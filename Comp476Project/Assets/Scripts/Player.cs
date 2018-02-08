@@ -14,10 +14,16 @@ public class Player : Character
     public float BulletDamage;
 
     [Header("Movement")]
-    public float MovementSpeed;
-    public float TurnSpeed;
+    public GameObject TargetIndicatorPrefab;
+    public float MaxVelocity;
+    public float MaxAcceleration;
+
+    public GameObject Target { get; set; }
 
     private NetworkStartPosition[] _spawnPoints;
+    private Vector3 _targetPosition;
+    private Vector3 _velocity;
+    private Vector3 _acceleration;
 
     void Start()
     {
@@ -34,15 +40,42 @@ public class Player : Character
             return;
         }
 
-        var x = Input.GetAxis("Horizontal") * Time.deltaTime * MovementSpeed;
-        var z = Input.GetAxis("Vertical") * Time.deltaTime * TurnSpeed;
-
-        transform.Rotate(0, x, 0);
-        transform.Translate(0, 0, z);
-
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetMouseButtonDown(0))
         {
-            CmdFire();
+            RaycastHit hit;
+
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+            {
+                if(Target != null)
+                {
+                    Destroy(Target.gameObject);
+                }
+
+                Target = Instantiate(TargetIndicatorPrefab, hit.point, Quaternion.identity);
+            }
+        }
+
+        if (Target != null)
+        {
+            _targetPosition = Target.transform.position;
+            _targetPosition.y = transform.position.y;
+
+            _acceleration = Vector3.Normalize(_targetPosition - transform.position) * MaxAcceleration;
+
+            var potentialVelocity = _velocity + (Time.deltaTime * _acceleration);
+            _velocity = potentialVelocity.magnitude <= MaxVelocity ? potentialVelocity : MaxVelocity * Vector3.Normalize(potentialVelocity);
+
+            transform.position = transform.position + _velocity * Time.deltaTime;
+            transform.rotation = Quaternion.LookRotation(_velocity, Vector3.up);
+        }
+    }
+
+    void OnTriggerEnter(Collider otherCollider)
+    {
+        if(otherCollider.gameObject == Target.gameObject)
+        {
+            Destroy(Target.gameObject);
+            Target = null;
         }
     }
 
