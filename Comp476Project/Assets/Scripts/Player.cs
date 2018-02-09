@@ -15,13 +15,16 @@ public class Player : Character
 
     [Header("Movement")]
     public GameObject TargetIndicatorPrefab;
+    public GameObject PatrolIndicatorPrefab;
     public Renderer Level;
+    public float PatrolCooldown;
     public float MinVelocity;
     public float MaxVelocity;
     public float MaxAcceleration;
 
-    public GameObject Target { get; set; }
-
+    private GameObject _target;
+    private GameObject _patrolOrigin;
+    private GameObject _patrolTarget;
     private NetworkStartPosition[] _spawnPoints;
     private Vector3 _targetPosition;
     private Vector3 _velocity;
@@ -61,18 +64,35 @@ public class Player : Character
 
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
             {
-                if(Target != null)
-                {
-                    Destroy(Target.gameObject);
-                }
+                StopAllCoroutines();
+                DestroyTargetIndicators();
 
-                Target = Instantiate(TargetIndicatorPrefab, hit.point, Quaternion.identity);
+                _target = Instantiate(TargetIndicatorPrefab, hit.point, Quaternion.identity);
             }
         }
 
-        if (Target != null)
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0))
         {
-            _targetPosition = Target.transform.position;
+            RaycastHit hit;
+
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+            {
+                StopAllCoroutines();
+                DestroyTargetIndicators();
+            
+                var targetOriginPosition = transform.position;
+                targetOriginPosition.y = hit.point.y;
+
+                _patrolTarget = Instantiate(PatrolIndicatorPrefab, hit.point, Quaternion.identity);
+                _patrolOrigin = Instantiate(PatrolIndicatorPrefab, targetOriginPosition, Quaternion.identity);
+
+                _target = _patrolTarget;
+            }
+        }
+        
+        if (_target != null)
+        {
+            _targetPosition = _target.transform.position;
             _targetPosition.y = transform.position.y;
 
             PursueTarget();
@@ -87,10 +107,24 @@ public class Player : Character
     
     void OnTriggerEnter(Collider otherCollider)
     {
-        if(otherCollider.gameObject == Target.gameObject)
+        if (_target != null && otherCollider.gameObject == _target.gameObject)
         {
-            Destroy(Target.gameObject);
-            Target = null;
+            if(_patrolTarget != null && _patrolOrigin != null)
+            {
+                if(_target == _patrolTarget)
+                {
+                    StartCoroutine(SetPatrolTargetWithDelay(_patrolOrigin));
+                }
+                else if(_target == _patrolOrigin)
+                {
+                    StartCoroutine(SetPatrolTargetWithDelay(_patrolTarget));
+                }
+
+                return;
+            }
+
+            Destroy(_target.gameObject);
+            _target = null;
 
             _targetPosition = transform.position - transform.forward * 5f;
         }
@@ -133,6 +167,15 @@ public class Player : Character
         }
     }
 
+    private IEnumerator SetPatrolTargetWithDelay(GameObject target)
+    {
+        _target = null;
+
+        yield return new WaitForSeconds(PatrolCooldown);
+
+        _target = target;
+    }
+
     private void PursueTarget()
     {
         _acceleration = Vector3.Normalize(_targetPosition - transform.position) * MaxAcceleration;
@@ -161,6 +204,19 @@ public class Player : Character
         if (transform.position.x < _leftBounds)
         {
             transform.position = new Vector3(_leftBounds, transform.position.y, transform.position.z);
+        }
+    }
+
+    private void DestroyTargetIndicators()
+    {
+        GameObject[] targetIndicators = { _target, _patrolOrigin, _patrolTarget };
+
+        for(var i = 0; i < targetIndicators.Length; i++)
+        {
+            if (targetIndicators[i] != null)
+            {
+                Destroy(targetIndicators[i].gameObject);
+            }
         }
     }
 }
