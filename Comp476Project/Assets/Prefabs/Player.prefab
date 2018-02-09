@@ -358,8 +358,10 @@ MonoBehaviour:
   BulletDamage: 1
   TargetIndicatorPrefab: {fileID: 1995885262257842, guid: b692a4fe9c1b3744395324910c3b3b2a,
     type: 2}
-  MaxVelocity: 5
-  MaxAcceleration: 10
+  Level: {fileID: 23983964793669322, guid: d191c07143855704780cada5589d6cea, type: 2}
+  MinVelocity: 0.5
+  MaxVelocity: 8
+  MaxAcceleration: 24
 --- !u!114 &114413533337164518
 MonoBehaviour:
   m_ObjectHideFlags: 1
