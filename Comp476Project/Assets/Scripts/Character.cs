@@ -14,7 +14,6 @@ public class Character : MonoBehaviour
     public float BulletDamage;
 
     [Header("Health")]
-    public Text IdText;
     public Image HealthBar;
     public float MaxHealth;
 
@@ -28,6 +27,7 @@ public class Character : MonoBehaviour
     public float MaxAcceleration;
 
     public PlayerManager Owner { get; set; }
+    public int OwnerId { get; set; }
     public bool IsSelected { get; set; }
     public bool JustSelected { get; set; }
 
@@ -146,16 +146,19 @@ public class Character : MonoBehaviour
 
     public void Select()
     {
-        foreach (var character in Owner.Characters)
+        if (Owner != null)
         {
-            if (character == this)
+            foreach (var character in Owner.Characters)
             {
-                continue;
+                if (character == this)
+                {
+                    continue;
+                }
+
+                character.Deselect();
             }
-
-            character.Deselect();
         }
-
+        
         IsSelected = true;
         JustSelected = true;
 
