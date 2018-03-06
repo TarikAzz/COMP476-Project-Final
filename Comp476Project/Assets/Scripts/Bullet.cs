@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    private float _damage;
+    //private float _damage;
 
     public void Initialize(float damage, float velocity)
     {
-        _damage = damage;
+        //_damage = damage;
         GetComponent<Rigidbody>().velocity = transform.forward * velocity;
     }
 
@@ -17,7 +17,7 @@ public class Bullet : MonoBehaviour
         var character = other.gameObject.GetComponent<Character>();
         if (character != null)
         {
-            character.TakeDamage(_damage);
+            //character.TakeDamage(_damage);
         }
 
         Destroy(gameObject);
