@@ -41,7 +41,24 @@ public class Character : MonoBehaviour
     private float _rightBounds;
     private float _bottomBounds;
     private float _leftBounds;
-    
+
+
+
+
+
+
+
+    // JONATHAN'S PART
+    public bool spotted;
+    public GameObject[] lamps;
+
+
+
+
+
+
+
+
     void Start()
     {
         var moveAreaX = Level.bounds.size.x / 2;
@@ -52,10 +69,41 @@ public class Character : MonoBehaviour
         _rightBounds = center.x + moveAreaX;
         _bottomBounds = center.z - moveAreaZ;
         _leftBounds = center.x - moveAreaX;
+
+
+
+        // JONATHAN'S PART
+        lamps = GameObject.FindGameObjectsWithTag("Lamp");
+
+
+
     }
 
     void Update()
     {
+
+
+
+
+
+        // JONATHAN'S PART
+        for (int i = 0; i < lamps.Length; i++)
+        {
+            if (Vector3.Distance(transform.position, lamps[i].transform.position) <= lamps[i].GetComponent<Lamp>().range)
+            {
+                spotted = true;
+            }
+            else
+            {
+                spotted = false;
+            }
+        }
+
+
+
+
+
+
         if (JustSelected)
         {
             JustSelected = false;
@@ -158,7 +206,7 @@ public class Character : MonoBehaviour
                 character.Deselect();
             }
         }
-        
+
         IsSelected = true;
         JustSelected = true;
 
