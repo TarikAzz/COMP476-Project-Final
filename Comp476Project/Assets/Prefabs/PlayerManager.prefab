@@ -179,6 +179,7 @@ GameObject:
   - component: {fileID: 23465283194946212}
   - component: {fileID: 54203496729931538}
   - component: {fileID: 114273527972766996}
+  - component: {fileID: 195729178479729244}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -250,6 +251,7 @@ GameObject:
   - component: {fileID: 23171868966341116}
   - component: {fileID: 54597974808359618}
   - component: {fileID: 114066071415560800}
+  - component: {fileID: 195446917184951114}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -340,6 +342,7 @@ GameObject:
   - component: {fileID: 23562356013379550}
   - component: {fileID: 54701059651349478}
   - component: {fileID: 114191667959773014}
+  - component: {fileID: 195900059940390344}
   m_Layer: 0
   m_Name: Character
   m_TagString: Untagged
@@ -804,7 +807,6 @@ MonoBehaviour:
   BulletVelocity: 5
   BulletLifeTime: 5
   BulletDamage: 1
-  IdText: {fileID: 0}
   HealthBar: {fileID: 114986410732394566}
   MaxHealth: 5
   TargetIndicatorPrefab: {fileID: 1995885262257842, guid: b692a4fe9c1b3744395324910c3b3b2a,
@@ -816,6 +818,8 @@ MonoBehaviour:
   MinVelocity: 0.5
   MaxVelocity: 8
   MaxAcceleration: 24
+  spotted: 0
+  lamps: []
 --- !u!114 &114191667959773014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -833,7 +837,6 @@ MonoBehaviour:
   BulletVelocity: 5
   BulletLifeTime: 5
   BulletDamage: 1
-  IdText: {fileID: 0}
   HealthBar: {fileID: 114665089901051688}
   MaxHealth: 5
   TargetIndicatorPrefab: {fileID: 1995885262257842, guid: b692a4fe9c1b3744395324910c3b3b2a,
@@ -845,6 +848,8 @@ MonoBehaviour:
   MinVelocity: 0.5
   MaxVelocity: 8
   MaxAcceleration: 24
+  spotted: 0
+  lamps: []
 --- !u!114 &114226035625010796
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -948,7 +953,6 @@ MonoBehaviour:
   BulletVelocity: 5
   BulletLifeTime: 5
   BulletDamage: 1
-  IdText: {fileID: 0}
   HealthBar: {fileID: 114236874895243916}
   MaxHealth: 5
   TargetIndicatorPrefab: {fileID: 1995885262257842, guid: b692a4fe9c1b3744395324910c3b3b2a,
@@ -960,6 +964,8 @@ MonoBehaviour:
   MinVelocity: 0.5
   MaxVelocity: 8
   MaxAcceleration: 24
+  spotted: 0
+  lamps: []
 --- !u!114 &114342727298622494
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1065,6 +1071,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74cf35c929fbd048bab6577bb756435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MouseSensitivity: 0.5
   Characters:
   - {fileID: 114191667959773014}
   - {fileID: 114066071415560800}
@@ -1325,6 +1332,69 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!195 &195446917184951114
+NavMeshAgent:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1585857011562494}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 8
+  m_Acceleration: 15
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!195 &195729178479729244
+NavMeshAgent:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1526676883541822}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 8
+  m_Acceleration: 15
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!195 &195900059940390344
+NavMeshAgent:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1847988883360426}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 8
+  m_Acceleration: 15
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 0
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!222 &222076857957055614
 CanvasRenderer:
   m_ObjectHideFlags: 1
