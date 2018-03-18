@@ -82,11 +82,11 @@ public class Character : MonoBehaviour
     void Update()
     {
 
+	// Sample change to demonstrate git flow
 
 
 
-
-        // JONATHAN'S PART
+        // JONATHAN'S PART !!
         for (int i = 0; i < lamps.Length; i++)
         {
             if (Vector3.Distance(transform.position, lamps[i].transform.position) <= lamps[i].GetComponent<Lamp>().range)
