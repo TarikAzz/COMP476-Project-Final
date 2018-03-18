@@ -813,11 +813,7 @@ MonoBehaviour:
     type: 2}
   PatrolIndicatorPrefab: {fileID: 1266561323702120, guid: 5e88816ba0ef35f4fa2dda8e2f1313cd,
     type: 2}
-  Level: {fileID: 23983964793669322, guid: d191c07143855704780cada5589d6cea, type: 2}
   PatrolCooldown: 1
-  MinVelocity: 0.5
-  MaxVelocity: 8
-  MaxAcceleration: 24
   spotted: 0
   lamps: []
 --- !u!114 &114191667959773014
@@ -843,11 +839,7 @@ MonoBehaviour:
     type: 2}
   PatrolIndicatorPrefab: {fileID: 1266561323702120, guid: 5e88816ba0ef35f4fa2dda8e2f1313cd,
     type: 2}
-  Level: {fileID: 23983964793669322, guid: d191c07143855704780cada5589d6cea, type: 2}
   PatrolCooldown: 1
-  MinVelocity: 0.5
-  MaxVelocity: 8
-  MaxAcceleration: 24
   spotted: 0
   lamps: []
 --- !u!114 &114226035625010796
@@ -959,11 +951,7 @@ MonoBehaviour:
     type: 2}
   PatrolIndicatorPrefab: {fileID: 1266561323702120, guid: 5e88816ba0ef35f4fa2dda8e2f1313cd,
     type: 2}
-  Level: {fileID: 23983964793669322, guid: d191c07143855704780cada5589d6cea, type: 2}
   PatrolCooldown: 1
-  MinVelocity: 0.5
-  MaxVelocity: 8
-  MaxAcceleration: 24
   spotted: 0
   lamps: []
 --- !u!114 &114342727298622494
@@ -1345,7 +1333,7 @@ NavMeshAgent:
   m_Acceleration: 15
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1366,7 +1354,7 @@ NavMeshAgent:
   m_Acceleration: 15
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -1387,7 +1375,7 @@ NavMeshAgent:
   m_Acceleration: 15
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
