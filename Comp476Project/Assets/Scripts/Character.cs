@@ -153,8 +153,6 @@ public class Character : MonoBehaviour
         {
             PursueTarget();
         }
-
-        RestrictPosition();
     }
 
     void OnTriggerEnter(Collider otherCollider)
@@ -238,27 +236,7 @@ public class Character : MonoBehaviour
         transform.position = transform.position + _velocity * Time.deltaTime;
         transform.rotation = Quaternion.LookRotation(_velocity, Vector3.up);
     }
-
-    private void RestrictPosition()
-    {
-        if (transform.position.z > _topBounds)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, _topBounds);
-        }
-        if (transform.position.x > _rightBounds)
-        {
-            transform.position = new Vector3(_rightBounds, transform.position.y, transform.position.z);
-        }
-        if (transform.position.z < _bottomBounds)
-        {
-            transform.position = new Vector3(transform.position.x, transform.position.y, _bottomBounds);
-        }
-        if (transform.position.x < _leftBounds)
-        {
-            transform.position = new Vector3(_leftBounds, transform.position.y, transform.position.z);
-        }
-    }
-
+    
     private void DestroyTargetIndicators()
     {
         GameObject[] targetIndicators = { _target, _patrolOrigin, _patrolTarget };
