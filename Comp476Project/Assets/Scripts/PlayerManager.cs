@@ -32,13 +32,13 @@ public class PlayerManager : NetworkBehaviour
 
         if (_kind == PlayerKind.Infiltrator)
         {
-            var newCameraPosition = Camera.main.transform.position;
+            /*var newCameraPosition = Camera.main.transform.position;
             newCameraPosition.z = -newCameraPosition.z;
 
-            var newCameraRotation = Quaternion.Euler(61f, 180f, 0f);
+            var newCameraRotation = Quaternion.Euler(55f, 180f, 0f);
 
             Camera.main.transform.position = newCameraPosition;
-            Camera.main.transform.rotation = newCameraRotation;
+            Camera.main.transform.rotation = newCameraRotation;*/
         }
 
         _inGamePanel = FindObjectOfType<InGamePanel>();

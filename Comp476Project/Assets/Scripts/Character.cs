@@ -37,56 +37,20 @@ public class Character : MonoBehaviour
     private Vector3 _targetPosition;
     private Vector3 _velocity;
     private Vector3 _acceleration;
-    private float _topBounds;
-    private float _rightBounds;
-    private float _bottomBounds;
-    private float _leftBounds;
-
-    // BLA BLA
-
-
-
-
-
+    
     // JONATHAN'S PART
     public bool spotted;
     public GameObject[] lamps;
-
-
-
-
-
-
-
-
+    
     void Start()
     {
-        var moveAreaX = Level.bounds.size.x / 2;
-        var moveAreaZ = Level.bounds.size.z / 2;
-        var center = Level.bounds.center;
-
-        _topBounds = center.z + moveAreaZ;
-        _rightBounds = center.x + moveAreaX;
-        _bottomBounds = center.z - moveAreaZ;
-        _leftBounds = center.x - moveAreaX;
-
-
-
         // JONATHAN'S PART
         lamps = GameObject.FindGameObjectsWithTag("Lamp");
-
-
-
     }
 
     void Update()
     {
-
-	// Sample change to demonstrate git flow
-
-
-
-        // JONATHAN'S PART !!
+        // JONATHAN'S PART
         for (int i = 0; i < lamps.Length; i++)
         {
             if (Vector3.Distance(transform.position, lamps[i].transform.position) <= lamps[i].GetComponent<Lamp>().range)
@@ -98,12 +62,7 @@ public class Character : MonoBehaviour
                 spotted = false;
             }
         }
-
-
-
-
-
-
+        
         if (JustSelected)
         {
             JustSelected = false;
