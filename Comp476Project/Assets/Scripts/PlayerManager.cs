@@ -12,6 +12,7 @@ public class PlayerManager : NetworkBehaviour
         Defender
     }
 
+    public float MouseSensitivity;
     public Character[] Characters;
 
     private int _id;
@@ -76,6 +77,14 @@ public class PlayerManager : NetworkBehaviour
             {
                 hitCharacter.Select();
             }
+        }
+
+        var mouseX = Input.GetAxis("Mouse X");
+        var mouseY = Input.GetAxis("Mouse Y");
+        
+        if (Input.GetMouseButton(2))
+        {
+            Camera.main.transform.Translate(new Vector3(-mouseX, 0.0f, -mouseY) * MouseSensitivity, Space.World);
         }
     }
 

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
@@ -20,11 +21,7 @@ public class Character : MonoBehaviour
     [Header("Movement")]
     public GameObject TargetIndicatorPrefab;
     public GameObject PatrolIndicatorPrefab;
-    public Renderer Level;
     public float PatrolCooldown;
-    public float MinVelocity;
-    public float MaxVelocity;
-    public float MaxAcceleration;
 
     public PlayerManager Owner { get; set; }
     public int OwnerId { get; set; }
@@ -34,10 +31,8 @@ public class Character : MonoBehaviour
     private GameObject _target;
     private GameObject _patrolOrigin;
     private GameObject _patrolTarget;
-    private Vector3 _targetPosition;
-    private Vector3 _velocity;
-    private Vector3 _acceleration;
-    
+    private NavMeshAgent _navMeshAgent;
+
     // JONATHAN'S PART
     public bool spotted;
     public GameObject[] lamps;
@@ -46,6 +41,8 @@ public class Character : MonoBehaviour
     {
         // JONATHAN'S PART
         lamps = GameObject.FindGameObjectsWithTag("Lamp");
+
+        _navMeshAgent = GetComponent<NavMeshAgent>();
     }
 
     void Update()
@@ -73,12 +70,19 @@ public class Character : MonoBehaviour
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
             {
-                StopAllCoroutines();
-                DestroyTargetIndicators();
+                var walkable = hit.collider.GetComponent<Walkable>();
 
-                _target = Instantiate(TargetIndicatorPrefab, hit.point, Quaternion.identity);
+                if (walkable != null && walkable.IsWall(hit.normal))
+                {
+                    StopAllCoroutines();
+                    DestroyTargetIndicators();
+
+                    _target = Instantiate(TargetIndicatorPrefab, hit.point, Quaternion.identity);
+                    
+                    _navMeshAgent.SetDestination(hit.point);
+                }
             }
         }
 
@@ -86,59 +90,44 @@ public class Character : MonoBehaviour
         {
             RaycastHit hit;
 
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
             {
-                StopAllCoroutines();
-                DestroyTargetIndicators();
+                if (hit.collider.GetComponent<Walkable>() != null)
+                {
+                    StopAllCoroutines();
+                    DestroyTargetIndicators();
 
-                var targetOriginPosition = transform.position;
-                targetOriginPosition.y = hit.point.y;
+                    var targetOriginPosition = transform.position;
+                    targetOriginPosition.y = hit.point.y;
 
-                _patrolTarget = Instantiate(PatrolIndicatorPrefab, hit.point, Quaternion.identity);
-                _patrolOrigin = Instantiate(PatrolIndicatorPrefab, targetOriginPosition, Quaternion.identity);
+                    _patrolTarget = Instantiate(PatrolIndicatorPrefab, hit.point, Quaternion.identity);
+                    _patrolOrigin = Instantiate(PatrolIndicatorPrefab, targetOriginPosition, Quaternion.identity);
 
-                _target = _patrolTarget;
+                    _navMeshAgent.SetDestination(hit.point);
+                }
             }
         }
 
-        if (_target != null)
-        {
-            _targetPosition = _target.transform.position;
-            _targetPosition.y = transform.position.y;
-
-            PursueTarget();
-        }
-        else if (_velocity.magnitude > MinVelocity)
-        {
-            PursueTarget();
-        }
-    }
-
-    void OnTriggerEnter(Collider otherCollider)
-    {
-        if (_target != null && otherCollider.gameObject == _target.gameObject)
+        if (Vector3.Distance(transform.position, _navMeshAgent.destination) <= _navMeshAgent.stoppingDistance)
         {
             if (_patrolTarget != null && _patrolOrigin != null)
             {
                 if (_target == _patrolTarget)
                 {
-                    StartCoroutine(SetPatrolTargetWithDelay(_patrolOrigin));
+                    StartCoroutine(SetPatrolTargetWithDelay(_patrolOrigin.transform.position));
                 }
                 else if (_target == _patrolOrigin)
                 {
-                    StartCoroutine(SetPatrolTargetWithDelay(_patrolTarget));
+                    StartCoroutine(SetPatrolTargetWithDelay(_patrolTarget.transform.position));
                 }
 
                 return;
             }
 
-            Destroy(_target.gameObject);
-            _target = null;
-
-            _targetPosition = transform.position - transform.forward * 5f;
+            DestroyTargetIndicators();
         }
     }
-
+    
     public void Colorize(Color color)
     {
         var renderers = GetComponentsInChildren<MeshRenderer>();
@@ -176,24 +165,11 @@ public class Character : MonoBehaviour
         Colorize(Color.blue);
     }
 
-    private IEnumerator SetPatrolTargetWithDelay(GameObject target)
+    private IEnumerator SetPatrolTargetWithDelay(Vector3 target)
     {
-        _target = null;
-
         yield return new WaitForSeconds(PatrolCooldown);
 
-        _target = target;
-    }
-
-    private void PursueTarget()
-    {
-        _acceleration = Vector3.Normalize(_targetPosition - transform.position) * MaxAcceleration;
-
-        var potentialVelocity = _velocity + (Time.deltaTime * _acceleration);
-        _velocity = potentialVelocity.magnitude <= MaxVelocity ? potentialVelocity : MaxVelocity * Vector3.Normalize(potentialVelocity);
-
-        transform.position = transform.position + _velocity * Time.deltaTime;
-        transform.rotation = Quaternion.LookRotation(_velocity, Vector3.up);
+        _navMeshAgent.SetDestination(target);
     }
     
     private void DestroyTargetIndicators()
