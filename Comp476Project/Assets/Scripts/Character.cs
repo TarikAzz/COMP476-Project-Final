@@ -42,7 +42,7 @@ public class Character : MonoBehaviour
     private float _bottomBounds;
     private float _leftBounds;
 
-
+    // BLA BLA
 
 
 
