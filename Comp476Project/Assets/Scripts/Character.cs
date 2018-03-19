@@ -68,7 +68,7 @@ public class Character : MonoBehaviour
             return;
         }
 
-        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0))
+        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0) && Owner.Kind == PlayerManager.PlayerKind.Defender)
         {
             RaycastHit originHit;
             RaycastHit targetHit;
