@@ -5,9 +5,10 @@ using UnityEngine.Networking;
 
 public class UnitSpawner : NetworkBehaviour
 {
+    // Get a reference to the InGamePanel
     public InGamePanel unitSelector;
 
-    // Prefab linked through the Inspector
+    // Defined in the Inspector
     public GameObject lamp;
 
 	// Use this for initialization
@@ -19,18 +20,24 @@ public class UnitSpawner : NetworkBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-
+        // Whenever you click and the controls were locked (meaning a unit was selected)
         if (Input.GetMouseButtonDown(0) && unitSelector.controlLocked == true)
         {
+            // Shoot a ray, and see if it hits land (can't spawn units outside of the map)
             RaycastHit hit;
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+
+            // If it hits land
             if (Physics.Raycast(ray, out hit))
             {
                 GameObject unit = null;
 
+                // Spawn unit
                 switch (unitSelector.buttonSelected)
                 {
-                    case 1:
+                    // Missing the rest...
+
+                    case 2:
                     {
                         unit = Instantiate(lamp, hit.point, Quaternion.identity);
                         NetworkServer.Spawn(unit);
@@ -42,12 +49,9 @@ public class UnitSpawner : NetworkBehaviour
                 }
                 
 
-
-
+                // Once unit has been spawned, unlock the controls again
                 unitSelector.controlLocked = false;
             }
-
         }
-
     }
 }
