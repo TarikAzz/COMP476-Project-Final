@@ -20,7 +20,6 @@ public class Character : MonoBehaviour
 
     [Header("Movement")]
     public GameObject TargetIndicatorPrefab;
-    public GameObject PatrolIndicatorPrefab;
     public float PatrolCooldown;
 
     public PlayerManager Owner { get; set; }
@@ -103,12 +102,12 @@ public class Character : MonoBehaviour
             {
                 if (_target == _patrolTarget)
                 {
-                    _target = null;
+                    SetTarget(null);
                     StartCoroutine(SetPatrolTargetWithDelay(_patrolOrigin));
                 }
                 else if (_target == _patrolOrigin)
                 {
-                    _target = null;
+                    SetTarget(null);
                     StartCoroutine(SetPatrolTargetWithDelay(_patrolTarget));
                 }
 
@@ -159,12 +158,28 @@ public class Character : MonoBehaviour
         HideTargetIndicators();
     }
 
+    private void SetTarget(GameObject target)
+    {
+        if (_target != null)
+        {
+            _target.GetComponent<Indicator>().IsTarget = false;
+        }
+
+        if (target != null)
+        {
+            target.GetComponent<Indicator>().IsTarget = true;
+        }
+        
+        _target = target;
+    }
+
     private IEnumerator SetPatrolTargetWithDelay(GameObject target)
     {
+        SetTarget(target);
+
         yield return new WaitForSeconds(PatrolCooldown);
 
         _navMeshAgent.SetDestination(target.transform.position);
-        _target = target;
     }
 
     private void CreateTargetIndicator(RaycastHit hit)
@@ -175,6 +190,7 @@ public class Character : MonoBehaviour
         _target = Instantiate(TargetIndicatorPrefab, hit.point + Vector3.up * 0.01f, Quaternion.identity);
         _target.transform.up = hit.normal;
         _target.transform.Rotate(new Vector3(90f, 0f, 0f));
+        SetTarget(_target);
 
         _navMeshAgent.SetDestination(hit.point);
     }
@@ -184,18 +200,19 @@ public class Character : MonoBehaviour
         StopAllCoroutines();
         DestroyTargetIndicators();
 
-        _patrolOrigin = Instantiate(PatrolIndicatorPrefab, originHit.point + Vector3.up * 0.01f, Quaternion.identity);
+        _patrolOrigin = Instantiate(TargetIndicatorPrefab, originHit.point + Vector3.up * 0.01f, Quaternion.identity);
         _patrolOrigin.transform.up = originHit.normal;
         _patrolOrigin.transform.Rotate(new Vector3(90f, 0f, 0f));
 
-        _patrolTarget = Instantiate(PatrolIndicatorPrefab, targetHit.point + Vector3.up * 0.01f, Quaternion.identity);
+        _patrolTarget = Instantiate(TargetIndicatorPrefab, targetHit.point + Vector3.up * 0.01f, Quaternion.identity);
         _patrolTarget.transform.up = targetHit.normal;
         _patrolTarget.transform.Rotate(new Vector3(90f, 0f, 0f));
 
         _navMeshAgent.SetDestination(targetHit.point);
-        _target = _patrolTarget;
-    }
 
+        SetTarget(_patrolTarget);
+    }
+    
     private void ShowTargetIndicators()
     {
         GameObject[] targetIndicators = { _target, _patrolOrigin, _patrolTarget };
