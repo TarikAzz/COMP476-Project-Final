@@ -811,8 +811,6 @@ MonoBehaviour:
   MaxHealth: 5
   TargetIndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
-  PatrolIndicatorPrefab: {fileID: 1242102572061558, guid: 9da83116d4733624a827b4710acdf8da,
-    type: 2}
   PatrolCooldown: 1
   spotted: 0
   lamps: []
@@ -836,8 +834,6 @@ MonoBehaviour:
   HealthBar: {fileID: 114665089901051688}
   MaxHealth: 5
   TargetIndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
-    type: 2}
-  PatrolIndicatorPrefab: {fileID: 1242102572061558, guid: 9da83116d4733624a827b4710acdf8da,
     type: 2}
   PatrolCooldown: 1
   spotted: 0
@@ -948,8 +944,6 @@ MonoBehaviour:
   HealthBar: {fileID: 114236874895243916}
   MaxHealth: 5
   TargetIndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
-    type: 2}
-  PatrolIndicatorPrefab: {fileID: 1242102572061558, guid: 9da83116d4733624a827b4710acdf8da,
     type: 2}
   PatrolCooldown: 1
   spotted: 0
