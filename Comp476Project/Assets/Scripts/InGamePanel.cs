@@ -12,6 +12,7 @@ public class InGamePanel : MonoBehaviour
     public ColorBlock buttonColors;
 
     public bool controlLocked;
+    public int buttonSelected;
 
 
     // Use this for initialization
@@ -69,6 +70,8 @@ public class InGamePanel : MonoBehaviour
         buttonColors.disabledColor = Color.green;
         unitControls[ID - 1].colors = buttonColors;
 
+
+        buttonSelected = ID;
         controlLocked = true;
 
         

@@ -1,10 +1,14 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class UnitSpawner : MonoBehaviour
+public class UnitSpawner : NetworkBehaviour
 {
     public InGamePanel unitSelector;
+
+    // Prefab linked through the Inspector
+    public GameObject lamp;
 
 	// Use this for initialization
 	void Start ()
@@ -15,13 +19,35 @@ public class UnitSpawner : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Vector3 mousePos = Input.mousePosition;
-            print(mousePos);
 
-            // Now use a ray to detect if mouse click is on plane's collider to spawn unit.
-            // ...
+        if (Input.GetMouseButtonDown(0) && unitSelector.controlLocked == true)
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit))
+            {
+                GameObject unit = null;
+
+                switch (unitSelector.buttonSelected)
+                {
+                    case 1:
+                    {
+                        unit = Instantiate(lamp, hit.point, Quaternion.identity);
+                        NetworkServer.Spawn(unit);
+                    }
+                    break;
+
+                    // Missing the rest...
+
+                }
+                
+
+
+
+                unitSelector.controlLocked = false;
+            }
+
         }
+
     }
 }

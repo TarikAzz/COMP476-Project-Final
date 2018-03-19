@@ -52,3 +52,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitSelector: {fileID: 0}
+  lamp: {fileID: 1051020488507802, guid: 8ba0f435975283542a8d6fb4b898d453, type: 2}
