@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4413948152444882}
   - component: {fileID: 33659652298817516}
   - component: {fileID: 23759964544714906}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -36,7 +36,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4020058103394348}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BulletSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -55,7 +55,7 @@ GameObject:
   - component: {fileID: 114833444660509536}
   - component: {fileID: 114226035625010796}
   - component: {fileID: 114384781465292960}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -72,7 +72,7 @@ GameObject:
   - component: {fileID: 4703145831984118}
   - component: {fileID: 33622021097706424}
   - component: {fileID: 23870717655252718}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -89,7 +89,7 @@ GameObject:
   - component: {fileID: 224345492262203126}
   - component: {fileID: 222666126095943720}
   - component: {fileID: 114665089901051688}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Foregroung
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -106,7 +106,7 @@ GameObject:
   - component: {fileID: 224869963496648890}
   - component: {fileID: 222697242319298554}
   - component: {fileID: 114755643235604936}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -142,7 +142,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4495901331919288}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BulletSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -159,7 +159,7 @@ GameObject:
   - component: {fileID: 224262222526474684}
   - component: {fileID: 222076857957055614}
   - component: {fileID: 114342727298622494}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -179,7 +179,8 @@ GameObject:
   - component: {fileID: 23465283194946212}
   - component: {fileID: 54203496729931538}
   - component: {fileID: 114273527972766996}
-  m_Layer: 0
+  - component: {fileID: 195729178479729244}
+  m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -194,7 +195,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4432993715019202}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BulletSpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -213,7 +214,7 @@ GameObject:
   - component: {fileID: 114777485930735508}
   - component: {fileID: 114490741686995140}
   - component: {fileID: 114620247821983684}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -230,7 +231,7 @@ GameObject:
   - component: {fileID: 224257318522765772}
   - component: {fileID: 222888109848091664}
   - component: {fileID: 114257141329649630}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -250,7 +251,8 @@ GameObject:
   - component: {fileID: 23171868966341116}
   - component: {fileID: 54597974808359618}
   - component: {fileID: 114066071415560800}
-  m_Layer: 0
+  - component: {fileID: 195446917184951114}
+  m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -267,7 +269,7 @@ GameObject:
   - component: {fileID: 224352462043635082}
   - component: {fileID: 222690521520343704}
   - component: {fileID: 114236874895243916}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Foregroung
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -284,7 +286,7 @@ GameObject:
   - component: {fileID: 224700093591488416}
   - component: {fileID: 222862932228523494}
   - component: {fileID: 114986410732394566}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Foregroung
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -303,7 +305,7 @@ GameObject:
   - component: {fileID: 114416673016179024}
   - component: {fileID: 114265234545915814}
   - component: {fileID: 114662158509911446}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: HealthBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -320,7 +322,7 @@ GameObject:
   - component: {fileID: 4892195807883386}
   - component: {fileID: 33807680293109202}
   - component: {fileID: 23014527605625378}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Sphere
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -340,7 +342,8 @@ GameObject:
   - component: {fileID: 23562356013379550}
   - component: {fileID: 54701059651349478}
   - component: {fileID: 114191667959773014}
-  m_Layer: 0
+  - component: {fileID: 195900059940390344}
+  m_Layer: 8
   m_Name: Character
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -804,18 +807,13 @@ MonoBehaviour:
   BulletVelocity: 5
   BulletLifeTime: 5
   BulletDamage: 1
-  IdText: {fileID: 0}
   HealthBar: {fileID: 114986410732394566}
   MaxHealth: 5
-  TargetIndicatorPrefab: {fileID: 1995885262257842, guid: b692a4fe9c1b3744395324910c3b3b2a,
+  TargetIndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
-  PatrolIndicatorPrefab: {fileID: 1266561323702120, guid: 5e88816ba0ef35f4fa2dda8e2f1313cd,
-    type: 2}
-  Level: {fileID: 23983964793669322, guid: d191c07143855704780cada5589d6cea, type: 2}
   PatrolCooldown: 1
-  MinVelocity: 0.5
-  MaxVelocity: 8
-  MaxAcceleration: 24
+  spotted: 0
+  lamps: []
 --- !u!114 &114191667959773014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -833,18 +831,13 @@ MonoBehaviour:
   BulletVelocity: 5
   BulletLifeTime: 5
   BulletDamage: 1
-  IdText: {fileID: 0}
   HealthBar: {fileID: 114665089901051688}
   MaxHealth: 5
-  TargetIndicatorPrefab: {fileID: 1995885262257842, guid: b692a4fe9c1b3744395324910c3b3b2a,
+  TargetIndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
-  PatrolIndicatorPrefab: {fileID: 1266561323702120, guid: 5e88816ba0ef35f4fa2dda8e2f1313cd,
-    type: 2}
-  Level: {fileID: 23983964793669322, guid: d191c07143855704780cada5589d6cea, type: 2}
   PatrolCooldown: 1
-  MinVelocity: 0.5
-  MaxVelocity: 8
-  MaxAcceleration: 24
+  spotted: 0
+  lamps: []
 --- !u!114 &114226035625010796
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -948,18 +941,13 @@ MonoBehaviour:
   BulletVelocity: 5
   BulletLifeTime: 5
   BulletDamage: 1
-  IdText: {fileID: 0}
   HealthBar: {fileID: 114236874895243916}
   MaxHealth: 5
-  TargetIndicatorPrefab: {fileID: 1995885262257842, guid: b692a4fe9c1b3744395324910c3b3b2a,
+  TargetIndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
-  PatrolIndicatorPrefab: {fileID: 1266561323702120, guid: 5e88816ba0ef35f4fa2dda8e2f1313cd,
-    type: 2}
-  Level: {fileID: 23983964793669322, guid: d191c07143855704780cada5589d6cea, type: 2}
   PatrolCooldown: 1
-  MinVelocity: 0.5
-  MaxVelocity: 8
-  MaxAcceleration: 24
+  spotted: 0
+  lamps: []
 --- !u!114 &114342727298622494
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1065,6 +1053,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74cf35c929fbd048bab6577bb756435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  MouseSensitivity: 0.5
   Characters:
   - {fileID: 114191667959773014}
   - {fileID: 114066071415560800}
@@ -1325,6 +1314,69 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!195 &195446917184951114
+NavMeshAgent:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1585857011562494}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 8
+  m_Acceleration: 15
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 1.5
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!195 &195729178479729244
+NavMeshAgent:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1526676883541822}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 8
+  m_Acceleration: 15
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 1.5
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!195 &195900059940390344
+NavMeshAgent:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1847988883360426}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 8
+  m_Acceleration: 15
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 1.5
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 2
+  m_BaseOffset: 1
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
 --- !u!222 &222076857957055614
 CanvasRenderer:
   m_ObjectHideFlags: 1

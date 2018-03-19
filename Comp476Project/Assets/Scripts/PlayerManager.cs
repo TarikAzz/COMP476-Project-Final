@@ -12,10 +12,12 @@ public class PlayerManager : NetworkBehaviour
         Defender
     }
 
+    public float MouseSensitivity;
     public Character[] Characters;
 
+    public PlayerKind Kind { get; set; }
+
     private int _id;
-    private PlayerKind _kind;
     private InGamePanel _inGamePanel;
 
     public override void OnStartLocalPlayer()
@@ -28,21 +30,21 @@ public class PlayerManager : NetworkBehaviour
             Characters[i].Colorize(Color.blue);
         }
 
-        _kind = NetworkManager.singleton.numPlayers == 1 ? PlayerKind.Defender : PlayerKind.Infiltrator;
+        Kind = NetworkManager.singleton.numPlayers == 1 ? PlayerKind.Defender : PlayerKind.Infiltrator;
 
-        if (_kind == PlayerKind.Infiltrator)
+        if (Kind == PlayerKind.Infiltrator)
         {
-            var newCameraPosition = Camera.main.transform.position;
+            /*var newCameraPosition = Camera.main.transform.position;
             newCameraPosition.z = -newCameraPosition.z;
 
-            var newCameraRotation = Quaternion.Euler(61f, 180f, 0f);
+            var newCameraRotation = Quaternion.Euler(55f, 180f, 0f);
 
             Camera.main.transform.position = newCameraPosition;
-            Camera.main.transform.rotation = newCameraRotation;
+            Camera.main.transform.rotation = newCameraRotation;*/
         }
 
         _inGamePanel = FindObjectOfType<InGamePanel>();
-        _inGamePanel.PlayerKind.text = _kind.ToString();
+        _inGamePanel.PlayerKind.text = Kind.ToString();
     }
 
     void Update()
@@ -76,6 +78,14 @@ public class PlayerManager : NetworkBehaviour
             {
                 hitCharacter.Select();
             }
+        }
+
+        var mouseX = Input.GetAxis("Mouse X");
+        var mouseY = Input.GetAxis("Mouse Y");
+        
+        if (Input.GetMouseButton(2))
+        {
+            Camera.main.transform.Translate(new Vector3(-mouseX, 0.0f, -mouseY) * MouseSensitivity, Space.World);
         }
     }
 
