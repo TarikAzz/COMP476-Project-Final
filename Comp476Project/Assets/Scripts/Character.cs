@@ -20,17 +20,18 @@ public class Character : MonoBehaviour
 
     [Header("Movement")]
     public GameObject TargetIndicatorPrefab;
-    public GameObject PatrolIndicatorPrefab;
     public float PatrolCooldown;
+    public bool LoopPatrol;
 
     public PlayerManager Owner { get; set; }
     public int OwnerId { get; set; }
     public bool IsSelected { get; set; }
     public bool JustSelected { get; set; }
 
-    private GameObject _target;
-    private GameObject _patrolOrigin;
-    private GameObject _patrolTarget;
+    private Indicator _target;
+    private int _patrolStep;
+    private bool _reversePatrol;
+    private List<Indicator> _patrolIndicators;
     private NavMeshAgent _navMeshAgent;
 
     // JONATHAN'S PART
@@ -43,6 +44,7 @@ public class Character : MonoBehaviour
         lamps = GameObject.FindGameObjectsWithTag("Lamp");
 
         _navMeshAgent = GetComponent<NavMeshAgent>();
+        _patrolIndicators = new List<Indicator>();
     }
 
     void Update()
@@ -66,7 +68,23 @@ public class Character : MonoBehaviour
             return;
         }
 
-        if (IsSelected && Input.GetMouseButtonDown(0))
+        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0))
+        {
+            RaycastHit originHit;
+            RaycastHit targetHit;
+
+            var originHitSuccess = Physics.Raycast(transform.position, Vector3.down, out originHit);
+            var targetHitSuccess = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out targetHit);
+
+            if (originHitSuccess && targetHitSuccess)
+            {
+                if (originHit.collider.GetComponent<Walkable>() != null && targetHit.collider.GetComponent<Walkable>())
+                {
+                    CreatePatrolIndicators(originHit, targetHit);
+                }
+            }
+        }
+        else if (IsSelected && Input.GetMouseButtonDown(0))
         {
             RaycastHit hit;
 
@@ -76,49 +94,57 @@ public class Character : MonoBehaviour
 
                 if (walkable != null && walkable.IsWall(hit.normal))
                 {
-                    StopAllCoroutines();
-                    DestroyTargetIndicators();
-
-                    _target = Instantiate(TargetIndicatorPrefab, hit.point, Quaternion.identity);
-                    
-                    _navMeshAgent.SetDestination(hit.point);
+                    CreateTargetIndicator(hit);
                 }
             }
         }
 
-        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            RaycastHit hit;
-
-            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
-            {
-                if (hit.collider.GetComponent<Walkable>() != null)
-                {
-                    StopAllCoroutines();
-                    DestroyTargetIndicators();
-
-                    var targetOriginPosition = transform.position;
-                    targetOriginPosition.y = hit.point.y;
-
-                    _patrolTarget = Instantiate(PatrolIndicatorPrefab, hit.point, Quaternion.identity);
-                    _patrolOrigin = Instantiate(PatrolIndicatorPrefab, targetOriginPosition, Quaternion.identity);
-
-                    _navMeshAgent.SetDestination(hit.point);
-                }
-            }
+            LoopPatrol = !LoopPatrol;
         }
-
-        if (Vector3.Distance(transform.position, _navMeshAgent.destination) <= _navMeshAgent.stoppingDistance)
+        
+        if (_target != null && Vector3.Distance(transform.position, _target.transform.position) <= _navMeshAgent.stoppingDistance)
         {
-            if (_patrolTarget != null && _patrolOrigin != null)
+            if (_patrolIndicators.Count > 0)
             {
-                if (_target == _patrolTarget)
+                if (!LoopPatrol)
                 {
-                    StartCoroutine(SetPatrolTargetWithDelay(_patrolOrigin.transform.position));
+                    if (_patrolStep == _patrolIndicators.Count - 1)
+                    {
+                        _reversePatrol = true;
+                    }
+                    else if (_patrolStep == 0 && !LoopPatrol)
+                    {
+                        _reversePatrol = false;
+                    }
                 }
-                else if (_target == _patrolOrigin)
+                
+                SetTarget(null);
+
+                StartCoroutine(SetPatrolTargetWithDelay(_patrolIndicators[_patrolStep]));
+
+                if (_reversePatrol)
                 {
-                    StartCoroutine(SetPatrolTargetWithDelay(_patrolTarget.transform.position));
+                    if (_patrolStep == 0)
+                    {
+                        _patrolStep = _patrolIndicators.Count - 1;
+                    }
+                    else
+                    {
+                        _patrolStep--;
+                    }
+                }
+                else
+                {
+                    if (_patrolStep == _patrolIndicators.Count - 1)
+                    {
+                        _patrolStep = 0;
+                    }
+                    else
+                    {
+                        _patrolStep++;
+                    }
                 }
 
                 return;
@@ -157,31 +183,142 @@ public class Character : MonoBehaviour
         JustSelected = true;
 
         Colorize(Color.cyan);
+
+        ShowTargetIndicators();
     }
 
     public void Deselect()
     {
         IsSelected = false;
         Colorize(Color.blue);
+        HideTargetIndicators();
     }
 
-    private IEnumerator SetPatrolTargetWithDelay(Vector3 target)
+    private void SetTarget(Indicator target)
     {
+        if (_target != null)
+        {
+            _target.GetComponent<Indicator>().IsTarget = false;
+        }
+
+        if (target != null)
+        {
+            target.GetComponent<Indicator>().IsTarget = true;
+        }
+        
+        _target = target;
+    }
+
+    private IEnumerator SetPatrolTargetWithDelay(Indicator target)
+    {
+        SetTarget(target);
+
         yield return new WaitForSeconds(PatrolCooldown);
 
-        _navMeshAgent.SetDestination(target);
+        _navMeshAgent.SetDestination(target.transform.position);
+    }
+
+    private void CreateTargetIndicator(RaycastHit hit)
+    {
+        StopAllCoroutines();
+        DestroyTargetIndicators();
+
+        _target = Instantiate(TargetIndicatorPrefab, hit.point + Vector3.up * 0.01f, Quaternion.identity).GetComponent<Indicator>();
+        _target.transform.up = hit.normal;
+        _target.transform.Rotate(new Vector3(90f, 0f, 0f));
+        SetTarget(_target);
+
+        _navMeshAgent.SetDestination(hit.point);
+    }
+
+    private void CreatePatrolIndicators(RaycastHit originHit, RaycastHit targetHit)
+    {
+        var newPatrolNode = (Indicator) null;
+
+        if (_patrolIndicators.Count == 0)
+        {
+            StopAllCoroutines();
+            DestroyTargetIndicators();
+
+            newPatrolNode = Instantiate(TargetIndicatorPrefab, originHit.point + Vector3.up * 0.01f, Quaternion.identity).GetComponent<Indicator>();
+            newPatrolNode.transform.up = originHit.normal;
+            newPatrolNode.transform.Rotate(new Vector3(90f, 0f, 0f));
+
+            _patrolIndicators.Add(newPatrolNode);
+
+            _navMeshAgent.SetDestination(targetHit.point);
+
+            _patrolStep = 1;
+        }
+
+        newPatrolNode = Instantiate(TargetIndicatorPrefab, targetHit.point + Vector3.up * 0.01f, Quaternion.identity).GetComponent<Indicator>();
+        newPatrolNode.transform.up = targetHit.normal;
+        newPatrolNode.transform.Rotate(new Vector3(90f, 0f, 0f));
+        _patrolIndicators.Add(newPatrolNode);
+
+        if (_patrolIndicators.Count == 2)
+        {
+            SetTarget(newPatrolNode);
+        }
     }
     
-    private void DestroyTargetIndicators()
+    private void ShowTargetIndicators()
     {
-        GameObject[] targetIndicators = { _target, _patrolOrigin, _patrolTarget };
-
-        for (var i = 0; i < targetIndicators.Length; i++)
+        if (_patrolIndicators.Count != 0)
         {
-            if (targetIndicators[i] != null)
+            for (var i = 0; i < _patrolIndicators.Count; i++)
             {
-                Destroy(targetIndicators[i].gameObject);
+                if (_patrolIndicators[i] != null)
+                {
+                    _patrolIndicators[i].GetComponent<SpriteRenderer>().enabled = true;
+                }
             }
         }
+        
+        if (_target != null)
+        {
+            _target.GetComponent<SpriteRenderer>().enabled = true;
+        }
+    }
+
+    private void HideTargetIndicators()
+    {
+        if (_patrolIndicators.Count != 0)
+        {
+            for (var i = 0; i < _patrolIndicators.Count; i++)
+            {
+                if (_patrolIndicators[i] != null)
+                {
+                    _patrolIndicators[i].GetComponent<SpriteRenderer>().enabled = false;
+                }
+            }
+        }
+
+        if (_target != null)
+        {
+            _target.GetComponent<SpriteRenderer>().enabled = false;
+        }
+    }
+
+    private void DestroyTargetIndicators()
+    {
+        if (_patrolIndicators.Count != 0)
+        {
+            for (var i = 0; i < _patrolIndicators.Count; i++)
+            {
+                if (_patrolIndicators[i] != null)
+                {
+                    Destroy(_patrolIndicators[i].gameObject);
+                }
+            }
+        }
+
+        if (_target != null)
+        {
+            Destroy(_target.gameObject);
+        }
+
+        _patrolIndicators.Clear();
+        _patrolStep = 0;
     }
 }
