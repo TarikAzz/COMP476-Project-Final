@@ -21,15 +21,17 @@ public class Character : MonoBehaviour
     [Header("Movement")]
     public GameObject TargetIndicatorPrefab;
     public float PatrolCooldown;
+    public bool LoopPatrol;
 
     public PlayerManager Owner { get; set; }
     public int OwnerId { get; set; }
     public bool IsSelected { get; set; }
     public bool JustSelected { get; set; }
 
-    private GameObject _target;
-    private GameObject _patrolOrigin;
-    private GameObject _patrolTarget;
+    private Indicator _target;
+    private int _patrolStep;
+    private bool _reversePatrol;
+    private List<Indicator> _patrolIndicators;
     private NavMeshAgent _navMeshAgent;
 
     // JONATHAN'S PART
@@ -42,6 +44,7 @@ public class Character : MonoBehaviour
         lamps = GameObject.FindGameObjectsWithTag("Lamp");
 
         _navMeshAgent = GetComponent<NavMeshAgent>();
+        _patrolIndicators = new List<Indicator>();
     }
 
     void Update()
@@ -95,20 +98,53 @@ public class Character : MonoBehaviour
                 }
             }
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            LoopPatrol = !LoopPatrol;
+        }
         
         if (_target != null && Vector3.Distance(transform.position, _target.transform.position) <= _navMeshAgent.stoppingDistance)
         {
-            if (_patrolTarget != null && _patrolOrigin != null)
+            if (_patrolIndicators.Count > 0)
             {
-                if (_target == _patrolTarget)
+                if (!LoopPatrol)
                 {
-                    SetTarget(null);
-                    StartCoroutine(SetPatrolTargetWithDelay(_patrolOrigin));
+                    if (_patrolStep == _patrolIndicators.Count - 1)
+                    {
+                        _reversePatrol = true;
+                    }
+                    else if (_patrolStep == 0 && !LoopPatrol)
+                    {
+                        _reversePatrol = false;
+                    }
                 }
-                else if (_target == _patrolOrigin)
+                
+                SetTarget(null);
+
+                StartCoroutine(SetPatrolTargetWithDelay(_patrolIndicators[_patrolStep]));
+
+                if (_reversePatrol)
                 {
-                    SetTarget(null);
-                    StartCoroutine(SetPatrolTargetWithDelay(_patrolTarget));
+                    if (_patrolStep == 0)
+                    {
+                        _patrolStep = _patrolIndicators.Count - 1;
+                    }
+                    else
+                    {
+                        _patrolStep--;
+                    }
+                }
+                else
+                {
+                    if (_patrolStep == _patrolIndicators.Count - 1)
+                    {
+                        _patrolStep = 0;
+                    }
+                    else
+                    {
+                        _patrolStep++;
+                    }
                 }
 
                 return;
@@ -158,7 +194,7 @@ public class Character : MonoBehaviour
         HideTargetIndicators();
     }
 
-    private void SetTarget(GameObject target)
+    private void SetTarget(Indicator target)
     {
         if (_target != null)
         {
@@ -173,7 +209,7 @@ public class Character : MonoBehaviour
         _target = target;
     }
 
-    private IEnumerator SetPatrolTargetWithDelay(GameObject target)
+    private IEnumerator SetPatrolTargetWithDelay(Indicator target)
     {
         SetTarget(target);
 
@@ -187,7 +223,7 @@ public class Character : MonoBehaviour
         StopAllCoroutines();
         DestroyTargetIndicators();
 
-        _target = Instantiate(TargetIndicatorPrefab, hit.point + Vector3.up * 0.01f, Quaternion.identity);
+        _target = Instantiate(TargetIndicatorPrefab, hit.point + Vector3.up * 0.01f, Quaternion.identity).GetComponent<Indicator>();
         _target.transform.up = hit.normal;
         _target.transform.Rotate(new Vector3(90f, 0f, 0f));
         SetTarget(_target);
@@ -197,58 +233,92 @@ public class Character : MonoBehaviour
 
     private void CreatePatrolIndicators(RaycastHit originHit, RaycastHit targetHit)
     {
-        StopAllCoroutines();
-        DestroyTargetIndicators();
+        var newPatrolNode = (Indicator) null;
 
-        _patrolOrigin = Instantiate(TargetIndicatorPrefab, originHit.point + Vector3.up * 0.01f, Quaternion.identity);
-        _patrolOrigin.transform.up = originHit.normal;
-        _patrolOrigin.transform.Rotate(new Vector3(90f, 0f, 0f));
+        if (_patrolIndicators.Count == 0)
+        {
+            StopAllCoroutines();
+            DestroyTargetIndicators();
 
-        _patrolTarget = Instantiate(TargetIndicatorPrefab, targetHit.point + Vector3.up * 0.01f, Quaternion.identity);
-        _patrolTarget.transform.up = targetHit.normal;
-        _patrolTarget.transform.Rotate(new Vector3(90f, 0f, 0f));
+            newPatrolNode = Instantiate(TargetIndicatorPrefab, originHit.point + Vector3.up * 0.01f, Quaternion.identity).GetComponent<Indicator>();
+            newPatrolNode.transform.up = originHit.normal;
+            newPatrolNode.transform.Rotate(new Vector3(90f, 0f, 0f));
 
-        _navMeshAgent.SetDestination(targetHit.point);
+            _patrolIndicators.Add(newPatrolNode);
 
-        SetTarget(_patrolTarget);
+            _navMeshAgent.SetDestination(targetHit.point);
+
+            _patrolStep = 1;
+        }
+
+        newPatrolNode = Instantiate(TargetIndicatorPrefab, targetHit.point + Vector3.up * 0.01f, Quaternion.identity).GetComponent<Indicator>();
+        newPatrolNode.transform.up = targetHit.normal;
+        newPatrolNode.transform.Rotate(new Vector3(90f, 0f, 0f));
+        _patrolIndicators.Add(newPatrolNode);
+
+        if (_patrolIndicators.Count == 2)
+        {
+            SetTarget(newPatrolNode);
+        }
     }
     
     private void ShowTargetIndicators()
     {
-        GameObject[] targetIndicators = { _target, _patrolOrigin, _patrolTarget };
-
-        for (var i = 0; i < targetIndicators.Length; i++)
+        if (_patrolIndicators.Count != 0)
         {
-            if (targetIndicators[i] != null)
+            for (var i = 0; i < _patrolIndicators.Count; i++)
             {
-                targetIndicators[i].GetComponent<SpriteRenderer>().enabled = true;
+                if (_patrolIndicators[i] != null)
+                {
+                    _patrolIndicators[i].GetComponent<SpriteRenderer>().enabled = true;
+                }
             }
+        }
+        
+        if (_target != null)
+        {
+            _target.GetComponent<SpriteRenderer>().enabled = true;
         }
     }
 
     private void HideTargetIndicators()
     {
-        GameObject[] targetIndicators = { _target, _patrolOrigin, _patrolTarget };
-
-        for (var i = 0; i < targetIndicators.Length; i++)
+        if (_patrolIndicators.Count != 0)
         {
-            if (targetIndicators[i] != null)
+            for (var i = 0; i < _patrolIndicators.Count; i++)
             {
-                targetIndicators[i].GetComponent<SpriteRenderer>().enabled = false;
+                if (_patrolIndicators[i] != null)
+                {
+                    _patrolIndicators[i].GetComponent<SpriteRenderer>().enabled = false;
+                }
             }
+        }
+
+        if (_target != null)
+        {
+            _target.GetComponent<SpriteRenderer>().enabled = false;
         }
     }
 
     private void DestroyTargetIndicators()
     {
-        GameObject[] targetIndicators = { _target, _patrolOrigin, _patrolTarget };
-
-        for (var i = 0; i < targetIndicators.Length; i++)
+        if (_patrolIndicators.Count != 0)
         {
-            if (targetIndicators[i] != null)
+            for (var i = 0; i < _patrolIndicators.Count; i++)
             {
-                Destroy(targetIndicators[i].gameObject);
+                if (_patrolIndicators[i] != null)
+                {
+                    Destroy(_patrolIndicators[i].gameObject);
+                }
             }
         }
+
+        if (_target != null)
+        {
+            Destroy(_target.gameObject);
+        }
+
+        _patrolIndicators.Clear();
+        _patrolStep = 0;
     }
 }
