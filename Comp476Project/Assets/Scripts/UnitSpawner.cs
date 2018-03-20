@@ -9,6 +9,8 @@ public class UnitSpawner : NetworkBehaviour
     public InGamePanel unitSelector;
 
     // Defined in the Inspector
+
+    // Missing the rest...
     public GameObject lamp;
 
 	// Use this for initialization
@@ -32,21 +34,39 @@ public class UnitSpawner : NetworkBehaviour
             {
                 GameObject unit = null;
 
-                // Spawn unit
-                switch (unitSelector.buttonSelected)
+                // Defender Units
+                if(unitSelector.PlayerKind.text == "Defender")
                 {
-                    // Missing the rest...
-
-                    case 2:
+                    // Spawn unit
+                    switch (unitSelector.buttonSelected)
                     {
-                        unit = Instantiate(lamp, hit.point, Quaternion.identity);
-                        NetworkServer.Spawn(unit);
+                        // Missing the rest...
+
+                        case 2:
+                            {
+                                unit = Instantiate(lamp, hit.point, Quaternion.identity);
+                                NetworkServer.Spawn(unit);
+                            }
+                            break;
+
+                            // Missing the rest...
+
                     }
-                    break;
-
-                    // Missing the rest...
-
                 }
+
+                // Infiltrator Units
+                else if (unitSelector.PlayerKind.text == "Infiltrator")
+                {
+                    // Spawn unit
+                    
+                    switch (unitSelector.buttonSelected)
+                    {
+                        // Missing the rest...
+                        case 1:
+                            break;
+                    }
+                }
+                
                 
 
                 // Once unit has been spawned, unlock the controls again

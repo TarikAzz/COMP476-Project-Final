@@ -33,7 +33,7 @@ public class InGamePanel : MonoBehaviour
     public Sprite sniper;
 
     // UI button sprites for Infiltrator (all defined in the Inspector)
-    // ...
+    public Sprite iTrap;
 
     // Unit limitations
     public int guardCapacity;
@@ -41,6 +41,7 @@ public class InGamePanel : MonoBehaviour
     public int cameraCapacity;
     public int trapCapacity;
     public int sniperCapacity;
+    public int iTrapCapacity;
 
 
 
@@ -55,6 +56,7 @@ public class InGamePanel : MonoBehaviour
         cameraCapacity = 7;
         trapCapacity = 4;
         sniperCapacity = 2;
+        iTrapCapacity = 4;
     }
 
 
@@ -62,7 +64,7 @@ public class InGamePanel : MonoBehaviour
     void Update()
     {
         // Only load the unit UI once player kind has been determined
-        if(UI_Loaded == false)
+        if (UI_Loaded == false)
         {
             // Defender's UI
             if (PlayerKind.text == "Defender")
@@ -74,29 +76,29 @@ public class InGamePanel : MonoBehaviour
                 for (int i = 1; i <= controlContainer.transform.childCount; i++)
                 {
                     unitControls.Add(GameObject.Find("Unit " + i).GetComponent<Button>());
-                    
+
                     // Set button's image to the sprite according to the unit ID
-                    switch(i)
+                    switch (i)
                     {
                         case 1:
-                            unitControls[i-1].image.sprite = guard;
+                            unitControls[i - 1].image.sprite = guard;
                             break;
                         case 2:
-                            unitControls[i-1].image.sprite = lamp;
+                            unitControls[i - 1].image.sprite = lamp;
                             break;
                         case 3:
-                            unitControls[i-1].image.sprite = cam;
+                            unitControls[i - 1].image.sprite = cam;
                             break;
                         case 4:
-                            unitControls[i-1].image.sprite = trap;
+                            unitControls[i - 1].image.sprite = trap;
                             break;
                         case 5:
-                            unitControls[i-1].image.sprite = sniper;
+                            unitControls[i - 1].image.sprite = sniper;
                             break;
                     }
 
                     // Just to make buttons visible after UI is loaded (mainly for setting alpha to 255)
-                    unitControls[i - 1].image.color = new Color32 (255, 255, 255, 255);
+                    unitControls[i - 1].image.color = new Color32(255, 255, 255, 255);
                 }
 
                 // Once UI is loaded, don't update this anymore
@@ -106,8 +108,21 @@ public class InGamePanel : MonoBehaviour
             // Infiltrator's UI
             else if (PlayerKind.text == "Infiltrator")
             {
-                // ...
+                controlLocked = false;
+                controlContainer = GameObject.Find("Unit Commands");
 
+                // As of now, infiltrator only as 1 unit, so no need for a for loop
+
+                // Add all unit buttons to the list, while modifying each one
+                unitControls.Add(GameObject.Find("Unit " + 1).GetComponent<Button>());
+
+                // Set button's image to the sprite according to the unit ID
+                unitControls[0].image.sprite = iTrap;
+
+                // Just to make buttons visible after UI is loaded (mainly for setting alpha to 255)
+                unitControls[0].image.color = new Color32(255, 255, 255, 255);
+
+                // Once UI is loaded, don't update this anymore
                 UI_Loaded = true;
             }
         }
@@ -115,43 +130,86 @@ public class InGamePanel : MonoBehaviour
         // If UI is loaded, then keep checking to lock/unlock buttons and coloring as game is running
         else
         {
-            // Disable all buttons until you place the chosen unit
-            if (controlLocked == true)
+            if (PlayerKind.text == "Defender")
             {
-                for (int i = 0; i < unitControls.Count; i++)
+                // Disable all buttons until you place the chosen unit
+                if (controlLocked == true)
                 {
-                    // Lock all buttons
-                    unitControls[i].interactable = false;
+                    for (int i = 0; i < unitControls.Count; i++)
+                    {
+                        // Lock all buttons
+                        unitControls[i].interactable = false;
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < unitControls.Count; i++)
+                    {
+                        // If a specific unit has reached its limit, lock it and gray out the button
+                        if ((i + 1 == 1 && GameObject.FindGameObjectsWithTag("Guard").Length >= guardCapacity) ||
+                            (i + 1 == 2 && GameObject.FindGameObjectsWithTag("Lamp").Length >= lampCapacity) ||
+                            (i + 1 == 3 && GameObject.FindGameObjectsWithTag("Camera").Length >= cameraCapacity) ||
+                            (i + 1 == 4 && GameObject.FindGameObjectsWithTag("Trap").Length >= trapCapacity) ||
+                            (i + 1 == 5 && GameObject.FindGameObjectsWithTag("Sniper").Length >= sniperCapacity))
+                        {
+                            unitControls[i].interactable = false;
+                            buttonColors = unitControls[i].colors;
+                            buttonColors.normalColor = Color.gray;
+                            buttonColors.disabledColor = Color.gray;
+                            unitControls[i].colors = buttonColors;
+                        }
+
+                        else
+                        {
+                            // Unlock button
+                            unitControls[i].interactable = true;
+
+                            // Also, reset its color back to white (selecting a button makes it green)
+                            buttonColors = unitControls[i].colors;
+                            buttonColors.normalColor = Color.white;
+                            buttonColors.disabledColor = Color.white;
+                            unitControls[i].colors = buttonColors;
+                        }
+                    }
                 }
             }
-            else
+
+            else if (PlayerKind.text == "Infiltrator")
             {
-                for (int i = 0; i < unitControls.Count; i++)
+                // Disable all buttons until you place the chosen unit
+                if (controlLocked == true)
                 {
-                    // If a specific unit has reached its limit, lock it and gray out the button
-                    if((i + 1 == 1 && GameObject.FindGameObjectsWithTag("Guard").Length >= guardCapacity) ||
-                        (i + 1 == 2 && GameObject.FindGameObjectsWithTag("Lamp").Length >= lampCapacity) ||
-                        (i + 1 == 3 && GameObject.FindGameObjectsWithTag("Camera").Length >= cameraCapacity) ||
-                        (i + 1 == 4 && GameObject.FindGameObjectsWithTag("Trap").Length >= trapCapacity) ||
-                        (i + 1 == 5 && GameObject.FindGameObjectsWithTag("Sniper").Length >= sniperCapacity))
+                    for (int i = 0; i < unitControls.Count; i++)
                     {
+                        // Lock all buttons
                         unitControls[i].interactable = false;
-                        buttonColors = unitControls[i].colors;
-                        buttonColors.normalColor = Color.gray;
-                        buttonColors.disabledColor = Color.gray;
-                        unitControls[i].colors = buttonColors;
                     }
-
-                    else
+                }
+                else
+                {
+                    for (int i = 0; i < unitControls.Count; i++)
                     {
-                        // Unlock button
-                        unitControls[i].interactable = true;
+                        // If a specific unit has reached its limit, lock it and gray out the button
+                        if ((i + 1 == 1 && GameObject.FindGameObjectsWithTag("iTrap").Length >= iTrapCapacity))
+                        {
+                            unitControls[i].interactable = false;
+                            buttonColors = unitControls[i].colors;
+                            buttonColors.normalColor = Color.gray;
+                            buttonColors.disabledColor = Color.gray;
+                            unitControls[i].colors = buttonColors;
+                        }
 
-                        // Also, reset its color back to white (selecting a button makes it green)
-                        buttonColors = unitControls[i].colors;
-                        buttonColors.normalColor = Color.white;
-                        buttonColors.disabledColor = Color.white;
-                        unitControls[i].colors = buttonColors;
+                        else
+                        {
+                            // Unlock button
+                            unitControls[i].interactable = true;
+
+                            // Also, reset its color back to white (selecting a button makes it green)
+                            buttonColors = unitControls[i].colors;
+                            buttonColors.normalColor = Color.white;
+                            buttonColors.disabledColor = Color.white;
+                            unitControls[i].colors = buttonColors;
+                        }
                     }
                 }
             }
