@@ -16,7 +16,7 @@ public class Indicator : MonoBehaviour
 
     #endregion
     
-    #region Private members
+    #region Private variables
 
     /// <summary>
     /// The animator component

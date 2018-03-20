@@ -11,6 +11,8 @@ using UnityEngine.UI;
 /// </summary>
 public class Character : MonoBehaviour
 {
+    #region Public variables
+
     [Header("Bullet")]
 
     /// <summary>
@@ -67,6 +69,10 @@ public class Character : MonoBehaviour
     /// </summary>
     public bool LoopPatrol;
 
+    #endregion
+
+    #region Public Properties
+
     /// <summary>
     /// The manager who owns the character
     /// </summary>
@@ -92,6 +98,10 @@ public class Character : MonoBehaviour
     /// </summary>
     public GameObject[] Lamps { get; set; }
 
+    #endregion
+
+    #region Private variables
+
     /// <summary>
     /// The current target
     /// </summary>
@@ -116,7 +126,9 @@ public class Character : MonoBehaviour
     /// The NavMeshAgent component
     /// </summary>
     private NavMeshAgent _navMeshAgent;
-    
+
+    #endregion
+
     /// <summary>
     /// Initilizes the components and the pertinent members
     /// </summary>
@@ -145,12 +157,14 @@ public class Character : MonoBehaviour
             }
         }
 
+        // If the character has just been selected, don't update this frame
         if (JustSelected)
         {
             JustSelected = false;
             return;
         }
 
+        // Shift-right-click to set a patrol for the character
         if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1) && Owner.Kind == PlayerManager.PlayerKind.Defender)
         {
             RaycastHit originHit;
@@ -159,6 +173,7 @@ public class Character : MonoBehaviour
             var originHitSuccess = Physics.Raycast(transform.position, Vector3.down, out originHit);
             var targetHitSuccess = Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out targetHit);
 
+            // Create indicators and initiate patrol if both the clicked ground and the ground under the character is walkable
             if (originHitSuccess && targetHitSuccess)
             {
                 if (originHit.collider.GetComponent<Walkable>() != null && targetHit.collider.GetComponent<Walkable>())
@@ -167,6 +182,7 @@ public class Character : MonoBehaviour
                 }
             }
         }
+        // Right-click to set simple movement target
         else if (IsSelected && Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;
@@ -175,6 +191,7 @@ public class Character : MonoBehaviour
             {
                 var walkable = hit.collider.GetComponent<Walkable>();
 
+                // Create indicators and initiate movement if a walkable surfacae is detected on click
                 if (walkable != null && walkable.IsWall(hit.normal))
                 {
                     CreateTargetIndicator(hit);
@@ -182,13 +199,16 @@ public class Character : MonoBehaviour
             }
         }
 
+        // Space-bar to set the character's to looping
         if (Input.GetKeyDown(KeyCode.Space))
         {
             LoopPatrol = !LoopPatrol;
         }
         
+        // Handle pathfinding when the current target is reached
         if (_target != null && Vector3.Distance(transform.position, _target.transform.position) <= _navMeshAgent.stoppingDistance)
         {
+            // If the character is on patrol, set the target to the next patrol indicator
             if (_patrolIndicators.Count > 0)
             {
                 if (!LoopPatrol)
@@ -233,6 +253,7 @@ public class Character : MonoBehaviour
                 return;
             }
 
+            // If not on patrol, simply destroy the target
             DestroyTargetIndicators();
         }
     }
@@ -347,6 +368,7 @@ public class Character : MonoBehaviour
     {
         var newPatrolNode = (Indicator) null;
 
+        // If the patrol list is empty, create an indicator at its origin
         if (_patrolIndicators.Count == 0)
         {
             StopAllCoroutines();
@@ -363,6 +385,7 @@ public class Character : MonoBehaviour
             _patrolStep = 1;
         }
 
+        // Create an indicator for ground clicks
         newPatrolNode = Instantiate(IndicatorPrefab, targetHit.point + Vector3.up * 0.01f, Quaternion.identity).GetComponent<Indicator>();
         newPatrolNode.transform.up = targetHit.normal;
         newPatrolNode.transform.Rotate(new Vector3(90f, 0f, 0f));
