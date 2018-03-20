@@ -5,6 +5,10 @@ TagManager:
   serializedVersion: 2
   tags:
   - Lamp
+  - Guard
+  - Camera
+  - Sniper
+  - Trap
   layers:
   - Default
   - TransparentFX
