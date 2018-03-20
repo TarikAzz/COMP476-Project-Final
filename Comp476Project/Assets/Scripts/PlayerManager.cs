@@ -9,6 +9,8 @@ using UnityEngine.UI;
 /// </summary>
 public class PlayerManager : NetworkBehaviour
 {
+    #region Enum
+    
     /// <summary>
     /// The different roles a player can play
     /// </summary>
@@ -17,6 +19,10 @@ public class PlayerManager : NetworkBehaviour
         Infiltrator,
         Defender
     }
+
+    #endregion
+
+    #region Public variables
 
     /// <summary>
     /// The sensitivity of the camera controls
@@ -28,15 +34,25 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public List<Character> Characters;
 
+    #endregion
+
+    #region Public properties
+
     /// <summary>
     /// The player's role
     /// </summary>
     public PlayerKind Kind { get; set; }
-    
+
+    #endregion
+
+    #region Private variables
+
     /// <summary>
     /// The player's HUD
     /// </summary>
     private InGamePanel _inGamePanel;
+
+    #endregion
 
     /// <summary>
     /// Intializes most of the variables when the player connects to the network
@@ -49,6 +65,7 @@ public class PlayerManager : NetworkBehaviour
             Characters[i].Colorize(Color.blue);
         }
 
+        // Assigns a role to the player, depending on if they joined first or not
         Kind = NetworkManager.singleton.numPlayers == 1 ? PlayerKind.Defender : PlayerKind.Infiltrator;
         
         _inGamePanel = FindObjectOfType<InGamePanel>();
@@ -88,6 +105,11 @@ public class PlayerManager : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// Whether the manager owns a specific character
+    /// </summary>
+    /// <param name="character">The character</param>
+    /// <returns>The manager's ownership of the character</returns>
     public bool OwnsCharacter(Character character)
     {
         return character.Owner != null && character.Owner.isLocalPlayer;
@@ -136,17 +158,7 @@ public class PlayerManager : NetworkBehaviour
             }
         }
     }
-
-    /// <summary>
-    /// Whether the manager owns a specific character
-    /// </summary>
-    /// <param name="character">The character</param>
-    /// <returns>The manager's ownership of the character</returns>
-    public bool OwnsCharacter(Character character)
-	{
-		return character.Owner != null && character.Owner.isLocalPlayer;
-	}
-	
+    
     /// Draws a rectangle from the mouse drag and selects the characters within it.
     /// </summary>
     /// <author>Tarik</author>
