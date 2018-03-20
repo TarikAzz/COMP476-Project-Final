@@ -810,12 +810,10 @@ MonoBehaviour:
   BulletDamage: 1
   HealthBar: {fileID: 114986410732394566}
   MaxHealth: 5
-  TargetIndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
+  IndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
   LoopPatrol: 0
-  spotted: 0
-  lamps: []
 --- !u!114 &114191667959773014
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -835,12 +833,10 @@ MonoBehaviour:
   BulletDamage: 1
   HealthBar: {fileID: 114665089901051688}
   MaxHealth: 5
-  TargetIndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
+  IndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
   LoopPatrol: 0
-  spotted: 0
-  lamps: []
 --- !u!114 &114226035625010796
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -946,12 +942,10 @@ MonoBehaviour:
   BulletDamage: 1
   HealthBar: {fileID: 114236874895243916}
   MaxHealth: 5
-  TargetIndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
+  IndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
   LoopPatrol: 0
-  spotted: 0
-  lamps: []
 --- !u!114 &114342727298622494
 MonoBehaviour:
   m_ObjectHideFlags: 1
