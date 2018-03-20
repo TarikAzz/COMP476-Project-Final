@@ -9,6 +9,7 @@ TagManager:
   - Camera
   - Sniper
   - Trap
+  - iTrap
   layers:
   - Default
   - TransparentFX

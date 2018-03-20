@@ -229,6 +229,7 @@ MonoBehaviour:
   cam: {fileID: 21300000, guid: cd01b92d54a70df40859de2b9a420d4c, type: 3}
   trap: {fileID: 21300000, guid: 7713a808670a61a44b1cbcc4e95730b3, type: 3}
   sniper: {fileID: 21300000, guid: 670edf4df5cfbba4a86b1137df354b5e, type: 3}
+  iTrap: {fileID: 21300000, guid: f42ee5adff0181048a366e1d236b4522, type: 3}
   guardCapacity: 0
   lampCapacity: 0
   cameraCapacity: 0
