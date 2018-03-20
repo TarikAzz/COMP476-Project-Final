@@ -20,6 +20,6 @@ public class Lamp : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-		
+		// i love milk
 	}
 }

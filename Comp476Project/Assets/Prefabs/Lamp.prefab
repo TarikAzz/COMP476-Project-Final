@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4602624291056308}
   - component: {fileID: 114789258342060250}
+  - component: {fileID: 114924909278029186}
   m_Layer: 0
   m_Name: Lamp
   m_TagString: Lamp
@@ -261,6 +262,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   point_light: {fileID: 0}
   range: 0
+--- !u!114 &114924909278029186
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1051020488507802}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 139
+    i1: 160
+    i2: 244
+    i3: 53
+    i4: 151
+    i5: 82
+    i6: 131
+    i7: 84
+    i8: 42
+    i9: 141
+    i10: 111
+    i11: 180
+    i12: 184
+    i13: 152
+    i14: 212
+    i15: 83
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!135 &135052468849917082
 SphereCollider:
   m_ObjectHideFlags: 1
