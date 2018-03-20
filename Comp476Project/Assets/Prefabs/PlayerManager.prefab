@@ -127,6 +127,7 @@ GameObject:
   - component: {fileID: 114530305365368158}
   - component: {fileID: 114784795616880158}
   - component: {fileID: 114055994384729666}
+  - component: {fileID: 114496100440237818}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: Untagged
@@ -812,6 +813,7 @@ MonoBehaviour:
   TargetIndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
+  LoopPatrol: 0
   spotted: 0
   lamps: []
 --- !u!114 &114191667959773014
@@ -836,6 +838,7 @@ MonoBehaviour:
   TargetIndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
+  LoopPatrol: 0
   spotted: 0
   lamps: []
 --- !u!114 &114226035625010796
@@ -946,6 +949,7 @@ MonoBehaviour:
   TargetIndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
+  LoopPatrol: 0
   spotted: 0
   lamps: []
 --- !u!114 &114342727298622494
@@ -1023,6 +1027,17 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &114496100440237818
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1330252670508812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2706433960a48e48b4ba9461236bb2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114530305365368158
 MonoBehaviour:
   m_ObjectHideFlags: 1

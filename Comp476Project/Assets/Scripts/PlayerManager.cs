@@ -22,11 +22,11 @@ public class PlayerManager : NetworkBehaviour
     /// The sensitivity of the camera controls
     /// </summary>
     public float MouseSensitivity;
-
-    /// <summary>
+	
+	/// <summary>
     /// The characters owned by the manager
     /// </summary>
-    public Character[] Characters;
+    public List<Character> Characters;
 
     /// <summary>
     /// The player's role
@@ -43,7 +43,7 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public override void OnStartLocalPlayer()
     {
-        for (var i = 0; i < Characters.Length; i++)
+        for (var i = 0; i < Characters.Count; i++)
         {
             Characters[i].Owner = this;
             Characters[i].Colorize(Color.blue);
@@ -56,7 +56,7 @@ public class PlayerManager : NetworkBehaviour
     }
 
     /// <summary>
-    /// Updates character selection and camera movement
+	/// Updates character selection and camera movement
     /// </summary>
     void Update()
     {
@@ -65,22 +65,67 @@ public class PlayerManager : NetworkBehaviour
             return;
         }
 
-        if (Input.GetMouseButtonDown(0))
+        // If shift and left click is pressed.
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0))
         {
-            RaycastHit hit;
+            RectangleSelect();
 
-            if (!Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+            CharacterSelection(true);
+        }
+        else if (Input.GetMouseButtonDown(0)) 
+        {
+            CharacterSelection(false);
+        }
+
+        RectangleSelect();
+        
+        var mouseX = Input.GetAxis("Mouse X");
+        var mouseY = Input.GetAxis("Mouse Y");
+
+        if (Input.GetMouseButton(2))
+        {
+            Camera.main.transform.Translate(new Vector3(-mouseX, 0.0f, -mouseY) * MouseSensitivity, Space.World);
+        }
+    }
+
+    public bool OwnsCharacter(Character character)
+    {
+        return character.Owner != null && character.Owner.isLocalPlayer;
+    }
+
+    /// <summary>
+    /// Selects the characters using the left mouse button.
+    /// Changes behaviour based on if the shift button is held.
+    /// </summary>
+    /// <param name="isShift">Option bool used to determine if shift was pressed</param>
+    /// <author>Tarik</author>
+    void CharacterSelection(bool isShift = false)
+    {
+        RaycastHit hit;
+
+        if (!Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+        {
+            return;
+        }
+
+        var hitCharacter = hit.collider.GetComponent<Character>();
+
+        if (hitCharacter == null || !OwnsCharacter(hitCharacter))
+        {
+            if (!isShift)
             {
-                return;
+                Characters.ForEach(c => c.Deselect());
             }
+            return;
+        }
 
-            var hitCharacter = hit.collider.GetComponent<Character>();
-
-            if (hitCharacter == null || !OwnsCharacter(hitCharacter))
-            {
-                return;
-            }
-
+        if (!isShift)
+        {
+            Characters.ForEach(c => c.Deselect());
+            hitCharacter.Select();
+        }
+        else
+        {
             if (hitCharacter.IsSelected)
             {
                 hitCharacter.Deselect();
@@ -90,14 +135,6 @@ public class PlayerManager : NetworkBehaviour
                 hitCharacter.Select();
             }
         }
-
-        var mouseX = Input.GetAxis("Mouse X");
-        var mouseY = Input.GetAxis("Mouse Y");
-        
-        if (Input.GetMouseButton(2))
-        {
-            Camera.main.transform.Translate(new Vector3(-mouseX, 0.0f, -mouseY) * MouseSensitivity, Space.World);
-        }
     }
 
     /// <summary>
@@ -106,7 +143,24 @@ public class PlayerManager : NetworkBehaviour
     /// <param name="character">The character</param>
     /// <returns>The manager's ownership of the character</returns>
     public bool OwnsCharacter(Character character)
+	{
+		return character.Owner != null && character.Owner.isLocalPlayer;
+	}
+	
+    /// Draws a rectangle from the mouse drag and selects the characters within it.
+    /// </summary>
+    /// <author>Tarik</author>
+    void RectangleSelect()
     {
-        return character.Owner != null && character.Owner.isLocalPlayer;
+        // Iterate through all characters to select them in the rectangle selection.
+        foreach (var character in Characters)
+        {
+            bool isRectanlgeSelcted = GetComponent<MouseSelection>().IsWithinSelectionBounds(character.gameObject);
+
+            if (isRectanlgeSelcted)
+            {
+                character.Select();
+            }
+        }
     }
 }
