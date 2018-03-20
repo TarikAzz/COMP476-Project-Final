@@ -128,40 +128,45 @@ public class InGamePanel : MonoBehaviour
             {
                 for (int i = 0; i < unitControls.Count; i++)
                 {
-                    // Unlock all buttons
-                    unitControls[i].interactable = true;
+                    // If a specific unit has reached its limit, lock it and gray out the button
+                    if((i + 1 == 1 && GameObject.FindGameObjectsWithTag("Guard").Length >= guardCapacity) ||
+                        (i + 1 == 2 && GameObject.FindGameObjectsWithTag("Lamp").Length >= lampCapacity) ||
+                        (i + 1 == 3 && GameObject.FindGameObjectsWithTag("Camera").Length >= cameraCapacity) ||
+                        (i + 1 == 4 && GameObject.FindGameObjectsWithTag("Trap").Length >= trapCapacity) ||
+                        (i + 1 == 5 && GameObject.FindGameObjectsWithTag("Sniper").Length >= sniperCapacity))
+                    {
+                        unitControls[i].interactable = false;
+                        buttonColors = unitControls[i].colors;
+                        buttonColors.normalColor = Color.gray;
+                        buttonColors.disabledColor = Color.gray;
+                        unitControls[i].colors = buttonColors;
+                    }
 
-                    // Also, reset their colors back to white (selecting a button makes it green)
-                    buttonColors = unitControls[i].colors;
-                    buttonColors.normalColor = Color.white;
-                    buttonColors.disabledColor = Color.white;
-                    unitControls[i].colors = buttonColors;
+                    else
+                    {
+                        // Unlock button
+                        unitControls[i].interactable = true;
+
+                        // Also, reset its color back to white (selecting a button makes it green)
+                        buttonColors = unitControls[i].colors;
+                        buttonColors.normalColor = Color.white;
+                        buttonColors.disabledColor = Color.white;
+                        unitControls[i].colors = buttonColors;
+                    }
                 }
             }
         }
     }
     
-    // When you select an unit, check if you reached its capacity. If not, select its ID and make button green
+    // Select its ID and make button green
     public void selectUnit(int ID)
     {
-        // Check capacities
-        if((ID == 1 && GameObject.FindGameObjectsWithTag("Guard").Length >= guardCapacity) ||
-            (ID == 2 && GameObject.FindGameObjectsWithTag("Lamp").Length >= lampCapacity) ||
-            (ID == 3 && GameObject.FindGameObjectsWithTag("Camera").Length >= cameraCapacity) ||
-            (ID == 4 && GameObject.FindGameObjectsWithTag("Trap").Length >= trapCapacity) ||
-            (ID == 5 && GameObject.FindGameObjectsWithTag("Sniper").Length >= sniperCapacity))
-        {
-            print("exceeded!");
-        }
-        else
-        {
-            // Highlight button green, and assign button selected's ID
-            buttonColors = unitControls[ID - 1].colors;
-            buttonColors.normalColor = Color.green;
-            buttonColors.disabledColor = Color.green;
-            unitControls[ID - 1].colors = buttonColors;
-            buttonSelected = ID;
-            controlLocked = true;
-        }
+        // Highlight button green, and assign button selected's ID
+        buttonColors = unitControls[ID - 1].colors;
+        buttonColors.normalColor = Color.green;
+        buttonColors.disabledColor = Color.green;
+        unitControls[ID - 1].colors = buttonColors;
+        buttonSelected = ID;
+        controlLocked = true;
     }
 }
