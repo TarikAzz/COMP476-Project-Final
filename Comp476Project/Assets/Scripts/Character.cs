@@ -61,14 +61,14 @@ public class Character : MonoBehaviour
                 spotted = false;
             }
         }
-        
+
         if (JustSelected)
         {
             JustSelected = false;
             return;
         }
 
-        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(0) && Owner.Kind == PlayerManager.PlayerKind.Defender)
+        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1) && Owner.Kind == PlayerManager.PlayerKind.Defender)
         {
             RaycastHit originHit;
             RaycastHit targetHit;
@@ -84,7 +84,7 @@ public class Character : MonoBehaviour
                 }
             }
         }
-        else if (IsSelected && Input.GetMouseButtonDown(0))
+        else if (IsSelected && Input.GetMouseButtonDown(1))
         {
             RaycastHit hit;
 
@@ -166,18 +166,20 @@ public class Character : MonoBehaviour
 
     public void Select()
     {
-        if (Owner != null)
-        {
-            foreach (var character in Owner.Characters)
-            {
-                if (character == this)
-                {
-                    continue;
-                }
+        // Commented this out temporarily so that the rectangle selection works properly.
 
-                character.Deselect();
-            }
-        }
+        //if (Owner != null)
+        //{
+        //    foreach (var character in Owner.Characters)
+        //    {
+        //        if (character == this)
+        //        {
+        //            continue;
+        //        }
+
+        //        character.Deselect();
+        //    }
+        //}
 
         IsSelected = true;
         JustSelected = true;
