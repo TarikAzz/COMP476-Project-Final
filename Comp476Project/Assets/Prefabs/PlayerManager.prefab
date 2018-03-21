@@ -1256,10 +1256,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   visibleTargets: []
-  meshResolution: 1
+  meshResolution: 2
   viewMeshFilter: {fileID: 33873597492307120}
   edgeDistanceThreshold: 0.5
-  edgeResolveIterations: 4
+  edgeResolveIterations: 7
+  owner: {fileID: 0}
 --- !u!114 &114490741686995140
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1307,10 +1308,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   visibleTargets: []
-  meshResolution: 1
+  meshResolution: 2
   viewMeshFilter: {fileID: 33831271200701838}
   edgeDistanceThreshold: 0.5
-  edgeResolveIterations: 4
+  edgeResolveIterations: 7
+  owner: {fileID: 0}
 --- !u!114 &114530305365368158
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1495,10 +1497,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 512
   visibleTargets: []
-  meshResolution: 1
+  meshResolution: 2
   viewMeshFilter: {fileID: 33961763226807022}
   edgeDistanceThreshold: 0.5
-  edgeResolveIterations: 4
+  edgeResolveIterations: 7
+  owner: {fileID: 0}
 --- !u!114 &114777485930735508
 MonoBehaviour:
   m_ObjectHideFlags: 1
