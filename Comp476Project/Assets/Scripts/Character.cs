@@ -268,6 +268,10 @@ public class Character : MonoBehaviour
 
         for (var i = 0; i < renderers.Length; i++)
         {
+            if (renderers[i].name == "View Visualization")
+            {
+                continue;
+            }
             renderers[i].material.color = color;
         }
     }
