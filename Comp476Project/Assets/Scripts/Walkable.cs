@@ -40,7 +40,7 @@ public class Walkable : MonoBehaviour
     #endregion
 
     /// <summary>
-    /// Handles collision with characters
+    /// Handles collision with characters that enter the surface
     /// </summary>
     /// <param name="collision">The collision information</param>
     void OnCollisionEnter(Collision collision)
@@ -51,8 +51,30 @@ public class Walkable : MonoBehaviour
         {
             return;
         }
-        
-        Debug.Log("Character entered a surface of the " + Kind + " kind");
+
+        if (Kind == WalkableKind.Goal && character.Owner.Kind == PlayerManager.PlayerKind.Infiltrator)
+        {
+            character.Owner.InfiltratorsInGoalZone++;
+        }
+    }
+
+    /// <summary>
+    /// Handles collision with characters that leave the surface
+    /// </summary>
+    /// <param name="collision">The collision information</param>
+    void OnCollisionExit(Collision collision)
+    {
+        var character = collision.gameObject.GetComponent<Character>();
+
+        if (Kind == WalkableKind.Neutral || character == null || !character.Owner.isLocalPlayer)
+        {
+            return;
+        }
+
+        if (Kind == WalkableKind.Goal && character.Owner.Kind == PlayerManager.PlayerKind.Infiltrator)
+        {
+            character.Owner.InfiltratorsInGoalZone--;
+        }
     }
 
     /// <summary>

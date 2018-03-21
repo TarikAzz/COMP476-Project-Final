@@ -34,6 +34,11 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public List<Character> Characters;
 
+    /// <summary>
+    /// The number of characters the infiltrating player needs to bring to the goal zone to win the game
+    /// </summary>
+    public int CharactersNeededToWin;
+
     #endregion
 
     #region Public properties
@@ -43,6 +48,27 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public PlayerKind Kind { get; set; }
 
+    /// <summary>
+    /// The number of infiltrating characters currently in the Goal Zone
+    /// On set : ends the game if the value is greater than or equal CharactersNeededToWin
+    /// </summary>
+    public int InfiltratorsInGoalZone
+    {
+        get
+        {
+            return _infiltratorsInGoalZone;
+        }
+        set
+        {
+            _infiltratorsInGoalZone = value;
+
+            if (value >= CharactersNeededToWin)
+            {
+                EndGame(PlayerKind.Infiltrator);
+            }
+        }
+    }
+
     #endregion
 
     #region Private variables
@@ -51,6 +77,11 @@ public class PlayerManager : NetworkBehaviour
     /// The player's HUD
     /// </summary>
     private InGamePanel _inGamePanel;
+
+    /// <summary>
+    /// InfiltratorsInGoalZone backing field
+    /// </summary>
+    private int _infiltratorsInGoalZone;
 
     #endregion
 
@@ -103,6 +134,11 @@ public class PlayerManager : NetworkBehaviour
         {
             Camera.main.transform.Translate(new Vector3(-mouseX, 0.0f, -mouseY) * MouseSensitivity, Space.World);
         }
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            RemoveCharacter(Characters[0]);
+        }
     }
 
     /// <summary>
@@ -116,12 +152,28 @@ public class PlayerManager : NetworkBehaviour
     }
 
     /// <summary>
+    /// Removes a player from the list and destroys it. Ends the game is the Infiltrator character count is small than CharactersNeededToWin
+    /// </summary>
+    /// <param name="character">The character to remove</param>
+    public void RemoveCharacter(Character character)
+    {
+        Characters.Remove(character);
+        character.gameObject.SetActive(false);
+        //Destroy(character.gameObject);
+
+        if (Kind == PlayerKind.Infiltrator && Characters.Count < CharactersNeededToWin)
+        {
+            EndGame(PlayerKind.Defender);
+        }
+    }
+
+    /// <summary>
     /// Selects the characters using the left mouse button.
     /// Changes behaviour based on if the shift button is held.
     /// </summary>
     /// <param name="isShift">Option bool used to determine if shift was pressed</param>
     /// <author>Tarik</author>
-    void CharacterSelection(bool isShift = false)
+    private void CharacterSelection(bool isShift = false)
     {
         RaycastHit hit;
 
@@ -158,11 +210,12 @@ public class PlayerManager : NetworkBehaviour
             }
         }
     }
-    
+
+    /// <summary>
     /// Draws a rectangle from the mouse drag and selects the characters within it.
     /// </summary>
     /// <author>Tarik</author>
-    void RectangleSelect()
+    private void RectangleSelect()
     {
         // Iterate through all characters to select them in the rectangle selection.
         foreach (var character in Characters)
@@ -174,5 +227,14 @@ public class PlayerManager : NetworkBehaviour
                 character.Select();
             }
         }
+    }
+
+    /// <summary>
+    /// Ends the game after a player wins
+    /// </summary>
+    /// <param name="winningPlayer">The winning player kind</param>
+    private void EndGame(PlayerKind winningPlayer)
+    {
+        Debug.Log(winningPlayer + " wins!");
     }
 }

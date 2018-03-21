@@ -1590,6 +1590,7 @@ MonoBehaviour:
   - {fileID: 114639121215128096}
   - {fileID: 114927436666788578}
   - {fileID: 114273527972766996}
+  CharactersNeededToWin: 3
 --- !u!114 &114542630109855748
 MonoBehaviour:
   m_ObjectHideFlags: 1
