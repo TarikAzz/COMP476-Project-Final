@@ -7,6 +7,20 @@ using UnityEngine;
 /// </summary>
 public class Walkable : MonoBehaviour
 {
+    #region Enum
+
+    /// <summary>
+    /// The different kinds a walkabe surface can be
+    /// </summary>
+    public enum WalkableKind
+    {
+        Neutral,
+        Start,
+        Goal
+    }
+
+    #endregion
+
     #region Constants
 
     /// <summary>
@@ -15,6 +29,31 @@ public class Walkable : MonoBehaviour
     private const float AngularThreshold = 45f;
 
     #endregion
+
+    #region Public variables
+
+    /// <summary>
+    /// The walkable surface's kind
+    /// </summary>
+    public WalkableKind Kind;
+
+    #endregion
+
+    /// <summary>
+    /// Handles collision with characters
+    /// </summary>
+    /// <param name="collision">The collision information</param>
+    void OnCollisionEnter(Collision collision)
+    {
+        var character = collision.gameObject.GetComponent<Character>();
+
+        if (Kind == WalkableKind.Neutral || character == null || !character.Owner.isLocalPlayer)
+        {
+            return;
+        }
+        
+        Debug.Log("Character entered a surface of the " + Kind + " kind");
+    }
 
     /// <summary>
     /// Identifies the surface as a wall or not. Walls are not walkable
