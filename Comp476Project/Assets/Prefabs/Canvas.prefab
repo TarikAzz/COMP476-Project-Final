@@ -235,6 +235,7 @@ MonoBehaviour:
   cameraCapacity: 0
   trapCapacity: 0
   sniperCapacity: 0
+  iTrapCapacity: 0
 --- !u!114 &114100197105932484
 MonoBehaviour:
   m_ObjectHideFlags: 1
