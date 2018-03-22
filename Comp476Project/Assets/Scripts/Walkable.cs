@@ -89,6 +89,6 @@ public class Walkable : MonoBehaviour
             new Vector2(normal.x, normal.y)
         );
         
-        return angle < AngularThreshold;
+        return angle > AngularThreshold;
     }
 }

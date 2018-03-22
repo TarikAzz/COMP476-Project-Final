@@ -190,11 +190,20 @@ public class Character : MonoBehaviour
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
             {
                 var walkable = hit.collider.GetComponent<Walkable>();
-
-                // Create indicators and initiate movement if a walkable surfacae is detected on click
-                if (walkable != null && walkable.IsWall(hit.normal))
+                
+                // Create indicators and initiate movement if a walkable surface is detected on click
+                if (walkable != null && !walkable.IsWall(hit.normal))
                 {
-                    CreateTargetIndicator(hit);
+                    // Disallow movement on other surface than the start zone for the Infiltrator player on setup
+                    var infiltratorSetup =
+                        !Owner.GameOn &&
+                        Owner.Kind == PlayerManager.PlayerKind.Infiltrator &&
+                        walkable.Kind != Walkable.WalkableKind.Start;
+
+                    if (!infiltratorSetup)
+                    {
+                        CreateTargetIndicator(hit);
+                    }
                 }
             }
         }
