@@ -39,6 +39,11 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public int CharactersNeededToWin;
 
+    /// <summary>
+    /// The time before the game starts when defender and infiltrator can start setting up their stuff
+    /// </summary>
+    public float SetupTime;
+
     #endregion
 
     #region Public properties
@@ -47,6 +52,11 @@ public class PlayerManager : NetworkBehaviour
     /// The player's role
     /// </summary>
     public PlayerKind Kind { get; set; }
+
+    /// <summary>
+    /// Whether or not the actual game is ongoing
+    /// </summary>
+    public bool GameOn { get; set; }
 
     /// <summary>
     /// The number of infiltrating characters currently in the Goal Zone
@@ -83,6 +93,11 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     private int _infiltratorsInGoalZone;
 
+    /// <summary>
+    /// The timer counting down the setup time
+    /// </summary>
+    private float _setupTimer;
+
     #endregion
 
     /// <summary>
@@ -97,10 +112,12 @@ public class PlayerManager : NetworkBehaviour
         }
 
         // Assigns a role to the player, depending on if they joined first or not
-        Kind = NetworkManager.singleton.numPlayers == 1 ? PlayerKind.Defender : PlayerKind.Infiltrator;
+        Kind = NetworkManager.singleton.numPlayers == 1 ? PlayerKind.Infiltrator : PlayerKind.Infiltrator;
         
         _inGamePanel = FindObjectOfType<InGamePanel>();
         _inGamePanel.PlayerKind.text = Kind.ToString();
+
+        _setupTimer = SetupTime;
     }
 
     /// <summary>
@@ -111,6 +128,16 @@ public class PlayerManager : NetworkBehaviour
         if (!isLocalPlayer)
         {
             return;
+        }
+
+        if(_setupTimer > 0)
+        {
+            _setupTimer -= Time.deltaTime;
+
+            if(_setupTimer <= 0)
+            {
+                StartGame();
+            }
         }
 
         // If shift and left click is pressed.
@@ -139,6 +166,14 @@ public class PlayerManager : NetworkBehaviour
         {
             RemoveCharacter(Characters[0]);
         }
+    }
+
+    /// <summary>
+    /// Starts the actual game, allowing the infiltrator through the level
+    /// </summary>
+    public void StartGame()
+    {
+        GameOn = true;
     }
 
     /// <summary>
