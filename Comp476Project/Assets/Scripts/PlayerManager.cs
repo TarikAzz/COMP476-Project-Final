@@ -73,6 +73,11 @@ public class PlayerManager : NetworkBehaviour
 
             if (_gameReady)
             {
+                if (!isLocalPlayer)
+                {
+                    return;
+                }
+
                 _inGamePanel.ReadyButton.gameObject.SetActive(false);
                 _setupTimer = SetupTime;
             }
@@ -110,6 +115,11 @@ public class PlayerManager : NetworkBehaviour
     private InGamePanel _inGamePanel;
 
     /// <summary>
+    /// The main game manager
+    /// </summary>
+    private MainManager _mainManager;
+
+    /// <summary>
     /// InfiltratorsInGoalZone backing field
     /// </summary>
     private int _infiltratorsInGoalZone;
@@ -130,7 +140,7 @@ public class PlayerManager : NetworkBehaviour
     private Barrier[] _setupBarriers;
 
     #endregion
-
+    
     /// <summary>
     /// Intializes most of the variables when the player connects to the network
     /// </summary>
@@ -147,7 +157,8 @@ public class PlayerManager : NetworkBehaviour
         
         _inGamePanel = FindObjectOfType<InGamePanel>();
         _inGamePanel.PlayerKind.text = Kind.ToString();
-        
+        _inGamePanel.PlayerManager = this;
+
         _setupBarriers = FindObjectsOfType<Barrier>();
     }
 
@@ -195,11 +206,34 @@ public class PlayerManager : NetworkBehaviour
         {
             Camera.main.transform.Translate(new Vector3(-mouseX, 0.0f, -mouseY) * MouseSensitivity, Space.World);
         }
+    }
 
-        if (Input.GetKeyDown(KeyCode.Space))
+    /// <summary>
+    /// Passes the ready function
+    /// </summary>
+    public void PlayerReady()
+    {
+        if (!isLocalPlayer)
         {
-            RemoveCharacter(Characters[0]);
+            return;
         }
+
+        CmdPlayerReady(Kind);
+    }
+
+    /// <summary>
+    /// Tells the main manager that this player is ready
+    /// </summary>
+    /// <param name="playerKind">The player kind</param>
+    [Command]
+    public void CmdPlayerReady(PlayerKind playerKind)
+    {
+        if (_mainManager == null)
+        {
+            _mainManager = FindObjectOfType<MainManager>();
+        }
+
+        _mainManager.PlayerReady(playerKind);
     }
 
     /// <summary>
@@ -228,7 +262,7 @@ public class PlayerManager : NetworkBehaviour
 
         GameOn = false;
     }
-
+    
     /// <summary>
     /// Whether the manager owns a specific character
     /// </summary>

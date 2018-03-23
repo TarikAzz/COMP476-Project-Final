@@ -5,46 +5,42 @@ using UnityEngine.Networking;
 
 public class MainManager : NetworkBehaviour
 {
-    /// <summary>
-    /// The manager instance
-    /// </summary>
-    public static MainManager Instance;
+    [SyncVar]
+    public bool DefenderReady;
 
-    /// <summary>
-    /// The readyness of the players
-    /// </summary>
-    public bool[] PlayersReady;
-
-    public override void OnStartServer()
+    [SyncVar]
+    public bool InfiltratorReady;
+    
+    public void PlayerReady(PlayerManager.PlayerKind playerKind)
     {
-        if(Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-
-        Debug.Log("initialized");
+        if (!isServer)
+            return;
         
-        PlayersReady = new bool[2];
+        RpcPlayerReady(playerKind);
     }
-
-    public void SendReady()
+    
+    [ClientRpc]
+    public void RpcPlayerReady(PlayerManager.PlayerKind playerKind)
     {
-        for(var i = 0; i < PlayersReady.Length; i++)
+        switch (playerKind)
         {
-            if(!PlayersReady[i])
-            {
-                PlayersReady[i] = true;
-                return;
-            }
+            case PlayerManager.PlayerKind.Defender:
+                DefenderReady = true;
+                break;
+
+            case PlayerManager.PlayerKind.Infiltrator:
+                InfiltratorReady = true;
+                break;
+        }
+
+        if (!DefenderReady || !InfiltratorReady)
+        {
+            return;
         }
 
         var playerManagers = FindObjectsOfType<PlayerManager>();
 
-        foreach(var playerManager in playerManagers)
+        foreach (var playerManager in playerManagers)
         {
             playerManager.GameReady = true;
         }
