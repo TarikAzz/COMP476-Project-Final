@@ -5,23 +5,56 @@ using UnityEngine.Networking;
 
 public class MainManager : NetworkBehaviour
 {
+    /// <summary>
+    /// The object holding the position for the defender's spawn position
+    /// </summary>
+    public Transform DefenderSpawn;
+
+    /// <summary>
+    /// The object holding the position for the infiltrator's spawn position
+    /// </summary>
+    public Transform InfiltratorSpawn;
+
+    /// <summary>
+    /// The number of characters the infiltrating player needs to bring to the goal zone to win the game
+    /// </summary>
+    public int CharactersNeededToWin;
+
+    /// <summary>
+    /// The time before the game starts when defender and infiltrator can start setting up their stuff
+    /// </summary>
+    public float SetupTime;
+
+    /// <summary>
+    /// Is the defending player ready
+    /// </summary>
     [SyncVar]
     public bool DefenderReady;
 
+    /// <summary>
+    /// Is the infiltrating player ready
+    /// </summary>
     [SyncVar]
     public bool InfiltratorReady;
 
-    public Transform DefenderSpawn;
-    public Transform InfiltratorSpawn;
-
+    /// <summary>
+    /// Sends the ready message from the server
+    /// </summary>
+    /// <param name="playerKind">The player that is ready</param>
     public void PlayerReady(PlayerManager.PlayerKind playerKind)
     {
         if (!isServer)
+        {
             return;
-        
+        }
+            
         RpcPlayerReady(playerKind);
     }
-    
+
+    /// <summary>
+    /// Sends the ready message back to the client
+    /// </summary>
+    /// <param name="playerKind">The player that is ready</param>
     [ClientRpc]
     public void RpcPlayerReady(PlayerManager.PlayerKind playerKind)
     {

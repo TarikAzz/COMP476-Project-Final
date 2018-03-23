@@ -229,13 +229,6 @@ public class Character : MonoBehaviour
                 }
             }
         }
-
-        // TEMP
-        // Space-bar to set the character's to looping
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            LoopPatrol = !LoopPatrol;
-        }
         
         // Handle pathfinding when the current target is reached
         if (_target != null && Vector3.Distance(transform.position, _target.transform.position) <= _navMeshAgent.stoppingDistance)
@@ -300,7 +293,7 @@ public class Character : MonoBehaviour
 
         for (var i = 0; i < renderers.Length; i++)
         {
-            if (renderers[i].name == "View Visualization")
+            if (renderers[i] == GetComponent<FieldOfView>().viewMeshFilter.GetComponent<MeshRenderer>())
             {
                 continue;
             }
