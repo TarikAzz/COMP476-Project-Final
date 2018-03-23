@@ -43,7 +43,7 @@ public class PlayerManager : NetworkBehaviour
     /// The time before the game starts when defender and infiltrator can start setting up their stuff
     /// </summary>
     public float SetupTime;
-
+    
     #endregion
 
     #region Public properties
@@ -57,6 +57,27 @@ public class PlayerManager : NetworkBehaviour
     /// Whether or not the actual game is ongoing
     /// </summary>
     public bool GameOn { get; set; }
+
+    /// <summary>
+    /// Whether or not the actual game is ready for setup
+    /// </summary>
+    public bool GameReady
+    {
+        get
+        {
+            return _gameReady;
+        }
+        set
+        {
+            _gameReady = value;
+
+            if (_gameReady)
+            {
+                _inGamePanel.ReadyButton.gameObject.SetActive(false);
+                _setupTimer = SetupTime;
+            }
+        }
+    }
 
     /// <summary>
     /// The number of infiltrating characters currently in the Goal Zone
@@ -94,9 +115,19 @@ public class PlayerManager : NetworkBehaviour
     private int _infiltratorsInGoalZone;
 
     /// <summary>
+    /// GameReady backing field
+    /// </summary>
+    private bool _gameReady;
+
+    /// <summary>
     /// The timer counting down the setup time
     /// </summary>
     private float _setupTimer;
+
+    /// <summary>
+    /// The barriers preventing the infiltrator to step through the level on setup
+    /// </summary>
+    private Barrier[] _setupBarriers;
 
     #endregion
 
@@ -112,12 +143,12 @@ public class PlayerManager : NetworkBehaviour
         }
 
         // Assigns a role to the player, depending on if they joined first or not
-        Kind = NetworkManager.singleton.numPlayers == 1 ? PlayerKind.Infiltrator : PlayerKind.Infiltrator;
+        Kind = NetworkManager.singleton.numPlayers == 1 ? PlayerKind.Defender : PlayerKind.Infiltrator;
         
         _inGamePanel = FindObjectOfType<InGamePanel>();
         _inGamePanel.PlayerKind.text = Kind.ToString();
-
-        _setupTimer = SetupTime;
+        
+        _setupBarriers = FindObjectsOfType<Barrier>();
     }
 
     /// <summary>
@@ -125,17 +156,20 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     void Update()
     {
-        if (!isLocalPlayer)
+        if (!isLocalPlayer && !GameReady)
         {
             return;
         }
-
-        if(_setupTimer > 0)
+        
+        if (_setupTimer > 0)
         {
             _setupTimer -= Time.deltaTime;
 
-            if(_setupTimer <= 0)
+            _inGamePanel.SetupTimer.fillAmount = _setupTimer / SetupTime;
+
+            if (_setupTimer <= 0)
             {
+                _inGamePanel.SetupTimer.fillAmount = 0;
                 StartGame();
             }
         }
@@ -173,7 +207,26 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public void StartGame()
     {
+        foreach (var barrier in _setupBarriers)
+        {
+            barrier.GetComponent<MeshRenderer>().enabled = false;
+        }
+
         GameOn = true;
+        _inGamePanel.GameText.text = "Go!";
+    }
+
+    /// <summary>
+    /// Ends the game, reseting the level and other variable to their standby states
+    /// </summary>
+    public void EndGame()
+    {
+        foreach (var barrier in _setupBarriers)
+        {
+            barrier.GetComponent<MeshRenderer>().enabled = true;
+        }
+
+        GameOn = false;
     }
 
     /// <summary>

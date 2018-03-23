@@ -1,11 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class InGamePanel : MonoBehaviour
+public class InGamePanel : NetworkBehaviour
 {
     public Text PlayerKind;
+    public Text GameText;
+    public Image SetupTimer;
+    public Button ReadyButton;
 
     // The object to retrieve all the UI buttons from
     public GameObject controlContainer;
@@ -214,6 +218,18 @@ public class InGamePanel : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void UI_Ready()
+    {
+        ReadyButton.interactable = false;
+        RpcSendReady();
+    }
+
+    [ClientRpc]
+    public void RpcSendReady()
+    {
+        MainManager.Instance.SendReady();
     }
     
     // Select its ID and make button green
