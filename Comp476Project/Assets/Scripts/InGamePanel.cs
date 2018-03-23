@@ -4,12 +4,14 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class InGamePanel : NetworkBehaviour
+public class InGamePanel : MonoBehaviour
 {
     public Text PlayerKind;
     public Text GameText;
     public Image SetupTimer;
     public Button ReadyButton;
+    public PlayerManager PlayerManager;
+
 
     // The object to retrieve all the UI buttons from
     public GameObject controlContainer;
@@ -46,9 +48,7 @@ public class InGamePanel : NetworkBehaviour
     public int trapCapacity;
     public int sniperCapacity;
     public int iTrapCapacity;
-
-
-
+    
     // Use this for initialization
     void Start()
     {
@@ -67,6 +67,11 @@ public class InGamePanel : NetworkBehaviour
     // Update is called once per frame
     void Update()
     {
+        if ((PlayerManager == null || !PlayerManager.isLocalPlayer) && transform.parent.gameObject.activeSelf)
+        {
+            transform.parent.gameObject.SetActive(false);
+        }
+
         // Only load the unit UI once player kind has been determined
         if (UI_Loaded == false)
         {
@@ -223,13 +228,7 @@ public class InGamePanel : NetworkBehaviour
     public void UI_Ready()
     {
         ReadyButton.interactable = false;
-        RpcSendReady();
-    }
-
-    [ClientRpc]
-    public void RpcSendReady()
-    {
-        MainManager.Instance.SendReady();
+        PlayerManager.PlayerReady();
     }
     
     // Select its ID and make button green
