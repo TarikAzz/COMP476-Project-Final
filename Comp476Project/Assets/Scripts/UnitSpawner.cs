@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class UnitSpawner : NetworkBehaviour
-{
+{/*
     // Get a reference to the InGamePanel
     public InGamePanel unitSelector;
 
@@ -13,8 +13,8 @@ public class UnitSpawner : NetworkBehaviour
     // Missing the rest...
     public GameObject lamp;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    public override void OnStartLocalPlayer()
     {
         unitSelector = GameObject.Find("InGamePanel").GetComponent<InGamePanel>();
 	}
@@ -73,5 +73,5 @@ public class UnitSpawner : NetworkBehaviour
                 unitSelector.controlLocked = false;
             }
         }
-    }
+    }*/
 }

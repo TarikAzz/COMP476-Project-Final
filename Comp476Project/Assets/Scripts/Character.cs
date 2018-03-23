@@ -176,9 +176,20 @@ public class Character : MonoBehaviour
             // Create indicators and initiate patrol if both the clicked ground and the ground under the character is walkable
             if (originHitSuccess && targetHitSuccess)
             {
-                if (originHit.collider.GetComponent<Walkable>() != null && targetHit.collider.GetComponent<Walkable>())
+                var targetWalkable = targetHit.collider.GetComponent<Walkable>();
+
+                if (targetWalkable != null && targetHit.collider.GetComponent<Walkable>())
                 {
-                    CreatePatrolIndicators(originHit, targetHit);
+                    // Disallow movement on other surface than the neutral zone for the defender player on setup
+                    var defenderSetup =
+                        !Owner.GameOn &&
+                        Owner.Kind == PlayerManager.PlayerKind.Defender &&
+                        targetWalkable.Kind != Walkable.WalkableKind.Neutral;
+
+                    if(!defenderSetup)
+                    {
+                        CreatePatrolIndicators(originHit, targetHit);
+                    }
                 }
             }
         }
@@ -200,7 +211,13 @@ public class Character : MonoBehaviour
                         Owner.Kind == PlayerManager.PlayerKind.Infiltrator &&
                         walkable.Kind != Walkable.WalkableKind.Start;
 
-                    if (!infiltratorSetup)
+                    // Disallow movement on other surface than the neutral zone for the defender player on setup
+                    var defenderSetup =
+                        !Owner.GameOn &&
+                        Owner.Kind == PlayerManager.PlayerKind.Defender &&
+                        walkable.Kind != Walkable.WalkableKind.Neutral;
+
+                    if (!infiltratorSetup && !defenderSetup)
                     {
                         CreateTargetIndicator(hit);
                     }
@@ -208,6 +225,7 @@ public class Character : MonoBehaviour
             }
         }
 
+        // TEMP
         // Space-bar to set the character's to looping
         if (Input.GetKeyDown(KeyCode.Space))
         {
