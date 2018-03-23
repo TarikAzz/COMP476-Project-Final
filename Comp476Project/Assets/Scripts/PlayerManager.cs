@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -23,17 +24,12 @@ public class PlayerManager : NetworkBehaviour
     #endregion
 
     #region Public variables
-
-    /// <summary>
-    /// The sensitivity of the camera controls
-    /// </summary>
-    public float MouseSensitivity;
-	
+    
 	/// <summary>
     /// The characters owned by the manager
     /// </summary>
     public List<Character> Characters;
-
+    
     #endregion
 
     #region Public properties
@@ -43,6 +39,58 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public PlayerKind Kind { get; set; }
 
+    /// <summary>
+    /// Whether or not the actual game is ongoing
+    /// </summary>
+    public bool GameOn { get; set; }
+
+    /// <summary>
+    /// Whether or not the actual game is ready for setup
+    /// </summary>
+    public bool GameReady
+    {
+        get
+        {
+            return _gameReady;
+        }
+        set
+        {
+            _gameReady = value;
+
+            if (_gameReady)
+            {
+                if (!isLocalPlayer)
+                {
+                    return;
+                }
+
+                _inGamePanel.ReadyButton.gameObject.SetActive(false);
+                _setupTimer = MainManager.SetupTime;
+            }
+        }
+    }
+
+    /// <summary>
+    /// The number of infiltrating characters currently in the Goal Zone
+    /// On set : ends the game if the value is greater than or equal CharactersNeededToWin
+    /// </summary>
+    public int InfiltratorsInGoalZone
+    {
+        get
+        {
+            return _infiltratorsInGoalZone;
+        }
+        set
+        {
+            _infiltratorsInGoalZone = value;
+
+            if (value >= MainManager.CharactersNeededToWin)
+            {
+                EndGame(PlayerKind.Infiltrator);
+            }
+        }
+    }
+
     #endregion
 
     #region Private variables
@@ -51,6 +99,51 @@ public class PlayerManager : NetworkBehaviour
     /// The player's HUD
     /// </summary>
     private InGamePanel _inGamePanel;
+    
+    /// <summary>
+    /// InfiltratorsInGoalZone backing field
+    /// </summary>
+    private int _infiltratorsInGoalZone;
+
+    /// <summary>
+    /// GameReady backing field
+    /// </summary>
+    private bool _gameReady;
+
+    /// <summary>
+    /// The timer counting down the setup time
+    /// </summary>
+    private float _setupTimer;
+
+    /// <summary>
+    /// The barriers preventing the infiltrator to step through the level on setup
+    /// </summary>
+    private Barrier[] _setupBarriers;
+
+    /// <summary>
+    /// MainManager backing field
+    /// </summary>
+    private MainManager _mainManager;
+
+    #endregion
+
+    #region Private properties
+
+    /// <summary>
+    /// The main game manager
+    /// </summary>
+    private MainManager MainManager
+    {
+        get
+        {
+            if (_mainManager == null)
+            {
+                _mainManager = FindObjectOfType<MainManager>();
+            }
+
+            return _mainManager;
+        }
+    }
 
     #endregion
 
@@ -61,15 +154,28 @@ public class PlayerManager : NetworkBehaviour
     {
         for (var i = 0; i < Characters.Count; i++)
         {
-            Characters[i].Owner = this;
+            Characters[i].PlayerManager = this;
             Characters[i].Colorize(Color.blue);
         }
 
         // Assigns a role to the player, depending on if they joined first or not
         Kind = NetworkManager.singleton.numPlayers == 1 ? PlayerKind.Defender : PlayerKind.Infiltrator;
-        
+
+        switch (Kind)
+        {
+            case PlayerKind.Infiltrator:
+                transform.position = MainManager.InfiltratorSpawn.position;
+                break;
+            case PlayerKind.Defender:
+                transform.position = MainManager.DefenderSpawn.position;
+                break;
+        }
+
         _inGamePanel = FindObjectOfType<InGamePanel>();
-        _inGamePanel.PlayerKind.text = Kind.ToString();
+        _inGamePanel.PlayerKindText.text = Kind.ToString();
+        _inGamePanel.PlayerManager = this;
+
+        _setupBarriers = FindObjectsOfType<Barrier>();
     }
 
     /// <summary>
@@ -77,9 +183,22 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     void Update()
     {
-        if (!isLocalPlayer)
+        if (!isLocalPlayer && !GameReady)
         {
             return;
+        }
+        
+        if (_setupTimer > 0)
+        {
+            _setupTimer -= Time.deltaTime;
+
+            _inGamePanel.SetupTimerImage.fillAmount = _setupTimer / MainManager.SetupTime;
+
+            if (_setupTimer <= 0)
+            {
+                _inGamePanel.SetupTimerImage.fillAmount = 0;
+                StartGame();
+            }
         }
 
         // If shift and left click is pressed.
@@ -95,16 +214,58 @@ public class PlayerManager : NetworkBehaviour
         }
 
         RectangleSelect();
-        
-        var mouseX = Input.GetAxis("Mouse X");
-        var mouseY = Input.GetAxis("Mouse Y");
-
-        if (Input.GetMouseButton(2))
-        {
-            Camera.main.transform.Translate(new Vector3(-mouseX, 0.0f, -mouseY) * MouseSensitivity, Space.World);
-        }
     }
 
+    /// <summary>
+    /// Passes the ready function
+    /// </summary>
+    public void PlayerReady()
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        CmdPlayerReady(Kind);
+    }
+
+    /// <summary>
+    /// Tells the main manager that this player is ready
+    /// </summary>
+    /// <param name="playerKind">The player kind</param>
+    [Command]
+    public void CmdPlayerReady(PlayerKind playerKind)
+    {
+        MainManager.PlayerReady(playerKind);
+    }
+
+    /// <summary>
+    /// Starts the actual game, allowing the infiltrator through the level
+    /// </summary>
+    public void StartGame()
+    {
+        foreach (var barrier in _setupBarriers)
+        {
+            barrier.GetComponent<MeshRenderer>().enabled = false;
+        }
+
+        GameOn = true;
+        _inGamePanel.GameStateText.text = "Go!";
+    }
+
+    /// <summary>
+    /// Ends the game, reseting the level and other variable to their standby states
+    /// </summary>
+    public void EndGame()
+    {
+        foreach (var barrier in _setupBarriers)
+        {
+            barrier.GetComponent<MeshRenderer>().enabled = true;
+        }
+
+        GameOn = false;
+    }
+    
     /// <summary>
     /// Whether the manager owns a specific character
     /// </summary>
@@ -112,7 +273,23 @@ public class PlayerManager : NetworkBehaviour
     /// <returns>The manager's ownership of the character</returns>
     public bool OwnsCharacter(Character character)
     {
-        return character.Owner != null && character.Owner.isLocalPlayer;
+        return character.PlayerManager != null && character.PlayerManager.isLocalPlayer;
+    }
+
+    /// <summary>
+    /// Removes a player from the list and destroys it. Ends the game is the Infiltrator character count is small than CharactersNeededToWin
+    /// </summary>
+    /// <param name="character">The character to remove</param>
+    public void RemoveCharacter(Character character)
+    {
+        Characters.Remove(character);
+        character.gameObject.SetActive(false);
+        //Destroy(character.gameObject);
+
+        if (Kind == PlayerKind.Infiltrator && Characters.Count < MainManager.CharactersNeededToWin)
+        {
+            EndGame(PlayerKind.Defender);
+        }
     }
 
     /// <summary>
@@ -121,7 +298,7 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     /// <param name="isShift">Option bool used to determine if shift was pressed</param>
     /// <author>Tarik</author>
-    void CharacterSelection(bool isShift = false)
+    private void CharacterSelection(bool isShift = false)
     {
         RaycastHit hit;
 
@@ -158,11 +335,12 @@ public class PlayerManager : NetworkBehaviour
             }
         }
     }
-    
+
+    /// <summary>
     /// Draws a rectangle from the mouse drag and selects the characters within it.
     /// </summary>
     /// <author>Tarik</author>
-    void RectangleSelect()
+    private void RectangleSelect()
     {
         // Iterate through all characters to select them in the rectangle selection.
         foreach (var character in Characters)
@@ -174,5 +352,14 @@ public class PlayerManager : NetworkBehaviour
                 character.Select();
             }
         }
+    }
+
+    /// <summary>
+    /// Ends the game after a player wins
+    /// </summary>
+    /// <param name="winningPlayer">The winning player kind</param>
+    private void EndGame(PlayerKind winningPlayer)
+    {
+        Debug.Log(winningPlayer + " wins!");
     }
 }

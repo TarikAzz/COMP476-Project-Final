@@ -1,11 +1,22 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class InGamePanel : MonoBehaviour
 {
-    public Text PlayerKind;
+    #region UI components
+
+    public Text PlayerKindText;
+    public Text GameStateText;
+    public Image SetupTimerImage;
+    public Button ReadyButton;
+
+    #endregion
+
+    #region Public variables
 
     // The object to retrieve all the UI buttons from
     public GameObject controlContainer;
@@ -43,8 +54,14 @@ public class InGamePanel : MonoBehaviour
     public int sniperCapacity;
     public int iTrapCapacity;
 
+    #endregion
 
+    #region Public Properties
 
+    public PlayerManager PlayerManager { get; set; }
+
+    #endregion
+    
     // Use this for initialization
     void Start()
     {
@@ -63,11 +80,21 @@ public class InGamePanel : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if ((PlayerManager == null || !PlayerManager.isLocalPlayer) && transform.parent.gameObject.activeSelf)
+        {
+            transform.parent.gameObject.SetActive(false);
+        }
+
+        if (PlayerManager == null)
+        {
+            return;
+        }
+
         // Only load the unit UI once player kind has been determined
         if (UI_Loaded == false)
         {
             // Defender's UI
-            if (PlayerKind.text == "Defender")
+            if (PlayerManager.Kind == PlayerManager.PlayerKind.Defender)
             {
                 controlLocked = false;
                 controlContainer = GameObject.Find("Unit Commands");
@@ -106,7 +133,7 @@ public class InGamePanel : MonoBehaviour
             }
 
             // Infiltrator's UI
-            else if (PlayerKind.text == "Infiltrator")
+            else if (PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator)
             {
                 controlLocked = false;
                 controlContainer = GameObject.Find("Unit Commands");
@@ -130,7 +157,7 @@ public class InGamePanel : MonoBehaviour
         // If UI is loaded, then keep checking to lock/unlock buttons and coloring as game is running
         else
         {
-            if (PlayerKind.text == "Defender")
+            if (PlayerManager.Kind == PlayerManager.PlayerKind.Defender)
             {
                 // Disable all buttons until you place the chosen unit
                 if (controlLocked == true)
@@ -174,7 +201,7 @@ public class InGamePanel : MonoBehaviour
                 }
             }
 
-            else if (PlayerKind.text == "Infiltrator")
+            else if (PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator)
             {
                 // Disable all buttons until you place the chosen unit
                 if (controlLocked == true)
@@ -214,6 +241,12 @@ public class InGamePanel : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void UI_Ready()
+    {
+        ReadyButton.interactable = false;
+        PlayerManager.PlayerReady();
     }
     
     // Select its ID and make button green
