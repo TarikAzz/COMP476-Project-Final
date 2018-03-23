@@ -4,24 +4,36 @@ using UnityEngine;
 using UnityEngine.Networking;
 
 public class UnitSpawner : NetworkBehaviour
-{/*
+{
     // Get a reference to the InGamePanel
-    public InGamePanel unitSelector;
+    public InGamePanel unitSelector
+    {
+        get
+        {
+            if (_unitSelector == null)
+            {
+                _unitSelector = FindObjectOfType<InGamePanel>();
+            }
+
+            return _unitSelector;
+        }
+    }
 
     // Defined in the Inspector
 
     // Missing the rest...
     public GameObject lamp;
 
-    // Use this for initialization
-    public override void OnStartLocalPlayer()
-    {
-        unitSelector = GameObject.Find("InGamePanel").GetComponent<InGamePanel>();
-	}
-	
-	// Update is called once per frame
+    private InGamePanel _unitSelector;
+
+    // Update is called once per frame
 	void Update ()
     {
+        if (unitSelector == null)
+        {
+            return;
+        }
+
         // Whenever you click and the controls were locked (meaning a unit was selected)
         if (Input.GetMouseButtonDown(0) && unitSelector.controlLocked == true)
         {
@@ -35,7 +47,7 @@ public class UnitSpawner : NetworkBehaviour
                 GameObject unit = null;
 
                 // Defender Units
-                if(unitSelector.PlayerKind.text == "Defender")
+                if(_unitSelector.PlayerManager.Kind == PlayerManager.PlayerKind.Defender)
                 {
                     // Spawn unit
                     switch (unitSelector.buttonSelected)
@@ -55,7 +67,7 @@ public class UnitSpawner : NetworkBehaviour
                 }
 
                 // Infiltrator Units
-                else if (unitSelector.PlayerKind.text == "Infiltrator")
+                else if (_unitSelector.PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator)
                 {
                     // Spawn unit
                     
@@ -73,5 +85,5 @@ public class UnitSpawner : NetworkBehaviour
                 unitSelector.controlLocked = false;
             }
         }
-    }*/
+    }
 }
