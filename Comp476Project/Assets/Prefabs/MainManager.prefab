@@ -52,10 +52,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45956c5a94c181a40bb3741e45c43b2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DefenderReady: 0
-  InfiltratorReady: 0
   DefenderSpawn: {fileID: 0}
   InfiltratorSpawn: {fileID: 0}
+  CharactersNeededToWin: 3
+  SetupTime: 15
+  DefenderReady: 0
+  InfiltratorReady: 0
 --- !u!114 &114598854847066890
 MonoBehaviour:
   m_ObjectHideFlags: 1

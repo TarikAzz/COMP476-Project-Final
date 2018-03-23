@@ -24,26 +24,11 @@ public class PlayerManager : NetworkBehaviour
     #endregion
 
     #region Public variables
-
-    /// <summary>
-    /// The sensitivity of the camera controls
-    /// </summary>
-    public float MouseSensitivity;
-	
+    
 	/// <summary>
     /// The characters owned by the manager
     /// </summary>
     public List<Character> Characters;
-
-    /// <summary>
-    /// The number of characters the infiltrating player needs to bring to the goal zone to win the game
-    /// </summary>
-    public int CharactersNeededToWin;
-
-    /// <summary>
-    /// The time before the game starts when defender and infiltrator can start setting up their stuff
-    /// </summary>
-    public float SetupTime;
     
     #endregion
 
@@ -80,7 +65,7 @@ public class PlayerManager : NetworkBehaviour
                 }
 
                 _inGamePanel.ReadyButton.gameObject.SetActive(false);
-                _setupTimer = SetupTime;
+                _setupTimer = MainManager.SetupTime;
             }
         }
     }
@@ -99,7 +84,7 @@ public class PlayerManager : NetworkBehaviour
         {
             _infiltratorsInGoalZone = value;
 
-            if (value >= CharactersNeededToWin)
+            if (value >= MainManager.CharactersNeededToWin)
             {
                 EndGame(PlayerKind.Infiltrator);
             }
@@ -207,7 +192,7 @@ public class PlayerManager : NetworkBehaviour
         {
             _setupTimer -= Time.deltaTime;
 
-            _inGamePanel.SetupTimerImage.fillAmount = _setupTimer / SetupTime;
+            _inGamePanel.SetupTimerImage.fillAmount = _setupTimer / MainManager.SetupTime;
 
             if (_setupTimer <= 0)
             {
@@ -229,14 +214,6 @@ public class PlayerManager : NetworkBehaviour
         }
 
         RectangleSelect();
-        
-        var mouseX = Input.GetAxis("Mouse X");
-        var mouseY = Input.GetAxis("Mouse Y");
-
-        if (Input.GetMouseButton(2))
-        {
-            Camera.main.transform.Translate(new Vector3(-mouseX, 0.0f, -mouseY) * MouseSensitivity, Space.World);
-        }
     }
 
     /// <summary>
@@ -309,7 +286,7 @@ public class PlayerManager : NetworkBehaviour
         character.gameObject.SetActive(false);
         //Destroy(character.gameObject);
 
-        if (Kind == PlayerKind.Infiltrator && Characters.Count < CharactersNeededToWin)
+        if (Kind == PlayerKind.Infiltrator && Characters.Count < MainManager.CharactersNeededToWin)
         {
             EndGame(PlayerKind.Defender);
         }
