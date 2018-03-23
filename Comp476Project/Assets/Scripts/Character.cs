@@ -76,7 +76,7 @@ public class Character : MonoBehaviour
     /// <summary>
     /// The manager who owns the character
     /// </summary>
-    public PlayerManager Owner { get; set; }
+    public PlayerManager PlayerManager { get; set; }
     
     /// <summary>
     /// Whether or not the character is currently selected
@@ -145,6 +145,11 @@ public class Character : MonoBehaviour
     /// </summary>
     void Update()
     {
+        if (PlayerManager == null || !PlayerManager.GameReady)
+        {
+            return;
+        }
+
         for (int i = 0; i < Lamps.Length; i++)
         {
             if (Vector3.Distance(transform.position, Lamps[i].transform.position) <= Lamps[i].GetComponent<Lamp>().range)
@@ -165,7 +170,7 @@ public class Character : MonoBehaviour
         }
 
         // Shift-right-click to set a patrol for the character
-        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1) && Owner.Kind == PlayerManager.PlayerKind.Defender)
+        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1) && PlayerManager.Kind == PlayerManager.PlayerKind.Defender)
         {
             RaycastHit originHit;
             RaycastHit targetHit;
@@ -182,8 +187,8 @@ public class Character : MonoBehaviour
                 {
                     // Disallow movement on other surface than the neutral zone for the defender player on setup
                     var defenderSetup =
-                        !Owner.GameOn &&
-                        Owner.Kind == PlayerManager.PlayerKind.Defender &&
+                        !PlayerManager.GameOn &&
+                        PlayerManager.Kind == PlayerManager.PlayerKind.Defender &&
                         targetWalkable.Kind != Walkable.WalkableKind.Neutral;
 
                     if(!defenderSetup)
@@ -207,14 +212,14 @@ public class Character : MonoBehaviour
                 {
                     // Disallow movement on other surface than the start zone for the Infiltrator player on setup
                     var infiltratorSetup =
-                        !Owner.GameOn &&
-                        Owner.Kind == PlayerManager.PlayerKind.Infiltrator &&
+                        !PlayerManager.GameOn &&
+                        PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator &&
                         walkable.Kind != Walkable.WalkableKind.Start;
 
                     // Disallow movement on other surface than the neutral zone for the defender player on setup
                     var defenderSetup =
-                        !Owner.GameOn &&
-                        Owner.Kind == PlayerManager.PlayerKind.Defender &&
+                        !PlayerManager.GameOn &&
+                        PlayerManager.Kind == PlayerManager.PlayerKind.Defender &&
                         walkable.Kind != Walkable.WalkableKind.Neutral;
 
                     if (!infiltratorSetup && !defenderSetup)
@@ -306,9 +311,9 @@ public class Character : MonoBehaviour
     {
         // Commented this out temporarily so that the rectangle selection works properly.
 
-        //if (Owner != null)
+        //if (PlayerManager != null)
         //{
-        //    foreach (var character in Owner.Characters)
+        //    foreach (var character in PlayerManager.Characters)
         //    {
         //        if (character == this)
         //        {
@@ -318,6 +323,11 @@ public class Character : MonoBehaviour
         //        character.Deselect();
         //    }
         //}
+
+        if (PlayerManager == null || !PlayerManager.isLocalPlayer)
+        {
+            return;
+        }
 
         IsSelected = true;
         JustSelected = true;
@@ -332,6 +342,11 @@ public class Character : MonoBehaviour
     /// </summary>
     public void Deselect()
     {
+        if (PlayerManager == null || !PlayerManager.isLocalPlayer)
+        {
+            return;
+        }
+
         IsSelected = false;
         Colorize(Color.blue);
         HideTargetIndicators();

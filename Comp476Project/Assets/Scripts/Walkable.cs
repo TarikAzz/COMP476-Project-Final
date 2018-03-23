@@ -47,14 +47,14 @@ public class Walkable : MonoBehaviour
     {
         var character = collision.gameObject.GetComponent<Character>();
 
-        if (Kind == WalkableKind.Neutral || character == null || !character.Owner.isLocalPlayer)
+        if (Kind == WalkableKind.Neutral || character == null || character.PlayerManager == null || !character.PlayerManager.isLocalPlayer)
         {
             return;
         }
 
-        if (Kind == WalkableKind.Goal && character.Owner.Kind == PlayerManager.PlayerKind.Infiltrator)
+        if (Kind == WalkableKind.Goal && character.PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator)
         {
-            character.Owner.InfiltratorsInGoalZone++;
+            character.PlayerManager.InfiltratorsInGoalZone++;
         }
     }
 
@@ -66,14 +66,14 @@ public class Walkable : MonoBehaviour
     {
         var character = collision.gameObject.GetComponent<Character>();
 
-        if (Kind == WalkableKind.Neutral || character == null || !character.Owner.isLocalPlayer)
+        if (Kind == WalkableKind.Neutral || character == null || character.PlayerManager == null || !character.PlayerManager.isLocalPlayer)
         {
             return;
         }
 
-        if (Kind == WalkableKind.Goal && character.Owner.Kind == PlayerManager.PlayerKind.Infiltrator)
+        if (Kind == WalkableKind.Goal && character.PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator)
         {
-            character.Owner.InfiltratorsInGoalZone--;
+            character.PlayerManager.InfiltratorsInGoalZone--;
         }
     }
 

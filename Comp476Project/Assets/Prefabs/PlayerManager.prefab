@@ -200,6 +200,8 @@ GameObject:
   - component: {fileID: 114784795616880158}
   - component: {fileID: 114055994384729666}
   - component: {fileID: 114496100440237818}
+  - component: {fileID: 114223979860331764}
+  - component: {fileID: 114378124002226542}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: Untagged
@@ -287,7 +289,7 @@ GameObject:
   - component: {fileID: 114800777170535980}
   - component: {fileID: 114291321851098770}
   m_Layer: 5
-  m_Name: GameObject
+  m_Name: GameInfo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -337,7 +339,7 @@ GameObject:
   - component: {fileID: 114176736333254994}
   - component: {fileID: 114928805631828374}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ReadyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -428,7 +430,7 @@ GameObject:
   - component: {fileID: 222094646353053248}
   - component: {fileID: 114370206702804204}
   m_Layer: 5
-  m_Name: Image
+  m_Name: PlayerKind
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -626,7 +628,7 @@ GameObject:
   - component: {fileID: 222400484146897010}
   - component: {fileID: 114752671898626382}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: GameState
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -799,7 +801,7 @@ GameObject:
   - component: {fileID: 222395087591106694}
   - component: {fileID: 114492337438045620}
   m_Layer: 5
-  m_Name: Image (2)
+  m_Name: SetupTimerImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1768,11 +1770,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a93122a6f6bdc5a4ab59c252f4340564, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerKind: {fileID: 114270025562084078}
-  GameText: {fileID: 114508997142009570}
-  SetupTimer: {fileID: 114492337438045620}
+  PlayerKindText: {fileID: 114270025562084078}
+  GameStateText: {fileID: 114508997142009570}
+  SetupTimerImage: {fileID: 114492337438045620}
   ReadyButton: {fileID: 114928805631828374}
-  PlayerManager: {fileID: 0}
   controlContainer: {fileID: 0}
   unitControls: []
   buttonColors:
@@ -1849,6 +1850,25 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &114223979860331764
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1330252670508812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1267208747, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Target: {fileID: 4247008521719542}
+  m_ChildIndex: 3
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_MovementThreshold: 0.001
+  m_InterpolateRotation: 0.5
+  m_InterpolateMovement: 0.5
 --- !u!114 &114226035625010796
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2137,6 +2157,25 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &114378124002226542
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1330252670508812}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1267208747, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Target: {fileID: 4603841429859368}
+  m_ChildIndex: 4
+  m_SendInterval: 0.1
+  m_SyncRotationAxis: 7
+  m_RotationSyncCompression: 0
+  m_MovementThreshold: 0.001
+  m_InterpolateRotation: 0.5
+  m_InterpolateMovement: 0.5
 --- !u!114 &114384781465292960
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2373,7 +2412,7 @@ MonoBehaviour:
   - {fileID: 114927436666788578}
   - {fileID: 114273527972766996}
   CharactersNeededToWin: 3
-  SetupTime: 5
+  SetupTime: 30
 --- !u!114 &114542630109855748
 MonoBehaviour:
   m_ObjectHideFlags: 1

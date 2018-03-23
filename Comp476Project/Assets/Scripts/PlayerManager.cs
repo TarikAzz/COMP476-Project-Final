@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -113,12 +114,7 @@ public class PlayerManager : NetworkBehaviour
     /// The player's HUD
     /// </summary>
     private InGamePanel _inGamePanel;
-
-    /// <summary>
-    /// The main game manager
-    /// </summary>
-    private MainManager _mainManager;
-
+    
     /// <summary>
     /// InfiltratorsInGoalZone backing field
     /// </summary>
@@ -139,8 +135,33 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     private Barrier[] _setupBarriers;
 
+    /// <summary>
+    /// MainManager backing field
+    /// </summary>
+    private MainManager _mainManager;
+
     #endregion
-    
+
+    #region Private properties
+
+    /// <summary>
+    /// The main game manager
+    /// </summary>
+    private MainManager MainManager
+    {
+        get
+        {
+            if (_mainManager == null)
+            {
+                _mainManager = FindObjectOfType<MainManager>();
+            }
+
+            return _mainManager;
+        }
+    }
+
+    #endregion
+
     /// <summary>
     /// Intializes most of the variables when the player connects to the network
     /// </summary>
@@ -148,15 +169,25 @@ public class PlayerManager : NetworkBehaviour
     {
         for (var i = 0; i < Characters.Count; i++)
         {
-            Characters[i].Owner = this;
+            Characters[i].PlayerManager = this;
             Characters[i].Colorize(Color.blue);
         }
 
         // Assigns a role to the player, depending on if they joined first or not
         Kind = NetworkManager.singleton.numPlayers == 1 ? PlayerKind.Defender : PlayerKind.Infiltrator;
-        
+
+        switch (Kind)
+        {
+            case PlayerKind.Infiltrator:
+                transform.position = MainManager.InfiltratorSpawn.position;
+                break;
+            case PlayerKind.Defender:
+                transform.position = MainManager.DefenderSpawn.position;
+                break;
+        }
+
         _inGamePanel = FindObjectOfType<InGamePanel>();
-        _inGamePanel.PlayerKind.text = Kind.ToString();
+        _inGamePanel.PlayerKindText.text = Kind.ToString();
         _inGamePanel.PlayerManager = this;
 
         _setupBarriers = FindObjectsOfType<Barrier>();
@@ -176,11 +207,11 @@ public class PlayerManager : NetworkBehaviour
         {
             _setupTimer -= Time.deltaTime;
 
-            _inGamePanel.SetupTimer.fillAmount = _setupTimer / SetupTime;
+            _inGamePanel.SetupTimerImage.fillAmount = _setupTimer / SetupTime;
 
             if (_setupTimer <= 0)
             {
-                _inGamePanel.SetupTimer.fillAmount = 0;
+                _inGamePanel.SetupTimerImage.fillAmount = 0;
                 StartGame();
             }
         }
@@ -228,12 +259,7 @@ public class PlayerManager : NetworkBehaviour
     [Command]
     public void CmdPlayerReady(PlayerKind playerKind)
     {
-        if (_mainManager == null)
-        {
-            _mainManager = FindObjectOfType<MainManager>();
-        }
-
-        _mainManager.PlayerReady(playerKind);
+        MainManager.PlayerReady(playerKind);
     }
 
     /// <summary>
@@ -247,7 +273,7 @@ public class PlayerManager : NetworkBehaviour
         }
 
         GameOn = true;
-        _inGamePanel.GameText.text = "Go!";
+        _inGamePanel.GameStateText.text = "Go!";
     }
 
     /// <summary>
@@ -270,7 +296,7 @@ public class PlayerManager : NetworkBehaviour
     /// <returns>The manager's ownership of the character</returns>
     public bool OwnsCharacter(Character character)
     {
-        return character.Owner != null && character.Owner.isLocalPlayer;
+        return character.PlayerManager != null && character.PlayerManager.isLocalPlayer;
     }
 
     /// <summary>

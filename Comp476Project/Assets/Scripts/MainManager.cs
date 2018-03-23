@@ -10,7 +10,10 @@ public class MainManager : NetworkBehaviour
 
     [SyncVar]
     public bool InfiltratorReady;
-    
+
+    public Transform DefenderSpawn;
+    public Transform InfiltratorSpawn;
+
     public void PlayerReady(PlayerManager.PlayerKind playerKind)
     {
         if (!isServer)
