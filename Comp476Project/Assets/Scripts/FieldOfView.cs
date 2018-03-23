@@ -115,7 +115,7 @@ public class FieldOfView : MonoBehaviour
                     if (targetCharacter!=null)
                     {
                         //Check if the target has the same owner as the character TODO: Check this before other conditions
-                        if (targetCharacter.Owner != owner)
+                        if (targetCharacter.PlayerManager != owner)
                         {
                             visibleTargets.Add(target);
                         }
