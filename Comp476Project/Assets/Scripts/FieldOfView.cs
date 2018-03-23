@@ -67,6 +67,13 @@ public class FieldOfView : MonoBehaviour
     void Start()
     {
         owner = transform.root.GetComponent<PlayerManager>();
+
+        if (owner.Kind == PlayerManager.PlayerKind.Infiltrator)
+        {
+            Destroy(viewMeshFilter.gameObject);
+            Destroy(this);   
+        }
+
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";
         viewMeshFilter.mesh = viewMesh;
@@ -115,7 +122,7 @@ public class FieldOfView : MonoBehaviour
                     if (targetCharacter!=null)
                     {
                         //Check if the target has the same owner as the character TODO: Check this before other conditions
-                        if (targetCharacter.Owner != owner)
+                        if (targetCharacter.PlayerManager != owner)
                         {
                             visibleTargets.Add(target);
                         }

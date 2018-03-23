@@ -7,6 +7,20 @@ using UnityEngine;
 /// </summary>
 public class Walkable : MonoBehaviour
 {
+    #region Enum
+
+    /// <summary>
+    /// The different kinds a walkabe surface can be
+    /// </summary>
+    public enum WalkableKind
+    {
+        Neutral,
+        Start,
+        Goal
+    }
+
+    #endregion
+
     #region Constants
 
     /// <summary>
@@ -15,6 +29,53 @@ public class Walkable : MonoBehaviour
     private const float AngularThreshold = 45f;
 
     #endregion
+
+    #region Public variables
+
+    /// <summary>
+    /// The walkable surface's kind
+    /// </summary>
+    public WalkableKind Kind;
+
+    #endregion
+
+    /// <summary>
+    /// Handles collision with characters that enter the surface
+    /// </summary>
+    /// <param name="collision">The collision information</param>
+    void OnCollisionEnter(Collision collision)
+    {
+        var character = collision.gameObject.GetComponent<Character>();
+
+        if (Kind == WalkableKind.Neutral || character == null || character.PlayerManager == null || !character.PlayerManager.isLocalPlayer)
+        {
+            return;
+        }
+
+        if (Kind == WalkableKind.Goal && character.PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator)
+        {
+            character.PlayerManager.InfiltratorsInGoalZone++;
+        }
+    }
+
+    /// <summary>
+    /// Handles collision with characters that leave the surface
+    /// </summary>
+    /// <param name="collision">The collision information</param>
+    void OnCollisionExit(Collision collision)
+    {
+        var character = collision.gameObject.GetComponent<Character>();
+
+        if (Kind == WalkableKind.Neutral || character == null || character.PlayerManager == null || !character.PlayerManager.isLocalPlayer)
+        {
+            return;
+        }
+
+        if (Kind == WalkableKind.Goal && character.PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator)
+        {
+            character.PlayerManager.InfiltratorsInGoalZone--;
+        }
+    }
 
     /// <summary>
     /// Identifies the surface as a wall or not. Walls are not walkable
@@ -28,6 +89,6 @@ public class Walkable : MonoBehaviour
             new Vector2(normal.x, normal.y)
         );
         
-        return angle < AngularThreshold;
+        return angle > AngularThreshold;
     }
 }

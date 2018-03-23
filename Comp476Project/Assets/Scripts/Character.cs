@@ -76,7 +76,7 @@ public class Character : MonoBehaviour
     /// <summary>
     /// The manager who owns the character
     /// </summary>
-    public PlayerManager Owner { get; set; }
+    public PlayerManager PlayerManager { get; set; }
     
     /// <summary>
     /// Whether or not the character is currently selected
@@ -145,6 +145,11 @@ public class Character : MonoBehaviour
     /// </summary>
     void Update()
     {
+        if (PlayerManager == null || !PlayerManager.GameReady)
+        {
+            return;
+        }
+
         for (int i = 0; i < Lamps.Length; i++)
         {
             if (Vector3.Distance(transform.position, Lamps[i].transform.position) <= Lamps[i].GetComponent<Lamp>().range)
@@ -165,7 +170,7 @@ public class Character : MonoBehaviour
         }
 
         // Shift-right-click to set a patrol for the character
-        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1) && Owner.Kind == PlayerManager.PlayerKind.Defender)
+        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1) && PlayerManager.Kind == PlayerManager.PlayerKind.Defender)
         {
             RaycastHit originHit;
             RaycastHit targetHit;
@@ -176,9 +181,20 @@ public class Character : MonoBehaviour
             // Create indicators and initiate patrol if both the clicked ground and the ground under the character is walkable
             if (originHitSuccess && targetHitSuccess)
             {
-                if (originHit.collider.GetComponent<Walkable>() != null && targetHit.collider.GetComponent<Walkable>())
+                var targetWalkable = targetHit.collider.GetComponent<Walkable>();
+
+                if (targetWalkable != null && targetHit.collider.GetComponent<Walkable>())
                 {
-                    CreatePatrolIndicators(originHit, targetHit);
+                    // Disallow movement on other surface than the neutral zone for the defender player on setup
+                    var defenderSetup =
+                        !PlayerManager.GameOn &&
+                        PlayerManager.Kind == PlayerManager.PlayerKind.Defender &&
+                        targetWalkable.Kind != Walkable.WalkableKind.Neutral;
+
+                    if(!defenderSetup)
+                    {
+                        CreatePatrolIndicators(originHit, targetHit);
+                    }
                 }
             }
         }
@@ -190,19 +206,28 @@ public class Character : MonoBehaviour
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
             {
                 var walkable = hit.collider.GetComponent<Walkable>();
-
-                // Create indicators and initiate movement if a walkable surfacae is detected on click
-                if (walkable != null && walkable.IsWall(hit.normal))
+                
+                // Create indicators and initiate movement if a walkable surface is detected on click
+                if (walkable != null && !walkable.IsWall(hit.normal))
                 {
-                    CreateTargetIndicator(hit);
+                    // Disallow movement on other surface than the start zone for the Infiltrator player on setup
+                    var infiltratorSetup =
+                        !PlayerManager.GameOn &&
+                        PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator &&
+                        walkable.Kind != Walkable.WalkableKind.Start;
+
+                    // Disallow movement on other surface than the neutral zone for the defender player on setup
+                    var defenderSetup =
+                        !PlayerManager.GameOn &&
+                        PlayerManager.Kind == PlayerManager.PlayerKind.Defender &&
+                        walkable.Kind != Walkable.WalkableKind.Neutral;
+
+                    if (!infiltratorSetup && !defenderSetup)
+                    {
+                        CreateTargetIndicator(hit);
+                    }
                 }
             }
-        }
-
-        // Space-bar to set the character's to looping
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            LoopPatrol = !LoopPatrol;
         }
         
         // Handle pathfinding when the current target is reached
@@ -268,7 +293,7 @@ public class Character : MonoBehaviour
 
         for (var i = 0; i < renderers.Length; i++)
         {
-            if (renderers[i].name == "View Visualization")
+            if (renderers[i] == GetComponent<FieldOfView>().viewMeshFilter.GetComponent<MeshRenderer>())
             {
                 continue;
             }
@@ -283,9 +308,9 @@ public class Character : MonoBehaviour
     {
         // Commented this out temporarily so that the rectangle selection works properly.
 
-        //if (Owner != null)
+        //if (PlayerManager != null)
         //{
-        //    foreach (var character in Owner.Characters)
+        //    foreach (var character in PlayerManager.Characters)
         //    {
         //        if (character == this)
         //        {
@@ -295,6 +320,11 @@ public class Character : MonoBehaviour
         //        character.Deselect();
         //    }
         //}
+
+        if (PlayerManager == null || !PlayerManager.isLocalPlayer)
+        {
+            return;
+        }
 
         IsSelected = true;
         JustSelected = true;
@@ -309,6 +339,11 @@ public class Character : MonoBehaviour
     /// </summary>
     public void Deselect()
     {
+        if (PlayerManager == null || !PlayerManager.isLocalPlayer)
+        {
+            return;
+        }
+
         IsSelected = false;
         Colorize(Color.blue);
         HideTargetIndicators();
