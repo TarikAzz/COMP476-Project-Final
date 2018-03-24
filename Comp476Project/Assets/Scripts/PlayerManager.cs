@@ -101,7 +101,7 @@ public class PlayerManager : NetworkBehaviour
 
             if (_infiltratorsInGoalZone >= MainManager.CharactersNeededToWin)
             {
-                EndGame(PlayerKind.Infiltrator);
+                CmdEndGame(PlayerKind.Infiltrator);
             }
         }
     }
@@ -121,7 +121,7 @@ public class PlayerManager : NetworkBehaviour
 
             if (_infiltratorDead >= MainManager.CharactersNeededToWin)
             {
-                EndGame(PlayerKind.Defender);
+                CmdEndGame(PlayerKind.Defender);
             }
         }
     }
@@ -311,20 +311,7 @@ public class PlayerManager : NetworkBehaviour
         GameOn = true;
         _inGamePanel.GameStateText.text = "Go!";
     }
-
-    /// <summary>
-    /// Ends the game, reseting the level and other variable to their standby states
-    /// </summary>
-    public void EndGame()
-    {
-        foreach (var barrier in _setupBarriers)
-        {
-            barrier.GetComponent<MeshRenderer>().enabled = true;
-        }
-
-        GameOn = false;
-    }
-
+    
     /// <summary>
     /// Assign damage to a specific character and handles elimination
     /// </summary>
@@ -437,12 +424,13 @@ public class PlayerManager : NetworkBehaviour
             }
         }
     }
-    
+
     /// <summary>
     /// Ends the game after a player wins
     /// </summary>
     /// <param name="winningPlayer">The winning player kind</param>
-    public void EndGame(PlayerKind winningPlayer)
+    [Command]
+    public void CmdEndGame(PlayerKind winningPlayer)
     {
         MainManager.EndGame(winningPlayer);
     }

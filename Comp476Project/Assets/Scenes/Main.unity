@@ -1842,7 +1842,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh85610
+  m_Name: pb_Mesh26786
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -2098,7 +2098,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh26138
+  m_Name: pb_Mesh14400
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -4074,7 +4074,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh85716
+  m_Name: pb_Mesh26324
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -4886,6 +4886,11 @@ Prefab:
       propertyPath: InfiltratorSpawn
       value: 
       objectReference: {fileID: 693476569}
+    - target: {fileID: 114113016603786408, guid: 1ab3986592c5eef4d9e00092d6c0a753,
+        type: 2}
+      propertyPath: SetupTime
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1ab3986592c5eef4d9e00092d6c0a753, type: 2}
   m_IsPrefabParent: 0
