@@ -21,8 +21,20 @@ public class InGamePanel : MonoBehaviour
     // The object to retrieve all the UI buttons from
     public GameObject controlContainer;
 
+    // The object to retrieve the toggle button (separated from unit container)
+    public GameObject toggleContainer;
+
     // The list of all UI buttons
     public List<Button> unitControls;
+
+    // The toggle button itself
+    public Button toggleControl;
+
+    // The boolean to check both states of the toggle button
+    public bool isToggleCycled;
+
+    // Used to access all the characters for the toggle feature to adjust their values
+    public PlayerManager characterContainer;
 
     // Used to handle the green highlight of the button when selecting a unit
     public ColorBlock buttonColors;
@@ -46,6 +58,10 @@ public class InGamePanel : MonoBehaviour
     // UI button sprites for Infiltrator (all defined in the Inspector)
     public Sprite iTrap;
 
+    // UI button sprites for the toggle (all defined in the Inspector)
+    public Sprite cycle;
+    public Sprite back_forth;
+
     // Unit limitations
     public int guardCapacity;
     public int lampCapacity;
@@ -66,6 +82,7 @@ public class InGamePanel : MonoBehaviour
     void Start()
     {
         UI_Loaded = false;
+        isToggleCycled = true;
 
         // RANDOM VALUES FOR TESTING, NOT FINALIZED!
         guardCapacity = 5;
@@ -93,6 +110,10 @@ public class InGamePanel : MonoBehaviour
         // Only load the unit UI once player kind has been determined
         if (UI_Loaded == false)
         {
+            // Outside the "if" statement because it works for both players
+            toggleContainer = GameObject.Find("Toggle Command");
+            toggleControl = GameObject.Find("Toggle").GetComponent<Button>();
+
             // Defender's UI
             if (PlayerManager.Kind == PlayerManager.PlayerKind.Defender)
             {
@@ -157,6 +178,12 @@ public class InGamePanel : MonoBehaviour
         // If UI is loaded, then keep checking to lock/unlock buttons and coloring as game is running
         else
         {
+            // Enable toggle control
+            toggleControl.interactable = true;
+
+            // Acess the Player Manager script
+            characterContainer = GameObject.Find("PlayerManager(Clone)").GetComponent<PlayerManager>();
+
             if (PlayerManager.Kind == PlayerManager.PlayerKind.Defender)
             {
                 // Disable all buttons until you place the chosen unit
@@ -240,6 +267,28 @@ public class InGamePanel : MonoBehaviour
                     }
                 }
             }
+
+            // Always update sprites depending on toggle's state
+            if (isToggleCycled)
+            {
+                toggleControl.image.sprite = cycle;
+
+                // Set all character to cycle
+                for (int i = 0; i < characterContainer.Characters.Count; i++)
+                {
+                    characterContainer.Characters[i].LoopPatrol = true;
+                }
+            }
+            else
+            {
+                toggleControl.image.sprite = back_forth;
+
+                // Set all character to reverse
+                for (int i = 0; i < characterContainer.Characters.Count; i++)
+                {
+                    characterContainer.Characters[i].LoopPatrol = false;
+                }
+            }
         }
     }
 
@@ -259,5 +308,18 @@ public class InGamePanel : MonoBehaviour
         unitControls[ID - 1].colors = buttonColors;
         buttonSelected = ID;
         controlLocked = true;
+    }
+
+    // Switch between the toggle states when user clicks button
+    public void togglePathState()
+    {
+        if (isToggleCycled)
+        {
+            isToggleCycled = false;
+        }
+        else
+        {
+            isToggleCycled = true;
+        }
     }
 }

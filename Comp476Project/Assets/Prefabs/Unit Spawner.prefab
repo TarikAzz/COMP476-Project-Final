@@ -52,3 +52,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lamp: {fileID: 1051020488507802, guid: 8ba0f435975283542a8d6fb4b898d453, type: 2}
+  trap: {fileID: 1752186976257290, guid: a3d523509eded4f48afd3eb57222a9f0, type: 2}
+  iTrap: {fileID: 1770624526532316, guid: 78aac45cc4aacac4eb5d58db56c23747, type: 2}
+  cam: {fileID: 1543696365204476, guid: 0362589357c7d074b94c009046b4c4c7, type: 2}
