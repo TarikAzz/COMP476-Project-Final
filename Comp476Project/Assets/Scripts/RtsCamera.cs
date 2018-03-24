@@ -91,12 +91,14 @@ public class RtsCamera : MonoBehaviour
         {
             if (Input.mousePosition.y <= 0)
             {
-                transform.position -= transform.forward * cameraSpeed * Time.deltaTime;
+                // transform.position -= transform.forward * cameraSpeed * Time.deltaTime;
+                transform.Translate(-(new Vector3(0, cameraSpeed * Time.deltaTime, 0)), Space.Self);
             }
 
             if (Input.mousePosition.y >= Screen.height)
             {
-                transform.position += transform.forward * cameraSpeed * Time.deltaTime;
+                //transform.position += transform.forward * cameraSpeed * Time.deltaTime;
+                transform.Translate((new Vector3(0, cameraSpeed * Time.deltaTime, 0)), Space.Self);
             }
 
             if (Input.mousePosition.x <= 0)
