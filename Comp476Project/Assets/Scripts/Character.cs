@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Networking;
@@ -282,7 +283,29 @@ public class Character : MonoBehaviour
             DestroyTargetIndicators();
         }
     }
-    
+
+    /// <summary>
+    /// Tell the player manage to assign damage to this character
+    /// </summary>
+    public void TakeDamage()
+    {
+        if (PlayerManager == null)
+        {
+            return;
+        }
+
+        PlayerManager.AssignDamage(this);
+    }
+
+    /// <summary>
+    /// Update the graphical healthbar above the character to reflect its health
+    /// </summary>
+    /// <param name="ratio">The ratio of current/max health</param>
+    public void UpdateHealthBar(float ratio)
+    {
+        HealthBar.fillAmount = ratio;
+    }
+
     /// <summary>
     /// Colors the character
     /// </summary>

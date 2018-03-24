@@ -29,7 +29,22 @@ public class PlayerManager : NetworkBehaviour
     /// The characters owned by the manager
     /// </summary>
     public List<Character> Characters;
-    
+
+    /// <summary>
+    /// The maximum health for every character
+    /// </summary>
+    public float CharactersMaxHealth;
+
+    /// <summary>
+    /// The current health of characters in the list
+    /// </summary>
+    public SyncListFloat CharactersHealth;
+
+    /// <summary>
+    /// The damage characters take per second when spotted
+    /// </summary>
+    public float DamagePerSecond;
+
     #endregion
 
     #region Public properties
@@ -84,9 +99,29 @@ public class PlayerManager : NetworkBehaviour
         {
             _infiltratorsInGoalZone = value;
 
-            if (value >= MainManager.CharactersNeededToWin)
+            if (_infiltratorsInGoalZone >= MainManager.CharactersNeededToWin)
             {
                 EndGame(PlayerKind.Infiltrator);
+            }
+        }
+    }
+
+    /// <summary>
+    /// The number of dead infiltrators
+    /// </summary>
+    public int InfiltratorDead
+    {
+        get
+        {
+            return _infiltratorDead;
+        }
+        set
+        {
+            _infiltratorDead = value;
+
+            if (_infiltratorDead >= MainManager.CharactersNeededToWin)
+            {
+                EndGame(PlayerKind.Defender);
             }
         }
     }
@@ -104,6 +139,11 @@ public class PlayerManager : NetworkBehaviour
     /// InfiltratorsInGoalZone backing field
     /// </summary>
     private int _infiltratorsInGoalZone;
+
+    /// <summary>
+    /// InfiltratorDead backing field
+    /// </summary>
+    private int _infiltratorDead;
 
     /// <summary>
     /// GameReady backing field
@@ -124,7 +164,7 @@ public class PlayerManager : NetworkBehaviour
     /// MainManager backing field
     /// </summary>
     private MainManager _mainManager;
-
+    
     #endregion
 
     #region Private properties
@@ -147,6 +187,24 @@ public class PlayerManager : NetworkBehaviour
 
     #endregion
 
+    void Awake()
+    {
+        CharactersHealth = new SyncListFloat();
+
+        for (var i = 0; i < Characters.Count; i++)
+        {
+            Characters[i].PlayerManager = this;
+        }
+    }
+
+    public override void OnStartServer()
+    {
+        for (var i = 0; i < Characters.Count; i++)
+        {
+            CharactersHealth.Add(CharactersMaxHealth);
+        }
+    }
+
     /// <summary>
     /// Intializes most of the variables when the player connects to the network
     /// </summary>
@@ -154,7 +212,6 @@ public class PlayerManager : NetworkBehaviour
     {
         for (var i = 0; i < Characters.Count; i++)
         {
-            Characters[i].PlayerManager = this;
             Characters[i].Colorize(Color.blue);
         }
 
@@ -164,7 +221,9 @@ public class PlayerManager : NetworkBehaviour
         switch (Kind)
         {
             case PlayerKind.Infiltrator:
+
                 transform.position = MainManager.InfiltratorSpawn.position;
+                
                 break;
             case PlayerKind.Defender:
                 transform.position = MainManager.DefenderSpawn.position;
@@ -265,7 +324,48 @@ public class PlayerManager : NetworkBehaviour
 
         GameOn = false;
     }
-    
+
+    /// <summary>
+    /// Assign damage to a specific character and handles elimination
+    /// </summary>
+    /// <param name="character">The damaged character</param>
+    public void AssignDamage(Character character)
+    {
+        if (CharactersHealth[Characters.IndexOf(character)] <= 0)
+        {
+            return;
+        }
+
+        CharactersHealth[Characters.IndexOf(character)] -= DamagePerSecond * Time.deltaTime;
+        RpcUpdateCharacterHealth(Characters.IndexOf(character));
+    }
+
+    /// <summary>
+    /// Tells the client to update the character's health info
+    /// </summary>
+    /// <param name="characterIndex">The index of the character to update</param>
+    [ClientRpc]
+    private void RpcUpdateCharacterHealth(int characterIndex)
+    {
+        if (CharactersHealth[characterIndex] <= 0)
+        {
+            RemoveCharacter(characterIndex);
+            return;
+        }
+        
+        Characters[characterIndex].UpdateHealthBar(CharactersHealth[characterIndex] / CharactersMaxHealth);
+    }
+
+    /// <summary>
+    /// Removes a player from the list. Ends the game is the Infiltrator character count is small than CharactersNeededToWin
+    /// </summary>
+    /// <param name="characterIndex">The index of the character to remove</param>
+    public void RemoveCharacter(int characterIndex)
+    {
+        Characters[characterIndex].gameObject.SetActive(false);
+        InfiltratorDead++;
+    }
+
     /// <summary>
     /// Whether the manager owns a specific character
     /// </summary>
@@ -275,23 +375,7 @@ public class PlayerManager : NetworkBehaviour
     {
         return character.PlayerManager != null && character.PlayerManager.isLocalPlayer;
     }
-
-    /// <summary>
-    /// Removes a player from the list and destroys it. Ends the game is the Infiltrator character count is small than CharactersNeededToWin
-    /// </summary>
-    /// <param name="character">The character to remove</param>
-    public void RemoveCharacter(Character character)
-    {
-        Characters.Remove(character);
-        character.gameObject.SetActive(false);
-        //Destroy(character.gameObject);
-
-        if (Kind == PlayerKind.Infiltrator && Characters.Count < MainManager.CharactersNeededToWin)
-        {
-            EndGame(PlayerKind.Defender);
-        }
-    }
-
+    
     /// <summary>
     /// Selects the characters using the left mouse button.
     /// Changes behaviour based on if the shift button is held.
@@ -353,13 +437,13 @@ public class PlayerManager : NetworkBehaviour
             }
         }
     }
-
+    
     /// <summary>
     /// Ends the game after a player wins
     /// </summary>
     /// <param name="winningPlayer">The winning player kind</param>
-    private void EndGame(PlayerKind winningPlayer)
+    public void EndGame(PlayerKind winningPlayer)
     {
-        Debug.Log(winningPlayer + " wins!");
+        MainManager.EndGame(winningPlayer);
     }
 }

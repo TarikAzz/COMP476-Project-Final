@@ -2799,15 +2799,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b74cf35c929fbd048bab6577bb756435, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MouseSensitivity: 0.5
   Characters:
   - {fileID: 114191667959773014}
   - {fileID: 114066071415560800}
   - {fileID: 114639121215128096}
   - {fileID: 114927436666788578}
   - {fileID: 114273527972766996}
-  CharactersNeededToWin: 3
-  SetupTime: 30
+  CharactersMaxHealth: 100
+  DamagePerSecond: 20
 --- !u!114 &114542630109855748
 MonoBehaviour:
   m_ObjectHideFlags: 1
