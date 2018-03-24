@@ -23,6 +23,9 @@ public class UnitSpawner : NetworkBehaviour
 
     // Missing the rest...
     public GameObject lamp;
+    public GameObject trap;
+    public GameObject iTrap;
+    public GameObject cam;
 
     private InGamePanel _unitSelector;
 
@@ -61,6 +64,20 @@ public class UnitSpawner : NetworkBehaviour
                             }
                             break;
 
+                        case 3:
+                            {
+                                unit = Instantiate(cam, hit.point, Quaternion.identity);
+                                NetworkServer.Spawn(unit);
+                            }
+                            break;
+
+                        case 4:
+                            {
+                                unit = Instantiate(trap, hit.point, Quaternion.identity);
+                                NetworkServer.Spawn(unit);
+                            }
+                            break;
+
                             // Missing the rest...
 
                     }
@@ -75,6 +92,10 @@ public class UnitSpawner : NetworkBehaviour
                     {
                         // Missing the rest...
                         case 1:
+                            {
+                                unit = Instantiate(iTrap, hit.point, Quaternion.identity);
+                                NetworkServer.Spawn(unit);
+                            }
                             break;
                     }
                 }
