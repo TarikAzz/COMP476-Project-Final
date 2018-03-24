@@ -36,7 +36,7 @@ public class MainManager : NetworkBehaviour
     /// </summary>
     [SyncVar]
     public bool InfiltratorReady;
-
+    
     /// <summary>
     /// Sends the ready message from the server
     /// </summary>
@@ -49,6 +49,35 @@ public class MainManager : NetworkBehaviour
         }
             
         RpcPlayerReady(playerKind);
+    }
+
+    /// <summary>
+    /// Sends the end message from the server
+    /// </summary>
+    /// <param name="winningPlayer">the winning player</param>
+    public void EndGame(PlayerManager.PlayerKind winningPlayer)
+    {
+        if (!isServer)
+        {
+            return;
+        }
+
+        RpcEndGame(winningPlayer);
+    }
+
+    /// <summary>
+    /// Sends the end message back to the client
+    /// </summary>
+    /// <param name="winningPlayer">the winning player</param>
+    [ClientRpc]
+    public void RpcEndGame(PlayerManager.PlayerKind winningPlayer)
+    {
+        var allCharacters = FindObjectsOfType<Character>();
+
+        foreach (var character in allCharacters)
+        {
+            character.gameObject.SetActive(false);
+        }
     }
 
     /// <summary>

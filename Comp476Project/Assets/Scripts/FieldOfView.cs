@@ -67,13 +67,7 @@ public class FieldOfView : MonoBehaviour
     void Start()
     {
         owner = transform.root.GetComponent<PlayerManager>();
-
-        if (owner.Kind == PlayerManager.PlayerKind.Infiltrator)
-        {
-            Destroy(viewMeshFilter.gameObject);
-            Destroy(this);   
-        }
-
+        
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";
         viewMeshFilter.mesh = viewMesh;
@@ -81,6 +75,18 @@ public class FieldOfView : MonoBehaviour
         StartCoroutine("FindTargetsWithDelay",.2f);
     }
 
+    void Update()
+    {
+        if (owner.Kind == PlayerManager.PlayerKind.Infiltrator)
+        {
+            return;
+        }
+
+        foreach (var character in visibleTargets)
+        {
+            character.GetComponent<Character>().TakeDamage();
+        }
+    }
 
     void LateUpdate()
     {
