@@ -10,6 +10,8 @@ TagManager:
   - Sniper
   - Trap
   - iTrap
+  - Bad
+  - Good
   layers:
   - Default
   - TransparentFX

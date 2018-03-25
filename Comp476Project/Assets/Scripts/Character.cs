@@ -78,7 +78,7 @@ public class Character : MonoBehaviour
     /// The manager who owns the character
     /// </summary>
     public PlayerManager PlayerManager { get; set; }
-    
+
     /// <summary>
     /// Whether or not the character is currently selected
     /// </summary>
@@ -192,7 +192,7 @@ public class Character : MonoBehaviour
                         PlayerManager.Kind == PlayerManager.PlayerKind.Defender &&
                         targetWalkable.Kind != Walkable.WalkableKind.Neutral;
 
-                    if(!defenderSetup)
+                    if (!defenderSetup)
                     {
                         CreatePatrolIndicators(originHit, targetHit);
                     }
@@ -207,7 +207,7 @@ public class Character : MonoBehaviour
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
             {
                 var walkable = hit.collider.GetComponent<Walkable>();
-                
+
                 // Create indicators and initiate movement if a walkable surface is detected on click
                 if (walkable != null && !walkable.IsWall(hit.normal))
                 {
@@ -230,7 +230,7 @@ public class Character : MonoBehaviour
                 }
             }
         }
-        
+
         // Handle pathfinding when the current target is reached
         if (_target != null && Vector3.Distance(transform.position, _target.transform.position) <= _navMeshAgent.stoppingDistance)
         {
@@ -248,7 +248,7 @@ public class Character : MonoBehaviour
                         _reversePatrol = false;
                     }
                 }
-                
+
                 SetTarget(null);
 
                 StartCoroutine(SetPatrolTargetWithDelay(_patrolIndicators[_patrolStep]));
@@ -281,6 +281,11 @@ public class Character : MonoBehaviour
 
             // If not on patrol, simply destroy the target
             DestroyTargetIndicators();
+
+            if (Spotted)
+            {
+                ToggleVisibility(true);
+            }
         }
     }
 
@@ -387,7 +392,7 @@ public class Character : MonoBehaviour
         {
             target.GetComponent<Indicator>().IsTarget = true;
         }
-        
+
         _target = target;
     }
 
@@ -428,7 +433,7 @@ public class Character : MonoBehaviour
     /// <param name="targetHit">The raycast information for the new patrol target</param>
     private void CreatePatrolIndicators(RaycastHit originHit, RaycastHit targetHit)
     {
-        var newPatrolNode = (Indicator) null;
+        var newPatrolNode = (Indicator)null;
 
         // If the patrol list is empty, create an indicator at its origin
         if (_patrolIndicators.Count == 0)
@@ -474,7 +479,7 @@ public class Character : MonoBehaviour
                 }
             }
         }
-        
+
         if (_target != null)
         {
             _target.GetComponent<SpriteRenderer>().enabled = true;
@@ -527,4 +532,23 @@ public class Character : MonoBehaviour
         _patrolIndicators.Clear();
         _patrolStep = 0;
     }
+
+    /// <summary>
+    /// Toggles visibility of the spotted character and its components.
+    /// </summary>
+    /// <param name="enabled">Determines if enabled or not</param>
+    public void ToggleVisibility(bool enabled)
+    {
+        Renderer[] rs = GetComponentsInChildren<Renderer>();
+
+        foreach (Renderer r in rs)
+        {
+            r.enabled = enabled;
+        }
+
+        gameObject.transform.GetChild(2).gameObject.SetActive(enabled);
+
+        gameObject.transform.GetChild(3).gameObject.SetActive(false);
+    }
+
 }

@@ -84,6 +84,7 @@ public class FieldOfView : MonoBehaviour
 
         foreach (var character in visibleTargets)
         {
+            character.GetComponent<Character>().ToggleVisibility(true);
             character.GetComponent<Character>().TakeDamage();
         }
     }
