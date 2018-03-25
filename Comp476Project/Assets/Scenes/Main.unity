@@ -1842,7 +1842,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh25446
+  m_Name: pb_Mesh49674
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -4085,7 +4085,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c24a9da77c22c81498b986736b8fe205, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  canMoveByEdge: 1
+  canMoveByEdge: 0
   isFovZoom: 1
   cameraSpeed: 25
   zoomSpeed: 12
@@ -4093,14 +4093,14 @@ MonoBehaviour:
   rotateVertical: 2
   minPitch: 15
   maxPitch: 85
-  minFov: 35
+  minFov: 15
   maxFov: 60
 --- !u!43 &1404563456
 Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh25172
+  m_Name: pb_Mesh49820
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2

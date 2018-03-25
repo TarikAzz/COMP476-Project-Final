@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class PlayerManager : NetworkBehaviour
 {
     #region Enum
-    
+
     /// <summary>
     /// The different roles a player can play
     /// </summary>
@@ -24,8 +24,8 @@ public class PlayerManager : NetworkBehaviour
     #endregion
 
     #region Public variables
-    
-	/// <summary>
+
+    /// <summary>
     /// The characters owned by the manager
     /// </summary>
     public List<Character> Characters;
@@ -134,7 +134,7 @@ public class PlayerManager : NetworkBehaviour
     /// The player's HUD
     /// </summary>
     private InGamePanel _inGamePanel;
-    
+
     /// <summary>
     /// InfiltratorsInGoalZone backing field
     /// </summary>
@@ -164,7 +164,7 @@ public class PlayerManager : NetworkBehaviour
     /// MainManager backing field
     /// </summary>
     private MainManager _mainManager;
-    
+
     #endregion
 
     #region Private properties
@@ -221,10 +221,12 @@ public class PlayerManager : NetworkBehaviour
         switch (Kind)
         {
             case PlayerKind.Infiltrator:
-
                 transform.position = MainManager.InfiltratorSpawn.position;
+
+                Characters.ForEach(c => c.transform.GetChild(3).gameObject.SetActive(false));
                 
                 break;
+
             case PlayerKind.Defender:
                 transform.position = MainManager.DefenderSpawn.position;
                 break;
@@ -246,7 +248,7 @@ public class PlayerManager : NetworkBehaviour
         {
             return;
         }
-        
+
         if (_setupTimer > 0)
         {
             _setupTimer -= Time.deltaTime;
@@ -267,12 +269,44 @@ public class PlayerManager : NetworkBehaviour
 
             CharacterSelection(true);
         }
-        else if (Input.GetMouseButtonDown(0)) 
+        else if (Input.GetMouseButtonDown(0))
         {
             CharacterSelection(false);
         }
 
         RectangleSelect();
+
+        #region Visibility
+
+        // Manages the visibility.
+        if (Kind == PlayerKind.Infiltrator)
+        {
+            if (Characters.Count > 0)
+            {
+                Characters.ForEach(c => c.tag = "Bad");
+            }
+        }
+        else
+        {
+            if (Characters.Count > 0)
+            {
+                Characters.ForEach(c => c.tag = "Good");
+            }
+        }
+
+        if (Kind == PlayerKind.Defender)
+        {
+            var infiltrators = GameObject.FindGameObjectsWithTag("Bad");
+
+            foreach (var infiltrator in infiltrators)
+            {
+                bool isSpotted = (infiltrator.GetComponent<Character>().Spotted);
+                
+                infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(isSpotted);
+            }
+        }
+
+        #endregion
     }
 
     /// <summary>
@@ -311,7 +345,7 @@ public class PlayerManager : NetworkBehaviour
         GameOn = true;
         _inGamePanel.GameStateText.text = "Go!";
     }
-    
+
     /// <summary>
     /// Assign damage to a specific character and handles elimination
     /// </summary>
@@ -339,7 +373,7 @@ public class PlayerManager : NetworkBehaviour
             RemoveCharacter(characterIndex);
             return;
         }
-        
+
         Characters[characterIndex].UpdateHealthBar(CharactersHealth[characterIndex] / CharactersMaxHealth);
     }
 
@@ -362,7 +396,7 @@ public class PlayerManager : NetworkBehaviour
     {
         return character.PlayerManager != null && character.PlayerManager.isLocalPlayer;
     }
-    
+
     /// <summary>
     /// Selects the characters using the left mouse button.
     /// Changes behaviour based on if the shift button is held.
