@@ -2042,6 +2042,9 @@ MonoBehaviour:
     type: 2}
   PatrolCooldown: 1
   LoopPatrol: 0
+  StunDuration: 5
+  IsStunned: 0
+  _navMeshAgent: {fileID: 0}
 --- !u!114 &114100540260939394
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2203,6 +2206,9 @@ MonoBehaviour:
     type: 2}
   PatrolCooldown: 1
   LoopPatrol: 0
+  StunDuration: 5
+  IsStunned: 0
+  _navMeshAgent: {fileID: 0}
 --- !u!114 &114193997025772754
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2540,6 +2546,9 @@ MonoBehaviour:
     type: 2}
   PatrolCooldown: 1
   LoopPatrol: 0
+  StunDuration: 5
+  IsStunned: 0
+  _navMeshAgent: {fileID: 0}
 --- !u!114 &114291321851098770
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3209,6 +3218,9 @@ MonoBehaviour:
     type: 2}
   PatrolCooldown: 1
   LoopPatrol: 0
+  StunDuration: 5
+  IsStunned: 0
+  _navMeshAgent: {fileID: 0}
 --- !u!114 &114662158509911446
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3599,6 +3611,9 @@ MonoBehaviour:
     type: 2}
   PatrolCooldown: 1
   LoopPatrol: 0
+  StunDuration: 5
+  IsStunned: 0
+  _navMeshAgent: {fileID: 0}
 --- !u!114 &114928805631828374
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -57,6 +57,7 @@ GameObject:
   - component: {fileID: 4918177571130382}
   - component: {fileID: 114885732544449660}
   - component: {fileID: 114442005932222158}
+  - component: {fileID: 135602226325915408}
   m_Layer: 0
   m_Name: Trap (Inf)
   m_TagString: iTrap
@@ -97,7 +98,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1770624526532316}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -4.79, y: 4.56, z: -9.47}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4329638018868604}
@@ -226,6 +227,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44eb56a8e4240524c93e950d322eefeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StunParticles: {fileID: 1211793155702746, guid: c0261bad08e699045937bc92e6332666,
+    type: 2}
+--- !u!135 &135602226325915408
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1770624526532316}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &135992173313315892
 SphereCollider:
   m_ObjectHideFlags: 1
