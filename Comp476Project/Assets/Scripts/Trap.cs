@@ -20,15 +20,15 @@ public class Trap : MonoBehaviour
 
     void OnCollisionEnter(Collision col)
     {
-        // TEMP
-        if(col.gameObject.tag == "Infiltrator")
+        if(/*col.gameObject.tag == "Infiltrator" &&*/ tag == "iTrap")
         {
-            // ...
+            
         }
+        /*
         else if (col.gameObject.tag == "Defender")
         {
-            // ...
+            
         }
-
+        */
     }
 }
