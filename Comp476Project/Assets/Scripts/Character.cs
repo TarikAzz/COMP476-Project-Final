@@ -70,6 +70,16 @@ public class Character : MonoBehaviour
     /// </summary>
     public bool LoopPatrol;
 
+    /// <summary>
+    /// The duration of the character being stunned (if stunned)
+    /// </summary>
+    public float StunDuration;
+
+    /// <summary>
+    /// Keep track of network's time as you are NOT stunned
+    /// </summary>
+    public double NotStunnedTillNow;
+
     #endregion
 
     #region Public Properties
@@ -92,7 +102,12 @@ public class Character : MonoBehaviour
     /// <summary>
     /// Whether or not the infiltrating character has been spotted by the defender
     /// </summary>
-    public bool Spotted { get; set; }
+    public bool IsSpotted { get; set; }
+
+    /// <summary>
+    /// To determine if defender unit is stunned by infiltrator trap
+    /// </summary>
+    public bool IsStunned;
 
     /// <summary>
     /// The lamps potentially affecting the character
@@ -126,7 +141,7 @@ public class Character : MonoBehaviour
     /// <summary>
     /// The NavMeshAgent component
     /// </summary>
-    private NavMeshAgent _navMeshAgent;
+    public NavMeshAgent _navMeshAgent;
 
     #endregion
 
@@ -155,11 +170,11 @@ public class Character : MonoBehaviour
         {
             if (Vector3.Distance(transform.position, Lamps[i].transform.position) <= Lamps[i].GetComponent<Lamp>().range)
             {
-                Spotted = true;
+                IsSpotted = true;
             }
             else
             {
-                Spotted = false;
+                IsSpotted = false;
             }
         }
 
@@ -171,7 +186,7 @@ public class Character : MonoBehaviour
         }
 
         // Shift-right-click to set a patrol for the character
-        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1) && PlayerManager.Kind == PlayerManager.PlayerKind.Defender)
+        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1) && PlayerManager.Kind == PlayerManager.PlayerKind.Defender && IsStunned == false)
         {
             RaycastHit originHit;
             RaycastHit targetHit;
@@ -200,7 +215,7 @@ public class Character : MonoBehaviour
             }
         }
         // Right-click to set simple movement target
-        else if (IsSelected && Input.GetMouseButtonDown(1))
+        else if (IsSelected && Input.GetMouseButtonDown(1) && IsStunned == false)
         {
             RaycastHit hit;
 
@@ -282,10 +297,25 @@ public class Character : MonoBehaviour
             // If not on patrol, simply destroy the target
             DestroyTargetIndicators();
 
-            if (Spotted)
+            if (IsSpotted)
             {
                 ToggleVisibility(true);
             }
+        }
+
+        // When stunned, free itself when stun duration passes
+        if(IsStunned)
+        {
+            if(Network.time > NotStunnedTillNow + StunDuration)
+            {
+                IsStunned = false;
+            }
+        }
+
+        // When not stunned, track up-to-date time
+        else
+        {
+            NotStunnedTillNow = Network.time;
         }
     }
 

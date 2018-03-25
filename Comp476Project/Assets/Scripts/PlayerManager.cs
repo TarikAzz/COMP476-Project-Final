@@ -300,7 +300,7 @@ public class PlayerManager : NetworkBehaviour
 
             foreach (var infiltrator in infiltrators)
             {
-                bool isSpotted = (infiltrator.GetComponent<Character>().Spotted);
+                bool isSpotted = (infiltrator.GetComponent<Character>().IsSpotted);
                 
                 infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(isSpotted);
             }

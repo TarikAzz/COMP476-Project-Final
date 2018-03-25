@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: 4670797161752920}
   - component: {fileID: 198050672042684296}
   - component: {fileID: 199034683456470192}
+  - component: {fileID: 114238568743304796}
+  - component: {fileID: 114122729022132422}
   m_Layer: 0
   m_Name: Stun Effects
   m_TagString: Untagged
@@ -41,6 +43,49 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &114122729022132422
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1211793155702746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af043b5bd82aabc43a1530ce18939427, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114238568743304796
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1211793155702746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 192
+    i1: 38
+    i2: 27
+    i3: 173
+    i4: 8
+    i5: 230
+    i6: 153
+    i7: 4
+    i8: 89
+    i9: 55
+    i10: 188
+    i11: 146
+    i12: 230
+    i13: 51
+    i14: 38
+    i15: 102
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 0
 --- !u!198 &198050672042684296
 ParticleSystem:
   m_ObjectHideFlags: 1
@@ -48,9 +93,9 @@ ParticleSystem:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1211793155702746}
   serializedVersion: 5
-  lengthInSec: 5
+  lengthInSec: 4
   simulationSpeed: 1
-  looping: 1
+  looping: 0
   prewarm: 0
   playOnAwake: 1
   autoRandomSeed: 1
