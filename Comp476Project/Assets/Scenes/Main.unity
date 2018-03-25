@@ -1842,7 +1842,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh18014
+  m_Name: pb_Mesh49674
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -4069,12 +4069,38 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f8ebb4f9efed0a3428d01c46aaeacfaf, type: 2}
   m_IsPrefabParent: 0
+--- !u!1 &1379874352 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1477313222349838, guid: f8ebb4f9efed0a3428d01c46aaeacfaf,
+    type: 2}
+  m_PrefabInternal: {fileID: 1379874351}
+--- !u!114 &1379874353
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1379874352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c24a9da77c22c81498b986736b8fe205, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canMoveByEdge: 0
+  isFovZoom: 1
+  cameraSpeed: 25
+  zoomSpeed: 12
+  rotateHorizontal: 2
+  rotateVertical: 2
+  minPitch: 15
+  maxPitch: 85
+  minFov: 15
+  maxFov: 60
 --- !u!43 &1404563456
 Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh18064
+  m_Name: pb_Mesh49820
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
