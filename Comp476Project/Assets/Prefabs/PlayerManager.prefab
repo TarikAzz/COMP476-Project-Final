@@ -2043,6 +2043,7 @@ MonoBehaviour:
   PatrolCooldown: 1
   LoopPatrol: 0
   StunDuration: 5
+  NotStunnedTillNow: 0
   IsStunned: 0
   _navMeshAgent: {fileID: 0}
 --- !u!114 &114100540260939394
@@ -2207,6 +2208,7 @@ MonoBehaviour:
   PatrolCooldown: 1
   LoopPatrol: 0
   StunDuration: 5
+  NotStunnedTillNow: 0
   IsStunned: 0
   _navMeshAgent: {fileID: 0}
 --- !u!114 &114193997025772754
@@ -2547,6 +2549,7 @@ MonoBehaviour:
   PatrolCooldown: 1
   LoopPatrol: 0
   StunDuration: 5
+  NotStunnedTillNow: 0
   IsStunned: 0
   _navMeshAgent: {fileID: 0}
 --- !u!114 &114291321851098770
@@ -3219,6 +3222,7 @@ MonoBehaviour:
   PatrolCooldown: 1
   LoopPatrol: 0
   StunDuration: 5
+  NotStunnedTillNow: 0
   IsStunned: 0
   _navMeshAgent: {fileID: 0}
 --- !u!114 &114662158509911446
@@ -3612,6 +3616,7 @@ MonoBehaviour:
   PatrolCooldown: 1
   LoopPatrol: 0
   StunDuration: 5
+  NotStunnedTillNow: 0
   IsStunned: 0
   _navMeshAgent: {fileID: 0}
 --- !u!114 &114928805631828374
