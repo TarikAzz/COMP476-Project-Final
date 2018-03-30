@@ -143,7 +143,12 @@ public class FieldOfView : MonoBehaviour
                         if (targetCharacter.PlayerManager != owner)
                         {
                             visibleTargets.Add(target);
-                            GetComponent<Character>().Chase(target);
+
+                            var character = GetComponent<Character>();
+                            if(character != null)
+                            {
+                                character.Chase(target);
+                            }
                         }
                     }
                     
