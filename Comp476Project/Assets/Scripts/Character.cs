@@ -196,7 +196,7 @@ public class Character : MonoBehaviour
         }
 
         // Shift-right-click to set a patrol for the character
-        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1) && PlayerManager.Kind == PlayerManager.PlayerKind.Defender && IsStunned == false)
+        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1) && IsStunned == false)
         {
             RaycastHit originHit;
             RaycastHit targetHit;
@@ -313,12 +313,13 @@ public class Character : MonoBehaviour
             }
         }
 
-        // When stunned, free itself when stun duration passes
+        // When stunned, free itself when stun duration passes (and go back to being hidden)
         if(IsStunned)
         {
             if(Network.time > NotStunnedTillNow + StunDuration)
             {
                 IsStunned = false;
+                IsSpotted = false;
             }
         }
         // When not stunned, track up-to-date time
