@@ -24,7 +24,6 @@ public class UnitSpawner : NetworkBehaviour
     // Missing the rest...
     public GameObject lamp;
     public GameObject trap;
-    public GameObject iTrap;
     public GameObject cam;
 
     private InGamePanel _unitSelector;
@@ -55,23 +54,21 @@ public class UnitSpawner : NetworkBehaviour
                     // Spawn unit
                     switch (unitSelector.buttonSelected)
                     {
-                        // Missing the rest...
-
-                        case 2:
+                        case 1:
                             {
                                 unit = Instantiate(lamp, hit.point, Quaternion.identity);
                                 NetworkServer.Spawn(unit);
                             }
                             break;
 
-                        case 3:
+                        case 2:
                             {
                                 unit = Instantiate(cam, hit.point, Quaternion.identity);
                                 NetworkServer.Spawn(unit);
                             }
                             break;
 
-                        case 4:
+                        case 3:
                             {
                                 unit = Instantiate(trap, hit.point, Quaternion.identity);
                                 NetworkServer.Spawn(unit);
@@ -82,25 +79,6 @@ public class UnitSpawner : NetworkBehaviour
 
                     }
                 }
-
-                // Infiltrator Units
-                else if (_unitSelector.PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator)
-                {
-                    // Spawn unit
-                    
-                    switch (unitSelector.buttonSelected)
-                    {
-                        // Missing the rest...
-                        case 1:
-                            {
-                                unit = Instantiate(iTrap, hit.point, Quaternion.identity);
-                                NetworkServer.Spawn(unit);
-                            }
-                            break;
-                    }
-                }
-                
-                
 
                 // Once unit has been spawned, unlock the controls again
                 unitSelector.controlLocked = false;

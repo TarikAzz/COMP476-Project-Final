@@ -194,6 +194,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44eb56a8e4240524c93e950d322eefeb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  StunParticles: {fileID: 1211793155702746, guid: c0261bad08e699045937bc92e6332666,
+    type: 2}
+  Infiltrators: []
 --- !u!114 &114751772180150532
 MonoBehaviour:
   m_ObjectHideFlags: 1

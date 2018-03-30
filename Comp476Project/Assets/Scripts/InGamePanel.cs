@@ -49,26 +49,20 @@ public class InGamePanel : MonoBehaviour
     public bool UI_Loaded;
 
     // UI button sprites for Defender (all defined in the Inspector)
-    public Sprite guard;
     public Sprite lamp;
     public Sprite cam;
     public Sprite trap;
     public Sprite sniper;
-
-    // UI button sprites for Infiltrator (all defined in the Inspector)
-    public Sprite iTrap;
 
     // UI button sprites for the toggle (all defined in the Inspector)
     public Sprite cycle;
     public Sprite back_forth;
 
     // Unit limitations
-    public int guardCapacity;
     public int lampCapacity;
     public int cameraCapacity;
     public int trapCapacity;
     public int sniperCapacity;
-    public int iTrapCapacity;
 
     #endregion
 
@@ -85,12 +79,10 @@ public class InGamePanel : MonoBehaviour
         isToggleCycled = true;
 
         // RANDOM VALUES FOR TESTING, NOT FINALIZED!
-        guardCapacity = 5;
         lampCapacity = 8;
         cameraCapacity = 7;
         trapCapacity = 4;
         sniperCapacity = 2;
-        iTrapCapacity = 4;
     }
 
 
@@ -129,18 +121,15 @@ public class InGamePanel : MonoBehaviour
                     switch (i)
                     {
                         case 1:
-                            unitControls[i - 1].image.sprite = guard;
-                            break;
-                        case 2:
                             unitControls[i - 1].image.sprite = lamp;
                             break;
-                        case 3:
+                        case 2:
                             unitControls[i - 1].image.sprite = cam;
                             break;
-                        case 4:
+                        case 3:
                             unitControls[i - 1].image.sprite = trap;
                             break;
-                        case 5:
+                        case 4:
                             unitControls[i - 1].image.sprite = sniper;
                             break;
                     }
@@ -148,31 +137,17 @@ public class InGamePanel : MonoBehaviour
                     // Just to make buttons visible after UI is loaded (mainly for setting alpha to 255)
                     unitControls[i - 1].image.color = new Color32(255, 255, 255, 255);
                 }
-
-                // Once UI is loaded, don't update this anymore
-                UI_Loaded = true;
             }
 
-            // Infiltrator's UI
+            // Infiltrator's UI (disable view for unit commands since infiltrator can't spawn anything)
             else if (PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator)
             {
-                controlLocked = false;
                 controlContainer = GameObject.Find("Unit Commands");
-
-                // As of now, infiltrator only as 1 unit, so no need for a for loop
-
-                // Add all unit buttons to the list, while modifying each one
-                unitControls.Add(GameObject.Find("Unit " + 1).GetComponent<Button>());
-
-                // Set button's image to the sprite according to the unit ID
-                unitControls[0].image.sprite = iTrap;
-
-                // Just to make buttons visible after UI is loaded (mainly for setting alpha to 255)
-                unitControls[0].image.color = new Color32(255, 255, 255, 255);
-
-                // Once UI is loaded, don't update this anymore
-                UI_Loaded = true;
+                controlContainer.SetActive(false);
             }
+
+            // Once UI is loaded, don't update this anymore
+            UI_Loaded = true;
         }
 
         // If UI is loaded, then keep checking to lock/unlock buttons and coloring as game is running
@@ -200,11 +175,10 @@ public class InGamePanel : MonoBehaviour
                     for (int i = 0; i < unitControls.Count; i++)
                     {
                         // If a specific unit has reached its limit, lock it and gray out the button
-                        if ((i + 1 == 1 && GameObject.FindGameObjectsWithTag("Guard").Length >= guardCapacity) ||
-                            (i + 1 == 2 && GameObject.FindGameObjectsWithTag("Lamp").Length >= lampCapacity) ||
-                            (i + 1 == 3 && GameObject.FindGameObjectsWithTag("Camera").Length >= cameraCapacity) ||
-                            (i + 1 == 4 && GameObject.FindGameObjectsWithTag("Trap").Length >= trapCapacity) ||
-                            (i + 1 == 5 && GameObject.FindGameObjectsWithTag("Sniper").Length >= sniperCapacity))
+                        if ((i + 1 == 1 && GameObject.FindGameObjectsWithTag("Lamp").Length >= lampCapacity) ||
+                            (i + 1 == 2 && GameObject.FindGameObjectsWithTag("Camera").Length >= cameraCapacity) ||
+                            (i + 1 == 3 && GameObject.FindGameObjectsWithTag("Trap").Length >= trapCapacity) ||
+                            (i + 1 == 4 && GameObject.FindGameObjectsWithTag("Sniper").Length >= sniperCapacity))
                         {
                             unitControls[i].interactable = false;
                             buttonColors = unitControls[i].colors;
@@ -227,46 +201,7 @@ public class InGamePanel : MonoBehaviour
                     }
                 }
             }
-
-            else if (PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator)
-            {
-                // Disable all buttons until you place the chosen unit
-                if (controlLocked == true)
-                {
-                    for (int i = 0; i < unitControls.Count; i++)
-                    {
-                        // Lock all buttons
-                        unitControls[i].interactable = false;
-                    }
-                }
-                else
-                {
-                    for (int i = 0; i < unitControls.Count; i++)
-                    {
-                        // If a specific unit has reached its limit, lock it and gray out the button
-                        if ((i + 1 == 1 && GameObject.FindGameObjectsWithTag("iTrap").Length >= iTrapCapacity))
-                        {
-                            unitControls[i].interactable = false;
-                            buttonColors = unitControls[i].colors;
-                            buttonColors.normalColor = Color.gray;
-                            buttonColors.disabledColor = Color.gray;
-                            unitControls[i].colors = buttonColors;
-                        }
-
-                        else
-                        {
-                            // Unlock button
-                            unitControls[i].interactable = true;
-
-                            // Also, reset its color back to white (selecting a button makes it green)
-                            buttonColors = unitControls[i].colors;
-                            buttonColors.normalColor = Color.white;
-                            buttonColors.disabledColor = Color.white;
-                            unitControls[i].colors = buttonColors;
-                        }
-                    }
-                }
-            }
+            
 
             // Always update sprites depending on toggle's state
             if (isToggleCycled)
