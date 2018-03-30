@@ -124,6 +124,16 @@ public class Character : MonoBehaviour
     private Indicator _target;
 
     /// <summary>
+    /// The chased target
+    /// </summary>
+    private Transform _chaseTarget;
+
+    /// <summary>
+    /// The chase routine
+    /// </summary>
+    private Coroutine _chaseRoutine;
+
+    /// <summary>
     /// The step on the current patrol
     /// </summary>
     private int _patrolStep;
@@ -311,11 +321,15 @@ public class Character : MonoBehaviour
                 IsStunned = false;
             }
         }
-
         // When not stunned, track up-to-date time
         else
         {
             NotStunnedTillNow = Network.time;
+        }
+
+        if (_chaseTarget != null && _chaseRoutine != null && !GetComponent<FieldOfView>().visibleTargets.Contains(_chaseTarget))
+        {
+            StopChase();
         }
     }
 
@@ -351,7 +365,7 @@ public class Character : MonoBehaviour
 
         for (var i = 0; i < renderers.Length; i++)
         {
-            if (renderers[i] == GetComponent<FieldOfView>().viewMeshFilter.GetComponent<MeshRenderer>())
+            if (GetComponent<FieldOfView>() != null && renderers[i] == GetComponent<FieldOfView>().viewMeshFilter.GetComponent<MeshRenderer>())
             {
                 continue;
             }
@@ -364,21 +378,6 @@ public class Character : MonoBehaviour
     /// </summary>
     public void Select()
     {
-        // Commented this out temporarily so that the rectangle selection works properly.
-
-        //if (PlayerManager != null)
-        //{
-        //    foreach (var character in PlayerManager.Characters)
-        //    {
-        //        if (character == this)
-        //        {
-        //            continue;
-        //        }
-
-        //        character.Deselect();
-        //    }
-        //}
-
         if (PlayerManager == null || !PlayerManager.isLocalPlayer)
         {
             return;
@@ -405,6 +404,59 @@ public class Character : MonoBehaviour
         IsSelected = false;
         Colorize(Color.blue);
         HideTargetIndicators();
+    }
+
+    /// <summary>
+    /// Starts chasing a character
+    /// </summary>
+    /// <param name="target">The chased character</param>
+    public void Chase(Transform target)
+    {
+        if (_chaseTarget != null && _chaseTarget == target)
+        {
+            return;
+        }
+
+        if (_chaseRoutine != null)
+        {
+            StopCoroutine(_chaseRoutine);
+        }
+        
+        _chaseTarget = target;
+        _chaseRoutine = StartCoroutine(FollowTarget(target));
+    }
+
+    /// <summary>
+    /// Stops chasing a character
+    /// </summary>
+    public void StopChase()
+    {
+        StopCoroutine(_chaseRoutine);
+        _chaseRoutine = null;
+
+        _navMeshAgent.SetDestination(_target.transform.position);
+
+        _chaseTarget = null;
+    }
+
+    /// <summary>
+    /// Follow a target, recomputing a path at a fixed interval
+    /// </summary>
+    /// <param name="target">The target</param>
+    private IEnumerator FollowTarget(Transform target)
+    {
+        var previousTargetPosition = new Vector3(float.PositiveInfinity, float.PositiveInfinity);
+
+        while (Vector3.SqrMagnitude(transform.position - target.position) > 0.1f)
+        {
+            if (Vector3.SqrMagnitude(previousTargetPosition - target.position) > 0.1f)
+            {
+                _navMeshAgent.SetDestination(target.position);
+                previousTargetPosition = target.position;
+            }
+            yield return new WaitForSeconds(0.1f);
+        }
+        yield return null;
     }
 
     /// <summary>
@@ -577,8 +629,6 @@ public class Character : MonoBehaviour
         }
 
         gameObject.transform.GetChild(2).gameObject.SetActive(enabled);
-
-        gameObject.transform.GetChild(3).gameObject.SetActive(false);
     }
 
 }

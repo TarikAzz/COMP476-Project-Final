@@ -64,6 +64,8 @@ public class FieldOfView : MonoBehaviour
     /// </summary>
     public PlayerManager owner;
 
+    private Coroutine _scanning;
+
     void Start()
     {
         owner = transform.root.GetComponent<PlayerManager>();
@@ -71,15 +73,24 @@ public class FieldOfView : MonoBehaviour
         viewMesh = new Mesh();
         viewMesh.name = "View Mesh";
         viewMeshFilter.mesh = viewMesh;
-        // Check for visible targets with delay
-        StartCoroutine("FindTargetsWithDelay",.2f);
     }
 
     void Update()
     {
-        if (owner.Kind == PlayerManager.PlayerKind.Infiltrator)
+        if (owner != null && owner.Kind == PlayerManager.PlayerKind.Infiltrator)
+        {
+            owner.DeactivateFOV();
+            return;
+        }
+        
+        if (owner != null && !owner.GameOn)
         {
             return;
+        }
+
+        if (_scanning == null)
+        {
+            _scanning = StartCoroutine("FindTargetsWithDelay", .2f);
         }
 
         foreach (var character in visibleTargets)
@@ -132,6 +143,7 @@ public class FieldOfView : MonoBehaviour
                         if (targetCharacter.PlayerManager != owner)
                         {
                             visibleTargets.Add(target);
+                            GetComponent<Character>().Chase(target);
                         }
                     }
                     

@@ -210,37 +210,39 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public override void OnStartLocalPlayer()
     {
-        for (var i = 0; i < Characters.Count; i++)
-        {
-            Characters[i].Colorize(Color.blue);
-        }
-
         // Assigns a role to the player, depending on if they joined first or not
         Kind = NetworkManager.singleton.numPlayers == 1 ? PlayerKind.Defender : PlayerKind.Infiltrator;
+
+        for (var i = 0; i < Characters.Count; i++)
+        {
+            Characters[i].gameObject.SetActive(false);
+        }
 
         switch (Kind)
         {
             case PlayerKind.Infiltrator:
-                transform.position = MainManager.InfiltratorSpawn.position;
-
-                Characters.ForEach(c => c.transform.GetChild(3).gameObject.SetActive(false));
-                
+                transform.localPosition = MainManager.InfiltratorSpawn.position;
                 break;
-
             case PlayerKind.Defender:
-                transform.position = MainManager.DefenderSpawn.position;
+                transform.localPosition = MainManager.DefenderSpawn.position;
                 break;
         }
 
+        for (var i = 0; i < Characters.Count; i++)
+        {
+            Characters[i].gameObject.SetActive(true);
+            Characters[i].Colorize(Color.blue);
+        }
+        
         _inGamePanel = FindObjectOfType<InGamePanel>();
         _inGamePanel.PlayerKindText.text = Kind.ToString();
         _inGamePanel.PlayerManager = this;
 
         _setupBarriers = FindObjectsOfType<Barrier>();
     }
-
+    
     /// <summary>
-	/// Updates character selection and camera movement
+    /// Updates character selection and camera movement
     /// </summary>
     void Update()
     {
@@ -344,6 +346,46 @@ public class PlayerManager : NetworkBehaviour
 
         GameOn = true;
         _inGamePanel.GameStateText.text = "Go!";
+    }
+
+    /// <summary>
+    /// Deactivate FOV if player is infiltrator
+    /// </summary>
+    public void DeactivateFOV()
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        CmdDeactivateFOV();
+    }
+
+    /// <summary>
+    /// The command to DeactivateFOV
+    /// </summary>
+    [Command]
+    public void CmdDeactivateFOV()
+    {
+        RpcDeactivateFOV();
+    }
+
+    /// <summary>
+    /// The RPC call to DeactivateFOV
+    /// </summary>
+    [ClientRpc]
+    public void RpcDeactivateFOV()
+    {
+        for (var i = 0; i < Characters.Count; i++)
+        {
+            if (Characters[i].GetComponent<FieldOfView>() == null)
+            {
+                continue;
+            }
+
+            Destroy(Characters[i].GetComponent<FieldOfView>().viewMeshFilter.gameObject);
+            Destroy(Characters[i].GetComponent<FieldOfView>());
+        }
     }
 
     /// <summary>
