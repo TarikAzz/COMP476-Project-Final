@@ -55,6 +55,7 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4240123081803352}
+  - component: {fileID: 135511765791701068}
   - component: {fileID: 114684247520790822}
   - component: {fileID: 114751772180150532}
   m_Layer: 0
@@ -196,7 +197,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StunParticles: {fileID: 1211793155702746, guid: c0261bad08e699045937bc92e6332666,
     type: 2}
-  Infiltrators: []
 --- !u!114 &114751772180150532
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -229,6 +229,18 @@ MonoBehaviour:
     i15: 240
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
+--- !u!135 &135511765791701068
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1752186976257290}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!135 &135843748657932770
 SphereCollider:
   m_ObjectHideFlags: 1
