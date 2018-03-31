@@ -160,8 +160,6 @@ public class Character : MonoBehaviour
     /// </summary>
     void Start()
     {
-        Lamps = GameObject.FindGameObjectsWithTag("Lamp");
-
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _patrolIndicators = new List<Indicator>();
     }
@@ -171,11 +169,15 @@ public class Character : MonoBehaviour
     /// </summary>
     void Update()
     {
+        // This MUST be in Update, to keep refreshing the list of lamps
+        Lamps = GameObject.FindGameObjectsWithTag("Lamp");
+
         if (PlayerManager == null || !PlayerManager.GameReady)
         {
             return;
         }
 
+        // Check if within any lamp's range
         for (int i = 0; i < Lamps.Length; i++)
         {
             if (Vector3.Distance(transform.position, Lamps[i].transform.position) <= Lamps[i].GetComponent<Lamp>().range)
@@ -187,6 +189,7 @@ public class Character : MonoBehaviour
                 IsSpotted = false;
             }
         }
+
 
         // If the character has just been selected, don't update this frame
         if (JustSelected)

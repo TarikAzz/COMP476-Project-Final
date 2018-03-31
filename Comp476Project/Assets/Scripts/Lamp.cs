@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-// JONATHAN'S PART
 public class Lamp : MonoBehaviour
 {
     public GameObject point_light;
     public float range;
-
-
+    
 	// Use this for initialization
 	void Start ()
     {
@@ -20,6 +17,6 @@ public class Lamp : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
     {
-		// i love milk
+		
 	}
 }
