@@ -73,7 +73,7 @@ Transform:
   m_GameObject: {fileID: 1752186976257290}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4556095152795026}
   - {fileID: 4772234225845138}
@@ -112,7 +112,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1255011860729670}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_MotionVectors: 1
@@ -144,7 +144,7 @@ MeshRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1498056015756706}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_MotionVectors: 1
@@ -197,6 +197,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   StunParticles: {fileID: 1211793155702746, guid: c0261bad08e699045937bc92e6332666,
     type: 2}
+  TrapBase: {fileID: 1498056015756706}
+  TrapHead: {fileID: 1255011860729670}
+  panel: {fileID: 0}
 --- !u!114 &114751772180150532
 MonoBehaviour:
   m_ObjectHideFlags: 1
