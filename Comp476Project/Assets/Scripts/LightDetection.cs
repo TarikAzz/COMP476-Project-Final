@@ -2,22 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SpotlightDetection : MonoBehaviour
+public class LightDetection : MonoBehaviour
 {
-
-	// Use this for initialization
-	void Start ()
-    {
-		
-	}
-	
-	// Update is called once per frame
-	void Update ()
-    {
-		
-	}
-
-    // Reveal infiltrators when entering the spotlight
+    // Reveal infiltrators when entering the light
     void OnTriggerEnter(Collider col)
     {
         if (col.gameObject.tag == "Bad")
@@ -26,7 +13,7 @@ public class SpotlightDetection : MonoBehaviour
         }
     }
 
-    // Hide infiltrators when leaving the spotlight
+    // Hide infiltrators when leaving the light
     void OnTriggerExit(Collider col)
     {
         if (col.gameObject.tag == "Bad")

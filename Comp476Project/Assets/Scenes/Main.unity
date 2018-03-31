@@ -1842,7 +1842,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh52428
+  m_Name: pb_Mesh-1100
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -4481,7 +4481,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh52120
+  m_Name: pb_Mesh-1102
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
