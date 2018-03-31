@@ -62,7 +62,18 @@ public class InGamePanel : MonoBehaviour
     public int lampCapacity;
     public int cameraCapacity;
     public int trapCapacity;
-    public int sniperCapacity;
+
+    // Needed for the sniper ability
+    public List<GameObject> spottedInfiltrators;
+
+    // Sniper cooldown
+    public int sniperCooldown;
+
+    // Keep track of network's time from last time you used the sniper
+    public double lastTimeSniped;
+
+    // Check if sniper is available
+    public bool isSniperReady;
 
     #endregion
 
@@ -78,11 +89,14 @@ public class InGamePanel : MonoBehaviour
         UI_Loaded = false;
         isToggleCycled = true;
 
-        // RANDOM VALUES FOR TESTING, NOT FINALIZED!
-        lampCapacity = 8;
-        cameraCapacity = 7;
-        trapCapacity = 4;
-        sniperCapacity = 2;
+        // The quantity limit of each unit
+        lampCapacity = 4;
+        cameraCapacity = 3;
+        trapCapacity = 5;
+
+        // Handle sniper cooldown mechanic
+        sniperCooldown = 5;
+        isSniperReady = true;
     }
 
 
@@ -178,7 +192,7 @@ public class InGamePanel : MonoBehaviour
                         if ((i + 1 == 1 && GameObject.FindGameObjectsWithTag("Lamp").Length >= lampCapacity) ||
                             (i + 1 == 2 && GameObject.FindGameObjectsWithTag("Camera").Length >= cameraCapacity) ||
                             (i + 1 == 3 && GameObject.FindGameObjectsWithTag("Trap").Length >= trapCapacity) ||
-                            (i + 1 == 4 && GameObject.FindGameObjectsWithTag("Sniper").Length >= sniperCapacity))
+                             i + 1 == 4 && !isSniperReady)
                         {
                             unitControls[i].interactable = false;
                             buttonColors = unitControls[i].colors;
@@ -201,7 +215,6 @@ public class InGamePanel : MonoBehaviour
                     }
                 }
             }
-            
 
             // Always update sprites depending on toggle's state
             if (isToggleCycled)
@@ -224,8 +237,12 @@ public class InGamePanel : MonoBehaviour
                     characterContainer.Characters[i].LoopPatrol = false;
                 }
             }
+
+            // Always check the sniper's cooldown state
+            SniperCooldown();
         }
     }
+
 
     public void UI_Ready()
     {
@@ -233,17 +250,28 @@ public class InGamePanel : MonoBehaviour
         PlayerManager.PlayerReady();
     }
     
+
     // Select its ID and make button green
     public void selectUnit(int ID)
     {
-        // Highlight button green, and assign button selected's ID
-        buttonColors = unitControls[ID - 1].colors;
-        buttonColors.normalColor = Color.green;
-        buttonColors.disabledColor = Color.green;
-        unitControls[ID - 1].colors = buttonColors;
-        buttonSelected = ID;
-        controlLocked = true;
+        // No need for button color change for the sniper ability (which is ID 4)
+        if(ID != 4)
+        {
+            // Highlight button green, and assign button selected's ID
+            buttonColors = unitControls[ID - 1].colors;
+            buttonColors.normalColor = Color.green;
+            buttonColors.disabledColor = Color.green;
+            unitControls[ID - 1].colors = buttonColors;
+            buttonSelected = ID;
+            controlLocked = true;
+        }
+        else
+        {
+            // Snipe!
+            OneHitKO();
+        }
     }
+
 
     // Switch between the toggle states when user clicks button
     public void togglePathState()
@@ -255,6 +283,57 @@ public class InGamePanel : MonoBehaviour
         else
         {
             isToggleCycled = true;
+        }
+    }
+
+
+    // Have sniper kill a random infiltrator that is spotted
+    void OneHitKO()
+    {
+        // Get a hold of all the infiltrators
+        GameObject[] infiltrators = GameObject.FindGameObjectsWithTag("Bad");
+
+        // Out of those, keep track of the spotted ones in the list
+        for (int i = 0; i < infiltrators.Length; i++)
+        {
+            if (infiltrators[i].GetComponent<Character>().IsSpotted == true)
+            {
+                spottedInfiltrators.Add(infiltrators[i]);
+            }
+        }
+
+        // Only check if there are any spotted infiltrators
+        if(spottedInfiltrators.Count > 0)
+        {
+            GameObject target = spottedInfiltrators[UnityEngine.Random.Range(0, spottedInfiltrators.Count)];
+
+            // Kill the character
+            target.SetActive(false);
+
+            // Clear list once finished
+            spottedInfiltrators.Clear();
+        }
+
+        // Sniper not ready anymore, cooldown begins
+        isSniperReady = false;
+    }
+
+
+    // Updates sniper availability based on cooldown and time passed
+    public void SniperCooldown()
+    {
+        // When sniper is not ready, check when the cooldown is over
+        if (!isSniperReady)
+        {
+            if (Network.time > sniperCooldown + lastTimeSniped)
+            {
+                isSniperReady = true;
+            }
+        }
+        // When ready, always check latest time
+        else
+        {
+            lastTimeSniped = Network.time;
         }
     }
 }

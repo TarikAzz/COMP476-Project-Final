@@ -19,9 +19,7 @@ public class UnitSpawner : NetworkBehaviour
         }
     }
 
-    // Defined in the Inspector
-
-    // Missing the rest...
+    // Defined in the Inspector (sniper is an ability, not a prefab)
     public GameObject lamp;
     public GameObject trap;
     public GameObject cam;
@@ -51,7 +49,7 @@ public class UnitSpawner : NetworkBehaviour
                 // Defender Units
                 if(_unitSelector.PlayerManager.Kind == PlayerManager.PlayerKind.Defender)
                 {
-                    // Spawn unit
+                    // Spawn unit (sniper is not a spawnable unit, so only need to define cases 1 - 3)
                     switch (unitSelector.buttonSelected)
                     {
                         case 1:
@@ -74,9 +72,6 @@ public class UnitSpawner : NetworkBehaviour
                                 NetworkServer.Spawn(unit);
                             }
                             break;
-
-                            // Missing the rest...
-
                     }
                 }
 
