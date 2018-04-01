@@ -9,6 +9,7 @@ public class InGamePanel : MonoBehaviour
 {
     #region UI components
 
+    public Image PlayerKind;
     public Text PlayerKindText;
     public Text GameStateText;
     public Image SetupTimerImage;
@@ -56,6 +57,10 @@ public class InGamePanel : MonoBehaviour
 
     // Only load the unit UI once player kind is determined (Defender or Infiltrator)
     public bool UI_Loaded;
+
+    // Game Info sprites (all defined in the Inspector)
+    public Sprite defender;
+    public Sprite infiltrator;
 
     // UI button sprites for Defender (all defined in the Inspector)
     public Sprite lamp;
@@ -136,6 +141,13 @@ public class InGamePanel : MonoBehaviour
                 controlLocked = false;
                 controlContainer = GameObject.Find("Unit Commands");
 
+                // Display Defender icon
+                PlayerKind.sprite = defender;
+
+                Color32 temp_color = PlayerKind.color;
+                temp_color.a = 255;
+                PlayerKind.color = temp_color;
+
                 // Add all unit buttons to the list, while modifying each one
                 for (int i = 1; i <= controlContainer.transform.childCount; i++)
                 {
@@ -168,6 +180,13 @@ public class InGamePanel : MonoBehaviour
             {
                 controlContainer = GameObject.Find("Unit Commands");
                 controlContainer.SetActive(false);
+
+                // Display Infiltrator icon
+                PlayerKind.sprite = infiltrator;
+
+                Color32 temp_color = PlayerKind.color;
+                temp_color.a = 255;
+                PlayerKind.color = temp_color;
             }
 
             // Once UI is loaded, don't update this anymore
