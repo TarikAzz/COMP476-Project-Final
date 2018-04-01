@@ -80,10 +80,13 @@ public class PlayerManager : NetworkBehaviour
                     return;
                 }
 
+                _inGamePanel.EndGameGroup.gameObject.SetActive(false);
                 _inGamePanel.ReadyButton.gameObject.SetActive(false);
+                _inGamePanel.SetupGroup.gameObject.SetActive(true);
                 _setupTimer = MainManager.SetupTime;
 
-                var selectedCharacterPositions = (from character in Characters select character.transform.position).ToArray();
+                var selectedCharacterPositions =
+                    (from character in Characters select character.transform.position).ToArray();
                 var center = Vector3.zero;
 
                 foreach (var position in selectedCharacterPositions)
@@ -93,9 +96,12 @@ public class PlayerManager : NetworkBehaviour
 
                 center /= selectedCharacterPositions.Length;
 
-                var cameraOffset = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z / (Kind == PlayerKind.Defender ? 1.25f : 1.5f));
-
-                Camera.main.transform.position = center + cameraOffset;
+                if (_cameraOffset == Vector3.zero)
+                {
+                    _cameraOffset = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z / (Kind == PlayerKind.Defender ? 1.25f : 1.5f));
+                }
+            
+                Camera.main.transform.position = center + _cameraOffset;
                 Camera.main.fieldOfView = Camera.main.GetComponent<RtsCamera>().minFov;
             }
         }
@@ -180,6 +186,11 @@ public class PlayerManager : NetworkBehaviour
     /// MainManager backing field
     /// </summary>
     private MainManager _mainManager;
+
+    /// <summary>
+    /// The Camera offset
+    /// </summary>
+    private Vector3 _cameraOffset = Vector3.zero;
 
     #endregion
 
@@ -270,7 +281,7 @@ public class PlayerManager : NetworkBehaviour
         if (_setupTimer > 0)
         {
             _setupTimer -= Time.deltaTime;
-
+            
             _inGamePanel.SetupTimerImage.fillAmount = _setupTimer / MainManager.SetupTime;
 
             if (_setupTimer <= 0)
@@ -361,7 +372,7 @@ public class PlayerManager : NetworkBehaviour
         }
 
         GameOn = true;
-        _inGamePanel.GameStateText.text = "Go!";
+        _inGamePanel.SetupGroup.SetActive(false);
     }
 
     /// <summary>
@@ -441,6 +452,7 @@ public class PlayerManager : NetworkBehaviour
     /// <param name="characterIndex">The index of the character to remove</param>
     public void RemoveCharacter(int characterIndex)
     {
+        Characters[characterIndex].DestroyTargetIndicators();
         Characters[characterIndex].gameObject.SetActive(false);
         InfiltratorDead++;
     }
@@ -525,5 +537,20 @@ public class PlayerManager : NetworkBehaviour
     public void CmdEndGame(PlayerKind winningPlayer)
     {
         MainManager.EndGame(winningPlayer);
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="winningPlayer"></param>
+    public void EndGame(PlayerKind winningPlayer)
+    {
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+        
+        _inGamePanel.EndGameGroup.SetActive(true);
+        _inGamePanel.EndGameMessage.text = winningPlayer == Kind ? "You won!" : "You lost...";
     }
 }

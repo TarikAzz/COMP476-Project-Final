@@ -618,7 +618,7 @@ public class Character : MonoBehaviour
     /// <summary>
     /// Destroys all the character's movement indicators
     /// </summary>
-    private void DestroyTargetIndicators()
+    public void DestroyTargetIndicators()
     {
         if (_patrolIndicators.Count != 0)
         {
