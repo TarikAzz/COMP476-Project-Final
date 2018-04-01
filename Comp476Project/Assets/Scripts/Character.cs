@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.AI;
@@ -177,7 +178,7 @@ public class Character : MonoBehaviour
         }
 
         // Shift-right-click to set a patrol for the character
-        if (IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1) && IsStunned == false)
+        if (PlayerManager.Kind == PlayerManager.PlayerKind.Defender && IsSelected && Input.GetKey(KeyCode.LeftShift) && Input.GetMouseButtonDown(1) && IsStunned == false)
         {
             RaycastHit originHit;
             RaycastHit targetHit;
@@ -482,12 +483,20 @@ public class Character : MonoBehaviour
         StopAllCoroutines();
         DestroyTargetIndicators();
 
-        _target = Instantiate(IndicatorPrefab, hit.point + Vector3.up * 0.01f, Quaternion.identity).GetComponent<Indicator>();
+        var centerOffset = GetSelectionCenterOffset();
+
+        if (Physics.OverlapSphere(hit.point - centerOffset, 0.1f).Length > 1)
+        {
+            Deselect();
+            return;
+        }
+
+        _target = Instantiate(IndicatorPrefab, hit.point - centerOffset + Vector3.up * 0.01f, Quaternion.identity).GetComponent<Indicator>();
         _target.transform.up = hit.normal;
         _target.transform.Rotate(new Vector3(90f, 0f, 0f));
         SetTarget(_target);
 
-        _navMeshAgent.SetDestination(hit.point);
+        _navMeshAgent.SetDestination(hit.point - centerOffset);
     }
 
     /// <summary>
@@ -499,25 +508,33 @@ public class Character : MonoBehaviour
     {
         var newPatrolNode = (Indicator)null;
 
+        var centerOffset = GetSelectionCenterOffset();
+
+        if (Physics.OverlapSphere(targetHit.point - centerOffset, 0.1f).Length > 1)
+        {
+            Deselect();
+            return;
+        }
+
         // If the patrol list is empty, create an indicator at its origin
         if (_patrolIndicators.Count == 0)
         {
             StopAllCoroutines();
             DestroyTargetIndicators();
-
+            
             newPatrolNode = Instantiate(IndicatorPrefab, originHit.point + Vector3.up * 0.01f, Quaternion.identity).GetComponent<Indicator>();
             newPatrolNode.transform.up = originHit.normal;
             newPatrolNode.transform.Rotate(new Vector3(90f, 0f, 0f));
 
             _patrolIndicators.Add(newPatrolNode);
 
-            _navMeshAgent.SetDestination(targetHit.point);
+            _navMeshAgent.SetDestination(targetHit.point - centerOffset);
 
             _patrolStep = 1;
         }
-
+        
         // Create an indicator for ground clicks
-        newPatrolNode = Instantiate(IndicatorPrefab, targetHit.point + Vector3.up * 0.01f, Quaternion.identity).GetComponent<Indicator>();
+        newPatrolNode = Instantiate(IndicatorPrefab, targetHit.point - centerOffset + Vector3.up * 0.01f, Quaternion.identity).GetComponent<Indicator>();
         newPatrolNode.transform.up = targetHit.normal;
         newPatrolNode.transform.Rotate(new Vector3(90f, 0f, 0f));
         _patrolIndicators.Add(newPatrolNode);
@@ -526,6 +543,32 @@ public class Character : MonoBehaviour
         {
             SetTarget(newPatrolNode);
         }
+    }
+
+    /// <summary>
+    /// Gets the center offset from the center of mass of the selected characters to the character's position
+    /// </summary>
+    /// <returns>The center offset</returns>
+    private Vector3 GetSelectionCenterOffset()
+    {
+        var selectedCharacterPositions = (from character in PlayerManager.Characters where character.IsSelected select character.transform.position).ToArray();
+        var centerOffset = Vector3.zero;
+
+        if (selectedCharacterPositions.Length > 1)
+        {
+            var center = Vector3.zero;
+
+            foreach (var position in selectedCharacterPositions)
+            {
+                center += position;
+            }
+
+            center /= selectedCharacterPositions.Length;
+
+            centerOffset = center - transform.position;
+        }
+
+        return centerOffset;
     }
 
     /// <summary>
