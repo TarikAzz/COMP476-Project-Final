@@ -30,6 +30,15 @@ public class InGamePanel : MonoBehaviour
     // The toggle button itself
     public Button toggleControl;
 
+    // Label for sniper's cooldown
+    public Text cooldownLabel;
+
+    // Image overlay used to show red flash on sniper kill
+    public Image killImage;
+
+    // Determine when to flash screen on sniper kill
+    public bool startFlash;
+
     // The boolean to check both states of the toggle button
     public bool isToggleCycled;
 
@@ -88,6 +97,7 @@ public class InGamePanel : MonoBehaviour
     {
         UI_Loaded = false;
         isToggleCycled = true;
+        startFlash = false;
 
         // The quantity limit of each unit
         lampCapacity = 4;
@@ -95,7 +105,7 @@ public class InGamePanel : MonoBehaviour
         trapCapacity = 5;
 
         // Handle sniper cooldown mechanic
-        sniperCooldown = 5;
+        sniperCooldown = 20;
         isSniperReady = true;
     }
 
@@ -240,6 +250,12 @@ public class InGamePanel : MonoBehaviour
 
             // Always check the sniper's cooldown state
             SniperCooldown();
+            
+            // Flash screen when triggered to do so
+            if(startFlash == true)
+            {
+                StartCoroutine(ScreenFlash());
+            }
         }
     }
 
@@ -249,7 +265,7 @@ public class InGamePanel : MonoBehaviour
         ReadyButton.interactable = false;
         PlayerManager.PlayerReady();
     }
-    
+
 
     // Select its ID and make button green
     public void selectUnit(int ID)
@@ -308,7 +324,10 @@ public class InGamePanel : MonoBehaviour
             GameObject target = spottedInfiltrators[UnityEngine.Random.Range(0, spottedInfiltrators.Count)];
 
             // Kill the character
-            target.SetActive(false);
+            target.GetComponent<Character>().TakeSniperDamage();
+            
+            // Flash screen
+            startFlash = true;
 
             // Clear list once finished
             spottedInfiltrators.Clear();
@@ -325,9 +344,13 @@ public class InGamePanel : MonoBehaviour
         // When sniper is not ready, check when the cooldown is over
         if (!isSniperReady)
         {
+            // +1 to make cooldown label display stop at 1, not 0
+            cooldownLabel.text = ((int)((sniperCooldown + lastTimeSniped) - Network.time) + 1).ToString();
+
             if (Network.time > sniperCooldown + lastTimeSniped)
             {
                 isSniperReady = true;
+                cooldownLabel.text = "";
             }
         }
         // When ready, always check latest time
@@ -335,5 +358,21 @@ public class InGamePanel : MonoBehaviour
         {
             lastTimeSniped = Network.time;
         }
+    }
+
+
+    // Handle red flash on screen
+    public IEnumerator ScreenFlash()
+    {
+        Color32 color = killImage.color;
+
+        color.a = 150;
+        killImage.color = color;
+        yield return new WaitForSeconds(0.075f);
+
+        color.a = 0;
+        killImage.color = color;
+
+        startFlash = false;
     }
 }
