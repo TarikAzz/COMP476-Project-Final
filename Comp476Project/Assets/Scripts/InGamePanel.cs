@@ -177,84 +177,88 @@ public class InGamePanel : MonoBehaviour
         // If UI is loaded, then keep checking to lock/unlock buttons and coloring as game is running
         else
         {
-            // Enable toggle control
-            toggleControl.interactable = true;
-
-            // Acess the Player Manager script
-            characterContainer = GameObject.Find("PlayerManager(Clone)").GetComponent<PlayerManager>();
-
-            if (PlayerManager.Kind == PlayerManager.PlayerKind.Defender)
+            // Only enable controls once game is ready
+            if (PlayerManager.GameReady)
             {
-                // Disable all buttons until you place the chosen unit
-                if (controlLocked == true)
+                // Enable toggle control
+                toggleControl.interactable = true;
+
+                // Acess the Player Manager script
+                characterContainer = GameObject.Find("PlayerManager(Clone)").GetComponent<PlayerManager>();
+
+                if (PlayerManager.Kind == PlayerManager.PlayerKind.Defender)
                 {
-                    for (int i = 0; i < unitControls.Count; i++)
+                    // Disable all buttons until you place the chosen unit
+                    if (controlLocked == true)
                     {
-                        // Lock all buttons
-                        unitControls[i].interactable = false;
+                        for (int i = 0; i < unitControls.Count; i++)
+                        {
+                            // Lock all buttons
+                            unitControls[i].interactable = false;
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < unitControls.Count; i++)
+                        {
+                            // If a specific unit has reached its limit, lock it and gray out the button
+                            if ((i + 1 == 1 && GameObject.FindGameObjectsWithTag("Lamp").Length >= lampCapacity) ||
+                                (i + 1 == 2 && GameObject.FindGameObjectsWithTag("Camera").Length >= cameraCapacity) ||
+                                (i + 1 == 3 && GameObject.FindGameObjectsWithTag("Trap").Length >= trapCapacity) ||
+                                 i + 1 == 4 && !isSniperReady)
+                            {
+                                unitControls[i].interactable = false;
+                                buttonColors = unitControls[i].colors;
+                                buttonColors.normalColor = Color.gray;
+                                buttonColors.disabledColor = Color.gray;
+                                unitControls[i].colors = buttonColors;
+                            }
+
+                            else
+                            {
+                                // Unlock button
+                                unitControls[i].interactable = true;
+
+                                // Also, reset its color back to white (selecting a button makes it green)
+                                buttonColors = unitControls[i].colors;
+                                buttonColors.normalColor = Color.white;
+                                buttonColors.disabledColor = Color.white;
+                                unitControls[i].colors = buttonColors;
+                            }
+                        }
+                    }
+                }
+
+                // Always update sprites depending on toggle's state
+                if (isToggleCycled)
+                {
+                    toggleControl.image.sprite = cycle;
+
+                    // Set all character to cycle
+                    for (int i = 0; i < characterContainer.Characters.Count; i++)
+                    {
+                        characterContainer.Characters[i].LoopPatrol = true;
                     }
                 }
                 else
                 {
-                    for (int i = 0; i < unitControls.Count; i++)
+                    toggleControl.image.sprite = back_forth;
+
+                    // Set all character to reverse
+                    for (int i = 0; i < characterContainer.Characters.Count; i++)
                     {
-                        // If a specific unit has reached its limit, lock it and gray out the button
-                        if ((i + 1 == 1 && GameObject.FindGameObjectsWithTag("Lamp").Length >= lampCapacity) ||
-                            (i + 1 == 2 && GameObject.FindGameObjectsWithTag("Camera").Length >= cameraCapacity) ||
-                            (i + 1 == 3 && GameObject.FindGameObjectsWithTag("Trap").Length >= trapCapacity) ||
-                             i + 1 == 4 && !isSniperReady)
-                        {
-                            unitControls[i].interactable = false;
-                            buttonColors = unitControls[i].colors;
-                            buttonColors.normalColor = Color.gray;
-                            buttonColors.disabledColor = Color.gray;
-                            unitControls[i].colors = buttonColors;
-                        }
-
-                        else
-                        {
-                            // Unlock button
-                            unitControls[i].interactable = true;
-
-                            // Also, reset its color back to white (selecting a button makes it green)
-                            buttonColors = unitControls[i].colors;
-                            buttonColors.normalColor = Color.white;
-                            buttonColors.disabledColor = Color.white;
-                            unitControls[i].colors = buttonColors;
-                        }
+                        characterContainer.Characters[i].LoopPatrol = false;
                     }
                 }
-            }
 
-            // Always update sprites depending on toggle's state
-            if (isToggleCycled)
-            {
-                toggleControl.image.sprite = cycle;
+                // Always check the sniper's cooldown state
+                SniperCooldown();
 
-                // Set all character to cycle
-                for (int i = 0; i < characterContainer.Characters.Count; i++)
+                // Flash screen when triggered to do so
+                if (startFlash == true)
                 {
-                    characterContainer.Characters[i].LoopPatrol = true;
+                    StartCoroutine(ScreenFlash());
                 }
-            }
-            else
-            {
-                toggleControl.image.sprite = back_forth;
-
-                // Set all character to reverse
-                for (int i = 0; i < characterContainer.Characters.Count; i++)
-                {
-                    characterContainer.Characters[i].LoopPatrol = false;
-                }
-            }
-
-            // Always check the sniper's cooldown state
-            SniperCooldown();
-            
-            // Flash screen when triggered to do so
-            if(startFlash == true)
-            {
-                StartCoroutine(ScreenFlash());
             }
         }
     }
