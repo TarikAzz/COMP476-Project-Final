@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -81,6 +82,21 @@ public class PlayerManager : NetworkBehaviour
 
                 _inGamePanel.ReadyButton.gameObject.SetActive(false);
                 _setupTimer = MainManager.SetupTime;
+
+                var selectedCharacterPositions = (from character in Characters select character.transform.position).ToArray();
+                var center = Vector3.zero;
+
+                foreach (var position in selectedCharacterPositions)
+                {
+                    center += position;
+                }
+
+                center /= selectedCharacterPositions.Length;
+
+                var cameraOffset = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z / (Kind == PlayerKind.Defender ? 1.25f : 1.5f));
+
+                Camera.main.transform.position = center + cameraOffset;
+                Camera.main.fieldOfView = Camera.main.GetComponent<RtsCamera>().minFov;
             }
         }
     }
@@ -230,8 +246,8 @@ public class PlayerManager : NetworkBehaviour
 
         for (var i = 0; i < Characters.Count; i++)
         {
-            Characters[i].gameObject.SetActive(true);
             Characters[i].Colorize(Color.blue);
+            Characters[i].gameObject.SetActive(true);
         }
         
         _inGamePanel = FindObjectOfType<InGamePanel>();
@@ -250,7 +266,7 @@ public class PlayerManager : NetworkBehaviour
         {
             return;
         }
-
+        
         if (_setupTimer > 0)
         {
             _setupTimer -= Time.deltaTime;

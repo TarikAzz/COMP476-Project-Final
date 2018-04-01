@@ -2181,7 +2181,10 @@ MonoBehaviour:
   lampCapacity: 0
   cameraCapacity: 0
   trapCapacity: 0
-  sniperCapacity: 0
+  spottedInfiltrators: []
+  sniperCooldown: 0
+  lastTimeSniped: 0
+  isSniperReady: 0
 --- !u!114 &114223893473078228
 MonoBehaviour:
   m_ObjectHideFlags: 1
