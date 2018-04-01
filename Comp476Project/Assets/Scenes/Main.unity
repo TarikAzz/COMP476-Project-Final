@@ -1842,7 +1842,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-15578
+  m_Name: pb_Mesh35444
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -4473,10 +4473,10 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 114903848884236284, guid: f8ebb4f9efed0a3428d01c46aaeacfaf,
+    - target: {fileID: 20638204522916514, guid: f8ebb4f9efed0a3428d01c46aaeacfaf,
         type: 2}
-      propertyPath: minFov
-      value: 30
+      propertyPath: field of view
+      value: 60
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f8ebb4f9efed0a3428d01c46aaeacfaf, type: 2}
@@ -4486,7 +4486,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh-15588
+  m_Name: pb_Mesh35676
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
