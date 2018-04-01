@@ -11,8 +11,11 @@ public class InGamePanel : MonoBehaviour
 
     public Text PlayerKindText;
     public Text GameStateText;
+    public GameObject SetupGroup;
     public Image SetupTimerImage;
     public Button ReadyButton;
+    public GameObject EndGameGroup;
+    public Text EndGameMessage;
 
     #endregion
 
