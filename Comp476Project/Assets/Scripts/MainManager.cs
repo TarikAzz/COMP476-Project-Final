@@ -63,6 +63,9 @@ public class MainManager : NetworkBehaviour
         }
 
         RpcEndGame(winningPlayer);
+
+        DefenderReady = false;
+        InfiltratorReady = false;
     }
 
     /// <summary>
@@ -76,7 +79,15 @@ public class MainManager : NetworkBehaviour
 
         foreach (var character in allCharacters)
         {
+            character.Deselect();
             character.gameObject.SetActive(false);
+        }
+
+        var playerManagers = FindObjectsOfType<PlayerManager>();
+
+        foreach (var playerManager in playerManagers)
+        {
+            playerManager.EndGame(winningPlayer);
         }
     }
 
