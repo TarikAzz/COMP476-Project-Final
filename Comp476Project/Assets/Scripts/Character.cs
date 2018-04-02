@@ -317,7 +317,7 @@ public class Character : MonoBehaviour
     }
 
     /// <summary>
-    /// Tell the player manage to assign damage to this character
+    /// Tell the player manager to assign damage to this character
     /// </summary>
     public void TakeDamage()
     {
@@ -327,6 +327,19 @@ public class Character : MonoBehaviour
         }
 
         PlayerManager.AssignDamage(this);
+    }
+
+    /// <summary>
+    /// Tell the player managre to assign heavy damage to this character (caused by Defender's Sniper)
+    /// </summary>
+    public void TakeSniperDamage()
+    {
+        if (PlayerManager == null)
+        {
+            return;
+        }
+
+        PlayerManager.AssignBurstDamage(this);
     }
 
     /// <summary>

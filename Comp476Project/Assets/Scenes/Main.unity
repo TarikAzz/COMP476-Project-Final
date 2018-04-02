@@ -113,7 +113,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh63366
+  m_Name: pb_Mesh93206
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -497,7 +497,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh63078
+  m_Name: pb_Mesh93138
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -1842,7 +1842,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh19538
+  m_Name: pb_Mesh-71780
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -2650,7 +2650,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh63248
+  m_Name: pb_Mesh92962
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -4473,6 +4473,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 20638204522916514, guid: f8ebb4f9efed0a3428d01c46aaeacfaf,
+        type: 2}
+      propertyPath: field of view
+      value: 60
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f8ebb4f9efed0a3428d01c46aaeacfaf, type: 2}
   m_IsPrefabParent: 0
@@ -4481,7 +4486,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh19646
+  m_Name: pb_Mesh-71782
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -5121,7 +5126,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh63394
+  m_Name: pb_Mesh93162
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -5293,6 +5298,11 @@ Prefab:
       propertyPath: InfiltratorSpawn
       value: 
       objectReference: {fileID: 693476569}
+    - target: {fileID: 114113016603786408, guid: 1ab3986592c5eef4d9e00092d6c0a753,
+        type: 2}
+      propertyPath: SetupTime
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1ab3986592c5eef4d9e00092d6c0a753, type: 2}
   m_IsPrefabParent: 0
