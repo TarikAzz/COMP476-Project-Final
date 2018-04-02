@@ -431,6 +431,21 @@ public class PlayerManager : NetworkBehaviour
     }
 
     /// <summary>
+    /// Assign heavy damage to a specific character and handles elimination (used by Defender's Sniper)
+    /// </summary>
+    /// <param name="character">The damaged character</param>
+    public void AssignBurstDamage(Character character)
+    {
+        if (CharactersHealth[Characters.IndexOf(character)] <= 0)
+        {
+            return;
+        }
+
+        CharactersHealth[Characters.IndexOf(character)] -= 9999;
+        RpcUpdateCharacterHealth(Characters.IndexOf(character));
+    }
+
+    /// <summary>
     /// Tells the client to update the character's health info
     /// </summary>
     /// <param name="characterIndex">The index of the character to update</param>

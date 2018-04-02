@@ -9,6 +9,7 @@ public class InGamePanel : MonoBehaviour
 {
     #region UI components
 
+    public Image PlayerKind;
     public Text PlayerKindText;
     public Text GameStateText;
     public GameObject SetupGroup;
@@ -33,6 +34,15 @@ public class InGamePanel : MonoBehaviour
     // The toggle button itself
     public Button toggleControl;
 
+    // Label for sniper's cooldown
+    public Text cooldownLabel;
+
+    // Image overlay used to show red flash on sniper kill
+    public Image killImage;
+
+    // Determine when to flash screen on sniper kill
+    public bool startFlash;
+
     // The boolean to check both states of the toggle button
     public bool isToggleCycled;
 
@@ -50,6 +60,10 @@ public class InGamePanel : MonoBehaviour
 
     // Only load the unit UI once player kind is determined (Defender or Infiltrator)
     public bool UI_Loaded;
+
+    // Game Info sprites (all defined in the Inspector)
+    public Sprite defender;
+    public Sprite infiltrator;
 
     // UI button sprites for Defender (all defined in the Inspector)
     public Sprite lamp;
@@ -91,6 +105,7 @@ public class InGamePanel : MonoBehaviour
     {
         UI_Loaded = false;
         isToggleCycled = true;
+        startFlash = false;
 
         // The quantity limit of each unit
         lampCapacity = 4;
@@ -98,7 +113,7 @@ public class InGamePanel : MonoBehaviour
         trapCapacity = 5;
 
         // Handle sniper cooldown mechanic
-        sniperCooldown = 5;
+        sniperCooldown = 20;
         isSniperReady = true;
     }
 
@@ -128,6 +143,13 @@ public class InGamePanel : MonoBehaviour
             {
                 controlLocked = false;
                 controlContainer = GameObject.Find("Unit Commands");
+
+                // Display Defender icon
+                PlayerKind.sprite = defender;
+
+                Color32 temp_color = PlayerKind.color;
+                temp_color.a = 255;
+                PlayerKind.color = temp_color;
 
                 // Add all unit buttons to the list, while modifying each one
                 for (int i = 1; i <= controlContainer.transform.childCount; i++)
@@ -161,6 +183,13 @@ public class InGamePanel : MonoBehaviour
             {
                 controlContainer = GameObject.Find("Unit Commands");
                 controlContainer.SetActive(false);
+
+                // Display Infiltrator icon
+                PlayerKind.sprite = infiltrator;
+
+                Color32 temp_color = PlayerKind.color;
+                temp_color.a = 255;
+                PlayerKind.color = temp_color;
             }
 
             // Once UI is loaded, don't update this anymore
@@ -170,79 +199,89 @@ public class InGamePanel : MonoBehaviour
         // If UI is loaded, then keep checking to lock/unlock buttons and coloring as game is running
         else
         {
-            // Enable toggle control
-            toggleControl.interactable = true;
-
-            // Acess the Player Manager script
-            characterContainer = GameObject.Find("PlayerManager(Clone)").GetComponent<PlayerManager>();
-
-            if (PlayerManager.Kind == PlayerManager.PlayerKind.Defender)
+            // Only enable controls once game is ready
+            if (PlayerManager.GameReady)
             {
-                // Disable all buttons until you place the chosen unit
-                if (controlLocked == true)
+                // Enable toggle control
+                toggleControl.interactable = true;
+
+                // Acess the Player Manager script
+                characterContainer = GameObject.Find("PlayerManager(Clone)").GetComponent<PlayerManager>();
+
+                if (PlayerManager.Kind == PlayerManager.PlayerKind.Defender)
                 {
-                    for (int i = 0; i < unitControls.Count; i++)
+                    // Disable all buttons until you place the chosen unit
+                    if (controlLocked == true)
                     {
-                        // Lock all buttons
-                        unitControls[i].interactable = false;
+                        for (int i = 0; i < unitControls.Count; i++)
+                        {
+                            // Lock all buttons
+                            unitControls[i].interactable = false;
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < unitControls.Count; i++)
+                        {
+                            // If a specific unit has reached its limit, lock it and gray out the button
+                            if ((i + 1 == 1 && GameObject.FindGameObjectsWithTag("Lamp").Length >= lampCapacity) ||
+                                (i + 1 == 2 && GameObject.FindGameObjectsWithTag("Camera").Length >= cameraCapacity) ||
+                                (i + 1 == 3 && GameObject.FindGameObjectsWithTag("Trap").Length >= trapCapacity) ||
+                                 i + 1 == 4 && !isSniperReady)
+                            {
+                                unitControls[i].interactable = false;
+                                buttonColors = unitControls[i].colors;
+                                buttonColors.normalColor = Color.gray;
+                                buttonColors.disabledColor = Color.gray;
+                                unitControls[i].colors = buttonColors;
+                            }
+
+                            else
+                            {
+                                // Unlock button
+                                unitControls[i].interactable = true;
+
+                                // Also, reset its color back to white (selecting a button makes it green)
+                                buttonColors = unitControls[i].colors;
+                                buttonColors.normalColor = Color.white;
+                                buttonColors.disabledColor = Color.white;
+                                unitControls[i].colors = buttonColors;
+                            }
+                        }
+                    }
+                }
+
+                // Always update sprites depending on toggle's state
+                if (isToggleCycled)
+                {
+                    toggleControl.image.sprite = cycle;
+
+                    // Set all character to cycle
+                    for (int i = 0; i < characterContainer.Characters.Count; i++)
+                    {
+                        characterContainer.Characters[i].LoopPatrol = true;
                     }
                 }
                 else
                 {
-                    for (int i = 0; i < unitControls.Count; i++)
+                    toggleControl.image.sprite = back_forth;
+
+                    // Set all character to reverse
+                    for (int i = 0; i < characterContainer.Characters.Count; i++)
                     {
-                        // If a specific unit has reached its limit, lock it and gray out the button
-                        if ((i + 1 == 1 && GameObject.FindGameObjectsWithTag("Lamp").Length >= lampCapacity) ||
-                            (i + 1 == 2 && GameObject.FindGameObjectsWithTag("Camera").Length >= cameraCapacity) ||
-                            (i + 1 == 3 && GameObject.FindGameObjectsWithTag("Trap").Length >= trapCapacity) ||
-                             i + 1 == 4 && !isSniperReady)
-                        {
-                            unitControls[i].interactable = false;
-                            buttonColors = unitControls[i].colors;
-                            buttonColors.normalColor = Color.gray;
-                            buttonColors.disabledColor = Color.gray;
-                            unitControls[i].colors = buttonColors;
-                        }
-
-                        else
-                        {
-                            // Unlock button
-                            unitControls[i].interactable = true;
-
-                            // Also, reset its color back to white (selecting a button makes it green)
-                            buttonColors = unitControls[i].colors;
-                            buttonColors.normalColor = Color.white;
-                            buttonColors.disabledColor = Color.white;
-                            unitControls[i].colors = buttonColors;
-                        }
+                        characterContainer.Characters[i].LoopPatrol = false;
                     }
                 }
-            }
 
-            // Always update sprites depending on toggle's state
-            if (isToggleCycled)
-            {
-                toggleControl.image.sprite = cycle;
+                // Always check the sniper's cooldown state
+                SniperCooldown();
 
-                // Set all character to cycle
-                for (int i = 0; i < characterContainer.Characters.Count; i++)
+                // Flash screen when triggered to do so
+                if (startFlash == true)
                 {
-                    characterContainer.Characters[i].LoopPatrol = true;
+                    StartCoroutine(ScreenFlash());
                 }
             }
-            else
-            {
-                toggleControl.image.sprite = back_forth;
-
-                // Set all character to reverse
-                for (int i = 0; i < characterContainer.Characters.Count; i++)
-                {
-                    characterContainer.Characters[i].LoopPatrol = false;
-                }
-            }
-
-            // Always check the sniper's cooldown state
-            SniperCooldown();
         }
     }
 
@@ -252,7 +291,7 @@ public class InGamePanel : MonoBehaviour
         ReadyButton.interactable = false;
         PlayerManager.PlayerReady();
     }
-    
+
 
     // Select its ID and make button green
     public void selectUnit(int ID)
@@ -311,7 +350,10 @@ public class InGamePanel : MonoBehaviour
             GameObject target = spottedInfiltrators[UnityEngine.Random.Range(0, spottedInfiltrators.Count)];
 
             // Kill the character
-            target.SetActive(false);
+            target.GetComponent<Character>().TakeSniperDamage();
+            
+            // Flash screen
+            startFlash = true;
 
             // Clear list once finished
             spottedInfiltrators.Clear();
@@ -328,9 +370,13 @@ public class InGamePanel : MonoBehaviour
         // When sniper is not ready, check when the cooldown is over
         if (!isSniperReady)
         {
+            // +1 to make cooldown label display stop at 1, not 0
+            cooldownLabel.text = ((int)((sniperCooldown + lastTimeSniped) - Network.time) + 1).ToString();
+
             if (Network.time > sniperCooldown + lastTimeSniped)
             {
                 isSniperReady = true;
+                cooldownLabel.text = "";
             }
         }
         // When ready, always check latest time
@@ -338,5 +384,21 @@ public class InGamePanel : MonoBehaviour
         {
             lastTimeSniped = Network.time;
         }
+    }
+
+
+    // Handle red flash on screen
+    public IEnumerator ScreenFlash()
+    {
+        Color32 color = killImage.color;
+
+        color.a = 150;
+        killImage.color = color;
+        yield return new WaitForSeconds(0.075f);
+
+        color.a = 0;
+        killImage.color = color;
+
+        startFlash = false;
     }
 }

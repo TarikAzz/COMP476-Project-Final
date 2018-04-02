@@ -13,6 +13,15 @@ public class LightDetection : MonoBehaviour
         }
     }
 
+    // Damage infiltrators as they remain in the light
+    void OnTriggerStay(Collider col)
+    {
+        if (col.gameObject.tag == "Bad")
+        {
+            col.gameObject.GetComponent<Character>().TakeDamage();
+        }
+    }
+
     // Hide infiltrators when leaving the light
     void OnTriggerExit(Collider col)
     {
