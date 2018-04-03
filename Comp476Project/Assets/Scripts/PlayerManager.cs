@@ -100,7 +100,7 @@ public class PlayerManager : NetworkBehaviour
                 {
                     _cameraOffset = new Vector3(Camera.main.transform.position.x, Camera.main.transform.position.y, Camera.main.transform.position.z / (Kind == PlayerKind.Defender ? 1.25f : 1.5f));
                 }
-            
+
                 Camera.main.transform.position = center + _cameraOffset;
                 Camera.main.fieldOfView = Camera.main.GetComponent<RtsCamera>().minFov;
             }
@@ -260,14 +260,14 @@ public class PlayerManager : NetworkBehaviour
             Characters[i].Colorize(Color.blue);
             Characters[i].gameObject.SetActive(true);
         }
-        
+
         _inGamePanel = FindObjectOfType<InGamePanel>();
         _inGamePanel.PlayerKindText.text = Kind.ToString();
         _inGamePanel.PlayerManager = this;
 
         _setupBarriers = FindObjectsOfType<Barrier>();
     }
-    
+
     /// <summary>
     /// Updates character selection and camera movement
     /// </summary>
@@ -277,11 +277,11 @@ public class PlayerManager : NetworkBehaviour
         {
             return;
         }
-        
+
         if (_setupTimer > 0)
         {
             _setupTimer -= Time.deltaTime;
-            
+
             _inGamePanel.SetupTimerImage.fillAmount = _setupTimer / MainManager.SetupTime;
 
             if (_setupTimer <= 0)
@@ -330,7 +330,7 @@ public class PlayerManager : NetworkBehaviour
             foreach (var infiltrator in infiltrators)
             {
                 bool isSpotted = (infiltrator.GetComponent<Character>().IsSpotted);
-                
+
                 infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(isSpotted);
             }
         }
@@ -488,11 +488,18 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     /// <param name="isShift">Option bool used to determine if shift was pressed</param>
     /// <author>Tarik</author>
-    private void CharacterSelection(bool isShift = false)
+    private void CharacterSelection(bool isShift)
     {
+        // Had to add this to fix the shift select not working. 
+        // In Update another condition was added for this check, so it didn't work anymore.
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+        
         RaycastHit hit;
 
-        if (!Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit, 100))
+        if (!Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
         {
             return;
         }
@@ -501,6 +508,7 @@ public class PlayerManager : NetworkBehaviour
 
         if (hitCharacter == null || !OwnsCharacter(hitCharacter))
         {
+            // just uncommented to test fixing it.
             if (!isShift)
             {
                 Characters.ForEach(c => c.Deselect());
@@ -508,6 +516,7 @@ public class PlayerManager : NetworkBehaviour
             return;
         }
 
+        //just uncommented to test fixing it.
         if (!isShift)
         {
             Characters.ForEach(c => c.Deselect());
@@ -524,6 +533,54 @@ public class PlayerManager : NetworkBehaviour
                 hitCharacter.Select();
             }
         }
+
+        #region OriginalSelectionCode
+        //if (isShift)
+        //{
+        //    RaycastHit hit;
+
+        //    if (!Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+        //    {
+        //        return;
+        //    }
+        //    var hitCharacter = hit.collider.GetComponent<Character>();
+
+        //    if (hitCharacter == null || !OwnsCharacter(hitCharacter))
+        //    {
+        //        return;
+        //    }
+
+        //    if (hitCharacter.IsSelected)
+        //    {
+        //        hitCharacter.Deselect();
+        //    }
+        //    else
+        //    {
+        //        hitCharacter.Select();
+        //    }
+
+        //}
+        //else
+        //{
+        //    RaycastHit hit;
+
+        //    if (!Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
+        //    {
+        //        return;
+        //    }
+
+        //    var hitCharacter = hit.collider.GetComponent<Character>();
+
+        //    if (hitCharacter == null || !OwnsCharacter(hitCharacter))
+        //    {
+        //        Characters.ForEach(c => c.Deselect());
+        //        return;
+        //    }
+
+        //    Characters.ForEach(c => c.Deselect());
+        //    hitCharacter.Select();
+        //}
+        #endregion
     }
 
     /// <summary>
@@ -564,7 +621,7 @@ public class PlayerManager : NetworkBehaviour
         {
             return;
         }
-        
+
         _inGamePanel.EndGameGroup.SetActive(true);
         _inGamePanel.EndGameMessage.text = winningPlayer == Kind ? "You won!" : "You lost...";
     }
