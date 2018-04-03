@@ -341,7 +341,9 @@ public class PlayerManager : NetworkBehaviour
                 infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(isSpotted);
 
                 // Show infiltrators when lightning flashes.
-                infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(lightning.GetComponent<Lightning>().showInfiltrators);
+
+                // ----- CURRENTLY BUGGED, BUT TARIK WILL FIX -----
+                //infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(lightning.GetComponent<Lightning>().showInfiltrators);
             }
         }
 

@@ -332,6 +332,9 @@ public class InGamePanel : MonoBehaviour
     // Have sniper kill a random infiltrator that is spotted
     void OneHitKO()
     {
+        // Flash screen (regardless of having any spotted infiltrators or not)
+        startFlash = true;
+
         // Get a hold of all the infiltrators
         GameObject[] infiltrators = GameObject.FindGameObjectsWithTag("Bad");
 
@@ -351,9 +354,6 @@ public class InGamePanel : MonoBehaviour
 
             // Kill the character
             target.GetComponent<Character>().TakeSniperDamage();
-            
-            // Flash screen
-            startFlash = true;
 
             // Clear list once finished
             spottedInfiltrators.Clear();
