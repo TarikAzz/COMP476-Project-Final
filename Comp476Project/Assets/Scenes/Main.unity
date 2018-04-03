@@ -1842,7 +1842,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh29538
+  m_Name: pb_Mesh25386
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
@@ -2469,6 +2469,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hasGameStarted: 0
+  showInfiltrators: 0
 --- !u!114 &819653955
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4619,7 +4620,7 @@ Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: pb_Mesh29232
+  m_Name: pb_Mesh25242
   serializedVersion: 8
   m_SubMeshes:
   - serializedVersion: 2
