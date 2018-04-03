@@ -46,6 +46,8 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public float DamagePerSecond;
 
+    public GameObject lightning;
+
     #endregion
 
     #region Public properties
@@ -218,6 +220,8 @@ public class PlayerManager : NetworkBehaviour
     {
         CharactersHealth = new SyncListFloat();
 
+        lightning = GameObject.Find("Lightning");
+
         for (var i = 0; i < Characters.Count; i++)
         {
             Characters[i].PlayerManager = this;
@@ -310,6 +314,7 @@ public class PlayerManager : NetworkBehaviour
         // Manages the visibility.
         if (Kind == PlayerKind.Infiltrator)
         {
+            // Will fix when this happens. Shouldn't happen all the time.
             if (Characters.Count > 0)
             {
                 Characters.ForEach(c => c.tag = "Bad");
@@ -317,6 +322,7 @@ public class PlayerManager : NetworkBehaviour
         }
         else
         {
+            // Will fix when this happens. Shouldn't happen all the time.
             if (Characters.Count > 0)
             {
                 Characters.ForEach(c => c.tag = "Good");
@@ -331,7 +337,11 @@ public class PlayerManager : NetworkBehaviour
             {
                 bool isSpotted = (infiltrator.GetComponent<Character>().IsSpotted);
 
+
                 infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(isSpotted);
+
+                // Show infiltrators when lightning flashes.
+                infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(lightning.GetComponent<Lightning>().showInfiltrators);
             }
         }
 
@@ -371,6 +381,7 @@ public class PlayerManager : NetworkBehaviour
             barrier.GetComponent<MeshRenderer>().enabled = false;
         }
 
+        lightning.GetComponent<Lightning>().hasGameStarted = true;
         GameOn = true;
         _inGamePanel.SetupGroup.SetActive(false);
     }
@@ -496,7 +507,7 @@ public class PlayerManager : NetworkBehaviour
         {
             return;
         }
-        
+
         RaycastHit hit;
 
         if (!Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out hit))
