@@ -46,6 +46,11 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public float DamagePerSecond;
 
+    /// <summary>
+    /// Tracks how many characters are currently selected
+    /// </summary>
+    public int Selected_Characters;
+
     public GameObject lightning;
 
     #endregion
@@ -308,6 +313,7 @@ public class PlayerManager : NetworkBehaviour
         }
 
         RectangleSelect();
+        CountSelections();
 
         #region Visibility
 
@@ -615,6 +621,28 @@ public class PlayerManager : NetworkBehaviour
                 character.Select();
             }
         }
+    }
+
+    /// <summary>
+    /// Counts how many characters are selected
+    /// </summary>
+    /// <author>Jonathan</author>
+    private void CountSelections()
+    {
+        // Initialize counter
+        int counter = 0;
+
+        // Count selected characters
+        for (int i = 0; i < Characters.Count; i++)
+        {
+            if (Characters[i].GetComponent<Character>().IsSelected)
+            {
+                counter++;
+            }
+        }
+
+        // Set the final answer
+        Selected_Characters = counter;
     }
 
     /// <summary>

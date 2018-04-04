@@ -88,6 +88,9 @@ public class InGamePanel : MonoBehaviour
     public Text camerasRemaining;
     public Text trapsRemaining;
 
+    // Used to display how many units are selected (all defined in the Inspector)
+    public Text unitsSelected;
+
     // Needed for the sniper ability
     public List<GameObject> spottedInfiltrators;
 
@@ -297,6 +300,29 @@ public class InGamePanel : MonoBehaviour
                 lampsRemaining.text = (lampCapacity - unitTracker.lamps_spawned).ToString();
                 camerasRemaining.text = (cameraCapacity - unitTracker.cameras_spawned).ToString();
                 trapsRemaining.text = (trapCapacity - unitTracker.traps_spawned).ToString();
+
+                // Always update UI on units currently selected
+                switch(PlayerManager.Selected_Characters)
+                {
+                    case 1:
+                        unitsSelected.text = "I";
+                        break;
+                    case 2:
+                        unitsSelected.text = "I I";
+                        break;
+                    case 3:
+                        unitsSelected.text = "I I I";
+                        break;
+                    case 4:
+                        unitsSelected.text = "I I I I";
+                        break;
+                    case 5:
+                        unitsSelected.text = "I I I I I";
+                        break;
+                    default:
+                        unitsSelected.text = "";
+                        break;
+                }
             }
         }
     }
