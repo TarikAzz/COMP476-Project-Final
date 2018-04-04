@@ -24,6 +24,11 @@ public class UnitSpawner : NetworkBehaviour
     public GameObject trap;
     public GameObject cam;
 
+    // Track how many of each unit have been spawned
+    public int lamps_spawned;
+    public int traps_spawned;
+    public int cameras_spawned;
+
     private InGamePanel _unitSelector;
 
     // Update is called once per frame
@@ -56,6 +61,7 @@ public class UnitSpawner : NetworkBehaviour
                             {
                                 unit = Instantiate(lamp, hit.point, Quaternion.identity);
                                 NetworkServer.Spawn(unit);
+                                lamps_spawned++;
                             }
                             break;
 
@@ -63,6 +69,7 @@ public class UnitSpawner : NetworkBehaviour
                             {
                                 unit = Instantiate(cam, hit.point, Quaternion.identity);
                                 NetworkServer.Spawn(unit);
+                                cameras_spawned++;
                             }
                             break;
 
@@ -70,6 +77,7 @@ public class UnitSpawner : NetworkBehaviour
                             {
                                 unit = Instantiate(trap, hit.point, Quaternion.identity);
                                 NetworkServer.Spawn(unit);
+                                traps_spawned++;
                             }
                             break;
                     }

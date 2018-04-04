@@ -80,6 +80,14 @@ public class InGamePanel : MonoBehaviour
     public int cameraCapacity;
     public int trapCapacity;
 
+    // Get reference of Unit Spawner to see how many of each unit have been used
+    public UnitSpawner unitTracker;
+
+    // Used to display on UI how many of each unit is remaining (all defined in the Inspector)
+    public Text lampsRemaining;
+    public Text camerasRemaining;
+    public Text trapsRemaining;
+
     // Needed for the sniper ability
     public List<GameObject> spottedInfiltrators;
 
@@ -111,6 +119,9 @@ public class InGamePanel : MonoBehaviour
         lampCapacity = 4;
         cameraCapacity = 3;
         trapCapacity = 5;
+
+        // Get amount of units
+        unitTracker = GameObject.Find("Unit Spawner").GetComponent<UnitSpawner>();
 
         // Handle sniper cooldown mechanic
         sniperCooldown = 20;
@@ -224,9 +235,9 @@ public class InGamePanel : MonoBehaviour
                         for (int i = 0; i < unitControls.Count; i++)
                         {
                             // If a specific unit has reached its limit, lock it and gray out the button
-                            if ((i + 1 == 1 && GameObject.FindGameObjectsWithTag("Lamp").Length >= lampCapacity) ||
-                                (i + 1 == 2 && GameObject.FindGameObjectsWithTag("Camera").Length >= cameraCapacity) ||
-                                (i + 1 == 3 && GameObject.FindGameObjectsWithTag("Trap").Length >= trapCapacity) ||
+                            if ((i + 1 == 1 && unitTracker.lamps_spawned >= lampCapacity) ||
+                                (i + 1 == 2 && unitTracker.cameras_spawned >= cameraCapacity) ||
+                                (i + 1 == 3 && unitTracker.traps_spawned >= trapCapacity) ||
                                  i + 1 == 4 && !isSniperReady)
                             {
                                 unitControls[i].interactable = false;
@@ -281,6 +292,11 @@ public class InGamePanel : MonoBehaviour
                 {
                     StartCoroutine(ScreenFlash());
                 }
+
+                // Always update UI on remaining units available
+                lampsRemaining.text = (lampCapacity - unitTracker.lamps_spawned).ToString();
+                camerasRemaining.text = (cameraCapacity - unitTracker.cameras_spawned).ToString();
+                trapsRemaining.text = (trapCapacity - unitTracker.traps_spawned).ToString();
             }
         }
     }
