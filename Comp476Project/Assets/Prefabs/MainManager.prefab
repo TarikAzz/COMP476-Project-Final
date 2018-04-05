@@ -55,7 +55,7 @@ MonoBehaviour:
   DefenderSpawn: {fileID: 0}
   InfiltratorSpawn: {fileID: 0}
   CharactersNeededToWin: 3
-  SetupTime: 2
+  SetupTime: 15
   DefenderReady: 0
   InfiltratorReady: 0
 --- !u!114 &114598854847066890
