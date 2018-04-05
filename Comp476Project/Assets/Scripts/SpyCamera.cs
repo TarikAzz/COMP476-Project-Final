@@ -1,21 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class SpyCamera : MonoBehaviour
+public class SpyCamera : NetworkBehaviour
 {
-    public Vector3 rotation;
-
-    // Use this for initialization
-    void Start ()
-    {
-        rotation = transform.rotation.eulerAngles;
-    }
-	
-	// Update is called once per frame
 	void Update ()
+	{
+	    CmdRotate();
+	}
+
+    [Command]
+    public void CmdRotate()
     {
-        rotation.y += 0.3f;
-        transform.rotation = Quaternion.Euler(rotation);
+        transform.Rotate(0f, 0.25f, 0f);
     }
 }
