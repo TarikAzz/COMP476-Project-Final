@@ -82,7 +82,20 @@ public class FieldOfView : MonoBehaviour
             owner.DeactivateFOV();
             return;
         }
-        
+
+        if (owner == null)
+        {
+            var managers = FindObjectsOfType<PlayerManager>();
+
+            foreach (var manager in managers)
+            {
+                if (manager.Kind == PlayerManager.PlayerKind.Defender)
+                {
+                    owner = manager;
+                }
+            }
+        }
+
         if (owner != null && !owner.GameOn)
         {
             return;
