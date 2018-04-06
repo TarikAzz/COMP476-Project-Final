@@ -51,6 +51,12 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public int Selected_Characters;
 
+    /// <summary>
+    /// Reference to the Audio Manager (CANNOT GET IT THROUGH INSPECTOR)
+    /// </summary>
+    public AudioManager audioManager;
+
+
     public GameObject lightning;
 
     #endregion
@@ -226,6 +232,9 @@ public class PlayerManager : NetworkBehaviour
         CharactersHealth = new SyncListFloat();
 
         lightning = GameObject.Find("Lightning");
+
+        // Get audio functionalities (CANNOT GET IT THROUGH INSPECTOR)
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
 
         for (var i = 0; i < Characters.Count; i++)
         {
@@ -668,5 +677,15 @@ public class PlayerManager : NetworkBehaviour
 
         _inGamePanel.EndGameGroup.SetActive(true);
         _inGamePanel.EndGameMessage.text = winningPlayer == Kind ? "You won!" : "You lost...";
+
+        // Play Win/Lose sound effect (depending if you win or lose)
+        if(Kind == winningPlayer)
+        {
+            audioManager.playWin();
+        }
+        else
+        {
+            audioManager.playLose();
+        }
     }
 }

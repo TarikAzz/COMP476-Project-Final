@@ -103,6 +103,9 @@ public class InGamePanel : MonoBehaviour
     // Check if sniper is available
     public bool isSniperReady;
 
+    // Reference to the Audio Manager (CANNOT GET IT THROUGH INSPECTOR)
+    public AudioManager audioManager;
+
     #endregion
 
     #region Public Properties
@@ -129,6 +132,9 @@ public class InGamePanel : MonoBehaviour
         // Handle sniper cooldown mechanic
         sniperCooldown = 20;
         isSniperReady = true;
+
+        // Get audio functionalities (CANNOT GET IT THROUGH INSPECTOR)
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
 
@@ -376,6 +382,9 @@ public class InGamePanel : MonoBehaviour
     {
         // Flash screen (regardless of having any spotted infiltrators or not)
         startFlash = true;
+
+        // Play sniper fire sound effect
+        audioManager.playSniperFire();
 
         // Get a hold of all the infiltrators
         GameObject[] infiltrators = GameObject.FindGameObjectsWithTag("Bad");
