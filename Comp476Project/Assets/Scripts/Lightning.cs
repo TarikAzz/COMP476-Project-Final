@@ -65,11 +65,17 @@ public class Lightning : NetworkBehaviour
     double otherTime;
 
     /// <summary>
+    /// Reference to the Audio Manager (CANNOT GET IT THROUGH INSPECTOR)
+    /// </summary>
+    public AudioManager audioManager;
+
+    /// <summary>
     /// Unity's Start.
     /// </summary>
     void Start()
     {
         light = GetComponent<Light>();
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
     /// <summary>
@@ -108,6 +114,9 @@ public class Lightning : NetworkBehaviour
         if ((Network.time > time + lastCheckedTime) && locker)
         {
             isFlashed = true;
+
+            // Play lightning sound effect
+            audioManager.playLightning();
 
             locker = false;
             sw.Stop();

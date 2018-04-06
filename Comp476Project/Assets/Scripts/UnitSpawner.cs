@@ -29,10 +29,13 @@ public class UnitSpawner : NetworkBehaviour
     public int traps_spawned;
     public int cameras_spawned;
 
+    // Reference to the Audio Manager (defined in Inspector)
+    public AudioManager audioManager;
+
     private InGamePanel _unitSelector;
 
     // Update is called once per frame
-	void Update ()
+    void Update ()
     {
         if (unitSelector == null)
         {
@@ -60,6 +63,10 @@ public class UnitSpawner : NetworkBehaviour
                         case 1:
                             {
                                 unit = Instantiate(lamp, hit.point, Quaternion.identity);
+
+                                // Play unit placement sound effect
+                                audioManager.playUnitPlacement();
+
                                 NetworkServer.Spawn(unit);
                                 lamps_spawned++;
                             }
@@ -68,6 +75,10 @@ public class UnitSpawner : NetworkBehaviour
                         case 2:
                             {
                                 unit = Instantiate(cam, hit.point, Quaternion.identity);
+
+                                // Play unit placement sound effect
+                                audioManager.playUnitPlacement();
+
                                 NetworkServer.Spawn(unit);
                                 cameras_spawned++;
                             }
@@ -76,6 +87,10 @@ public class UnitSpawner : NetworkBehaviour
                         case 3:
                             {
                                 unit = Instantiate(trap, hit.point, Quaternion.identity);
+
+                                // Play unit placement sound effect
+                                audioManager.playUnitPlacement();
+
                                 NetworkServer.Spawn(unit);
                                 traps_spawned++;
                             }

@@ -13,10 +13,16 @@ public class Trap : NetworkBehaviour
     // Get the panel for traps to determine player kind
     public InGamePanel panel;
 
+    // Reference to the Audio Manager (CANNOT GET IT THROUGH INSPECTOR)
+    public AudioManager audioManager;
+
     // Use this for initialization
     void Start()
     {
         panel = GameObject.Find("InGamePanel").GetComponent<InGamePanel>();
+
+        // Get audio functionalities (CANNOT GET IT THROUGH INSPECTOR)
+        audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
     }
 
     // Update is called once per frame
@@ -35,6 +41,9 @@ public class Trap : NetworkBehaviour
     {
         if(col.gameObject.tag == "Bad")
         {
+            // Play trap stun sound effect
+            audioManager.playTrapStun();
+
             // Reveal the trap
             TrapBase.GetComponent<MeshRenderer>().enabled = true;
             TrapHead.GetComponent<MeshRenderer>().enabled = true;

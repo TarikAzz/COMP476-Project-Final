@@ -222,6 +222,7 @@ MonoBehaviour:
   TrapBase: {fileID: 1498056015756706}
   TrapHead: {fileID: 1255011860729670}
   panel: {fileID: 0}
+  audioManager: {fileID: 0}
 --- !u!114 &114751772180150532
 MonoBehaviour:
   m_ObjectHideFlags: 1

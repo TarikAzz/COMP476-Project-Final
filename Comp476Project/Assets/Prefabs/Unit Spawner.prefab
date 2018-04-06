@@ -57,3 +57,4 @@ MonoBehaviour:
   lamps_spawned: 0
   traps_spawned: 0
   cameras_spawned: 0
+  audioManager: {fileID: 0}
