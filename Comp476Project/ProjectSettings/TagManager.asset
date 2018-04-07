@@ -12,6 +12,9 @@ TagManager:
   - iTrap
   - Bad
   - Good
+  - InfiltratorPlayer
+  - DefenderPlayer
+  - OtherPlayer
   layers:
   - Default
   - TransparentFX
