@@ -18,6 +18,7 @@ public class InGamePanel : MonoBehaviour
     public GameObject UnitCommands;
     public GameObject ToggleCommand;
     public GameObject EndGameGroup;
+    public Image EndGameImage;
     public Text EndGameMessage;
 
     #endregion
