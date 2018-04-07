@@ -4,8 +4,16 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
+    // Audio Sources added in Start method (it's messy via Inspector)
+    public AudioSource source_Sniper;
+    public AudioSource source_Unit;
+    public AudioSource source_Trap;
+    public AudioSource source_Lightning;
+    public AudioSource source_Alarm;
+    public AudioSource source_Win;
+    public AudioSource source_Lose;
+
     // Defined in the Inspector
-    public AudioSource source;
     public AudioClip sniper_fire;
     public AudioClip unit_placement;
     public AudioClip trap_stun;
@@ -23,6 +31,19 @@ public class AudioManager : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        // Each gets its own audio source so that sounds can overlap each other
+        source_Sniper = gameObject.AddComponent<AudioSource>();
+        source_Unit = gameObject.AddComponent<AudioSource>();
+        source_Trap = gameObject.AddComponent<AudioSource>();
+        source_Lightning = gameObject.AddComponent<AudioSource>();
+
+        // Lowered its volume because the alarm itself is loud
+        source_Alarm = gameObject.AddComponent<AudioSource>();
+        source_Alarm.volume = 0.25f;
+
+        source_Win = gameObject.AddComponent<AudioSource>();
+        source_Lose = gameObject.AddComponent<AudioSource>();
+
         alarmFrequency = 0.5f;
         waitForAlarm = false;
     }
@@ -65,50 +86,50 @@ public class AudioManager : MonoBehaviour
     // Play the Sniper Fire sound effect
     public void playSniperFire()
     {
-        source.clip = sniper_fire;
-        source.Play();
+        source_Sniper.clip = sniper_fire;
+        source_Sniper.Play();
     }
 
     // Play the Unit Placement sound effect
     public void playUnitPlacement()
     {
-        source.clip = unit_placement;
-        source.Play();
+        source_Unit.clip = unit_placement;
+        source_Unit.Play();
     }
 
     // Play the Trap Stun sound effect
     public void playTrapStun()
     {
-        source.clip = trap_stun;
-        source.Play();
+        source_Trap.clip = trap_stun;
+        source_Trap.Play();
     }
 
     // Play the Lightning sound effect
     public void playLightning()
     {
-        source.clip = lightning;
-        source.Play();
+        source_Lightning.clip = lightning;
+        source_Lightning.Play();
     }
 
     // Play the Alarm sound effect
     public void playAlarm()
     {
-        source.clip = alarm;
-        source.Play();
+        source_Alarm.clip = alarm;
+        source_Alarm.Play();
     }
 
     // Play the Win sound effect
     public void playWin()
     {
-        source.clip = win;
-        source.Play();
+        source_Win.clip = win;
+        source_Win.Play();
     }
 
     // Play the Lose sound effect
     public void playLose()
     {
-        source.clip = lose;
-        source.Play();
+        source_Lose.clip = lose;
+        source_Lose.Play();
     }
 
 
