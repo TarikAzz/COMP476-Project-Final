@@ -2254,6 +2254,7 @@ MonoBehaviour:
   LoopPatrol: 0
   StunDuration: 5
   NotStunnedTillNow: 0
+  IsSpotted: 0
   IsStunned: 0
   _navMeshAgent: {fileID: 0}
 --- !u!114 &114100540260939394
@@ -2367,6 +2368,7 @@ MonoBehaviour:
   LoopPatrol: 0
   StunDuration: 5
   NotStunnedTillNow: 0
+  IsSpotted: 0
   IsStunned: 0
   _navMeshAgent: {fileID: 0}
 --- !u!114 &114193997025772754
@@ -2386,6 +2388,8 @@ MonoBehaviour:
   SetupGroup: {fileID: 1440743977178784}
   SetupTimerImage: {fileID: 114492337438045620}
   ReadyButton: {fileID: 114928805631828374}
+  UnitCommands: {fileID: 1560629562885716}
+  ToggleCommand: {fileID: 1778719084040776}
   EndGameGroup: {fileID: 1169296495041376}
   EndGameMessage: {fileID: 114534204269735122}
   controlContainer: {fileID: 0}
@@ -2782,6 +2786,7 @@ MonoBehaviour:
   LoopPatrol: 0
   StunDuration: 5
   NotStunnedTillNow: 0
+  IsSpotted: 0
   IsStunned: 0
   _navMeshAgent: {fileID: 0}
 --- !u!114 &114340371602721122
@@ -3225,6 +3230,7 @@ MonoBehaviour:
   CharactersMaxHealth: 100
   DamagePerSecond: 20
   Selected_Characters: 0
+  audioManager: {fileID: 0}
   lightning: {fileID: 0}
 --- !u!114 &114542630109855748
 MonoBehaviour:
@@ -3529,6 +3535,7 @@ MonoBehaviour:
   LoopPatrol: 0
   StunDuration: 5
   NotStunnedTillNow: 0
+  IsSpotted: 0
   IsStunned: 0
   _navMeshAgent: {fileID: 0}
 --- !u!114 &114662158509911446
@@ -3901,6 +3908,7 @@ MonoBehaviour:
   LoopPatrol: 0
   StunDuration: 5
   NotStunnedTillNow: 0
+  IsSpotted: 0
   IsStunned: 0
   _navMeshAgent: {fileID: 0}
 --- !u!114 &114928805631828374

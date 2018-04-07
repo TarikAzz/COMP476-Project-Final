@@ -56,6 +56,10 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public AudioManager audioManager;
 
+    /// <summary>
+    /// Disable controls once game is over
+    /// </summary>
+    public bool DisableControls;
 
     public GameObject lightning;
 
@@ -97,6 +101,9 @@ public class PlayerManager : NetworkBehaviour
                 _inGamePanel.ReadyButton.gameObject.SetActive(false);
                 _inGamePanel.SetupGroup.gameObject.SetActive(true);
                 _setupTimer = MainManager.SetupTime;
+
+                // Play setup ticking noise
+                audioManager.playSetup();
 
                 var selectedCharacterPositions =
                     (from character in Characters select character.transform.position).ToArray();
@@ -305,6 +312,11 @@ public class PlayerManager : NetworkBehaviour
             if (_setupTimer <= 0)
             {
                 _inGamePanel.SetupTimerImage.fillAmount = 0;
+
+                // Stop the setup sound and play game start sound effect
+                audioManager.stopSetup();
+                audioManager.playGameStart();
+
                 StartGame();
             }
         }
@@ -350,17 +362,18 @@ public class PlayerManager : NetworkBehaviour
 
             foreach (var infiltrator in infiltrators)
             {
-                bool isSpotted = (infiltrator.GetComponent<Character>().IsSpotted);
+                // bool isSpotted = (infiltrator.GetComponent<Character>().IsSpotted);
 
                 // Show visibility on lightning flash
                 if (lightning.GetComponent<Lightning>().showInfiltrators)
                 {
                     infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(true);
+                    infiltrator.GetComponent<Character>().IsSpotted = true;
                 }
                 else
                 {
-
-                    infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(isSpotted);
+                    infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(false);
+                    infiltrator.GetComponent<Character>().IsSpotted = false;
                 }
             }
         }
@@ -675,11 +688,12 @@ public class PlayerManager : NetworkBehaviour
             return;
         }
 
+        DisableControls = true;
         _inGamePanel.EndGameGroup.SetActive(true);
         _inGamePanel.EndGameMessage.text = winningPlayer == Kind ? "You won!" : "You lost...";
 
         // Play Win/Lose sound effect (depending if you win or lose)
-        if(Kind == winningPlayer)
+        if (Kind == winningPlayer)
         {
             audioManager.playWin();
         }
