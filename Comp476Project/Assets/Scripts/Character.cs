@@ -103,7 +103,7 @@ public class Character : MonoBehaviour
     /// <summary>
     /// Whether or not the infiltrating character has been spotted by the defender
     /// </summary>
-    public bool IsSpotted { get; set; }
+    public bool IsSpotted;
 
     /// <summary>
     /// To determine if defender unit is stunned by infiltrator trap
@@ -659,6 +659,15 @@ public class Character : MonoBehaviour
     /// <param name="enabled">Determines if enabled or not</param>
     public void ToggleVisibility(bool enabled)
     {
+        //if (enabled == true)
+        //{
+        //    IsSpotted = true;
+        //}
+        //else
+        //{
+        //    IsSpotted = false;
+        //}
+
         Renderer[] rs = GetComponentsInChildren<Renderer>();
 
         foreach (Renderer r in rs)

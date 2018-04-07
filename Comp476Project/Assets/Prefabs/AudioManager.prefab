@@ -84,21 +84,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c2c5969656305944a4e5e18ffc4e3c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  source_MainTheme: {fileID: 0}
+  source_Setup: {fileID: 0}
+  source_GameStart: {fileID: 0}
   source_Sniper: {fileID: 0}
   source_Unit: {fileID: 0}
   source_Trap: {fileID: 0}
   source_Lightning: {fileID: 0}
-  source_Alarm: {fileID: 0}
   source_Win: {fileID: 0}
   source_Lose: {fileID: 0}
+  main_theme: {fileID: 8300000, guid: 5c741811ca0722e408bf020a36ca33ee, type: 3}
+  setup: {fileID: 8300000, guid: c4fab33e71529b248a680ba64e6cfbb5, type: 3}
+  game_start: {fileID: 8300000, guid: e21c2481f81cd0543bee8f124865c78c, type: 3}
   sniper_fire: {fileID: 8300000, guid: 6e5b090b43fbe0740a402f6eb14f34bd, type: 3}
   unit_placement: {fileID: 8300000, guid: 4a63eb5efa661504e8d012f1ab90f7ef, type: 3}
   trap_stun: {fileID: 8300000, guid: 7f3603d71ad16f04e85e056233c08939, type: 3}
   lightning: {fileID: 8300000, guid: 6111beb4c750bcc4aa3b9ce286ae566a, type: 3}
-  alarm: {fileID: 8300000, guid: c13b25f9a56018f40a9537a976361fd1, type: 3}
   win: {fileID: 8300000, guid: fa37002116d689c489465ad682270c48, type: 3}
   lose: {fileID: 8300000, guid: df55825ce36e66e44958387a12c3bcda, type: 3}
-  infiltrators: []
-  alarmFrequency: 0
-  waitForAlarm: 0
-  lastTimeAlarmPlayed: 0

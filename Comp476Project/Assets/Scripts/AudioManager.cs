@@ -1,87 +1,81 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Linq;
 
 public class AudioManager : MonoBehaviour
 {
     // Audio Sources added in Start method (it's messy via Inspector)
+    public AudioSource source_MainTheme;
+    public AudioSource source_Setup;
+    public AudioSource source_GameStart;
     public AudioSource source_Sniper;
     public AudioSource source_Unit;
     public AudioSource source_Trap;
     public AudioSource source_Lightning;
-    public AudioSource source_Alarm;
     public AudioSource source_Win;
     public AudioSource source_Lose;
 
     // Defined in the Inspector
+    public AudioClip main_theme;
+    public AudioClip setup;
+    public AudioClip game_start;
     public AudioClip sniper_fire;
     public AudioClip unit_placement;
     public AudioClip trap_stun;
     public AudioClip lightning;
-    public AudioClip alarm;
     public AudioClip win;
     public AudioClip lose;
-    
-    // These are used to play the alarm sound effect when any infiltrator is spotted
-    public GameObject[] infiltrators;
-    public float alarmFrequency;
-    public bool waitForAlarm;
-    public double lastTimeAlarmPlayed;
 
     // Use this for initialization
     void Start()
     {
         // Each gets its own audio source so that sounds can overlap each other
+        source_MainTheme = gameObject.AddComponent<AudioSource>();
+        source_MainTheme.volume = 0.6f;
+        source_MainTheme.loop = true;
+
+        source_Setup = gameObject.AddComponent<AudioSource>();
+        source_Setup.loop = true;
+        
+        source_GameStart = gameObject.AddComponent<AudioSource>();
         source_Sniper = gameObject.AddComponent<AudioSource>();
         source_Unit = gameObject.AddComponent<AudioSource>();
         source_Trap = gameObject.AddComponent<AudioSource>();
         source_Lightning = gameObject.AddComponent<AudioSource>();
-
-        // Lowered its volume because the alarm itself is loud
-        source_Alarm = gameObject.AddComponent<AudioSource>();
-        source_Alarm.volume = 0.25f;
-
         source_Win = gameObject.AddComponent<AudioSource>();
         source_Lose = gameObject.AddComponent<AudioSource>();
 
-        alarmFrequency = 0.5f;
-        waitForAlarm = false;
+        // Start playing the main theme
+        playMainTheme();
     }
 
-    // Update is called once per frame
-    void Update()
+    // Play the Main Theme music
+    public void playMainTheme()
     {
-        // Always get updated list of active infiltrators
-        infiltrators = GameObject.FindGameObjectsWithTag("Bad");
-
-        // Only check for spotted infiltrator when it can play an alarm
-        if (waitForAlarm == false)
-        {
-            for (int i = 0; i < infiltrators.Length; i++)
-            {
-                if (infiltrators[i].GetComponent<Character>().IsSpotted)
-                {
-                    waitForAlarm = true;
-                    playAlarm();
-                }
-            }
-
-            // Always update time since last played alarm
-            lastTimeAlarmPlayed = Network.time;
-        }
-        else
-        {
-            // Halt alarm via the allowed frequency
-            if (Network.time > lastTimeAlarmPlayed + alarmFrequency)
-            {
-                waitForAlarm = false;
-            }
-        }
+        source_MainTheme.clip = main_theme;
+        source_MainTheme.Play();
+    }
+    
+    // Play the Setup sound effect
+    public void playSetup()
+    {
+        source_Setup.clip = setup;
+        source_Setup.Play();
     }
 
+    // Stop the Setup sound effect
+    public void stopSetup()
+    {
+        source_Setup.Stop();
+    }
 
-
-
+    // Play the Game Start sound effect
+    public void playGameStart()
+    {
+        source_GameStart.clip = game_start;
+        source_GameStart.Play();
+    }
 
     // Play the Sniper Fire sound effect
     public void playSniperFire()
@@ -111,16 +105,12 @@ public class AudioManager : MonoBehaviour
         source_Lightning.Play();
     }
 
-    // Play the Alarm sound effect
-    public void playAlarm()
-    {
-        source_Alarm.clip = alarm;
-        source_Alarm.Play();
-    }
-
     // Play the Win sound effect
     public void playWin()
     {
+        // Only for Win and Lose
+        StopEverything();
+
         source_Win.clip = win;
         source_Win.Play();
     }
@@ -128,16 +118,20 @@ public class AudioManager : MonoBehaviour
     // Play the Lose sound effect
     public void playLose()
     {
+        // Only for Win and Lose
+        StopEverything();
+
         source_Lose.clip = lose;
         source_Lose.Play();
     }
-
-
-
-
-
     
-
-
-
+    // Stop all audio (used for when game is over)
+    public void StopEverything()
+    {
+        source_MainTheme.Stop();
+        source_Sniper.Stop();
+        source_Unit.Stop();
+        source_Trap.Stop();
+        source_Lightning.Stop();
+    }
 }
