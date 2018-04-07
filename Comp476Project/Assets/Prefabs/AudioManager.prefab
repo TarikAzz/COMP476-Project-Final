@@ -170,5 +170,10 @@ MonoBehaviour:
   unit_placement: {fileID: 8300000, guid: 4a63eb5efa661504e8d012f1ab90f7ef, type: 3}
   trap_stun: {fileID: 8300000, guid: 7f3603d71ad16f04e85e056233c08939, type: 3}
   lightning: {fileID: 8300000, guid: 6111beb4c750bcc4aa3b9ce286ae566a, type: 3}
+  alarm: {fileID: 8300000, guid: c13b25f9a56018f40a9537a976361fd1, type: 3}
   win: {fileID: 8300000, guid: fa37002116d689c489465ad682270c48, type: 3}
   lose: {fileID: 8300000, guid: df55825ce36e66e44958387a12c3bcda, type: 3}
+  infiltrators: []
+  alarmFrequency: 0
+  waitForAlarm: 0
+  lastTimeAlarmPlayed: 0
