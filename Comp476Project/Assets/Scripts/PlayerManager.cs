@@ -56,8 +56,9 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public AudioManager audioManager;
 
-
     public GameObject lightning;
+
+    public GameObject defenderModel;
 
     #endregion
 
@@ -267,9 +268,11 @@ public class PlayerManager : NetworkBehaviour
         {
             case PlayerKind.Infiltrator:
                 transform.localPosition = MainManager.InfiltratorSpawn.position;
+                gameObject.tag = "InfiltratorPlayer";
                 break;
             case PlayerKind.Defender:
                 transform.localPosition = MainManager.DefenderSpawn.position;
+                gameObject.tag = "DefenderPlayer";
                 break;
         }
 
@@ -286,12 +289,20 @@ public class PlayerManager : NetworkBehaviour
         _setupBarriers = FindObjectsOfType<Barrier>();
     }
 
+    bool doOnce = true;
+
     /// <summary>
     /// Updates character selection and camera movement
     /// </summary>
     void Update()
     {
-        if (!isLocalPlayer && !GameReady)
+
+        if (!isLocalPlayer)
+        {
+            return;
+        }
+
+        if (!GameReady)
         {
             return;
         }
@@ -366,6 +377,36 @@ public class PlayerManager : NetworkBehaviour
         }
 
         #endregion
+        if (Kind == PlayerKind.Infiltrator)
+        {
+
+            GameObject otherPlayer = GameObject.FindGameObjectWithTag("OtherPlayer");
+            ChangeChars(otherPlayer);
+        }
+        else
+        {
+            ChangeChars(gameObject);
+        }
+
+
+
+
+
+    }
+
+    // [Command]
+    void ChangeChars(GameObject otherPlayer)
+    {
+        //var defenders = GameObject.FindGameObjectsWithTag("Good");
+
+        for (var i = 0; i < 5; i++)
+        {
+
+            otherPlayer.transform.GetChild(i).gameObject.GetComponent<MeshRenderer>().enabled = false;
+            otherPlayer.transform.GetChild(i).gameObject.transform.GetChild(4).gameObject.SetActive(true);
+
+
+        }
     }
 
     /// <summary>
@@ -679,7 +720,7 @@ public class PlayerManager : NetworkBehaviour
         _inGamePanel.EndGameMessage.text = winningPlayer == Kind ? "You won!" : "You lost...";
 
         // Play Win/Lose sound effect (depending if you win or lose)
-        if(Kind == winningPlayer)
+        if (Kind == winningPlayer)
         {
             audioManager.playWin();
         }

@@ -103,7 +103,7 @@ public class Character : MonoBehaviour
     /// <summary>
     /// Whether or not the infiltrating character has been spotted by the defender
     /// </summary>
-    public bool IsSpotted { get; set; }
+    public bool IsSpotted;
 
     /// <summary>
     /// To determine if defender unit is stunned by infiltrator trap
