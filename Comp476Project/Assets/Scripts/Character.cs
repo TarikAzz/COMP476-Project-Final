@@ -296,9 +296,9 @@ public class Character : MonoBehaviour
         }
 
         // When stunned, free itself when stun duration passes (and go back to being hidden)
-        if(IsStunned)
+        if (IsStunned)
         {
-            if(Network.time > NotStunnedTillNow + StunDuration)
+            if (Network.time > NotStunnedTillNow + StunDuration)
             {
                 IsStunned = false;
                 IsSpotted = false;
@@ -314,6 +314,20 @@ public class Character : MonoBehaviour
         {
             StopChase();
         }
+
+        if ((_navMeshAgent.velocity.magnitude > 0f) )
+        {
+            print("Moving");
+            transform.GetChild(4).gameObject.GetComponent<Animator>().SetBool("Move", true);
+        }
+        else
+        {
+            transform.GetChild(4).gameObject.GetComponent<Animator>().SetBool("Move", false);
+        }
+
+
+
+
     }
 
     /// <summary>
@@ -382,7 +396,10 @@ public class Character : MonoBehaviour
         IsSelected = true;
         JustSelected = true;
 
-        Colorize(Color.cyan);
+        //Colorize(Color.cyan);
+
+        gameObject.transform.GetChild(0).gameObject.SetActive(true);
+        gameObject.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
 
         ShowTargetIndicators();
     }
@@ -398,7 +415,9 @@ public class Character : MonoBehaviour
         }
 
         IsSelected = false;
-        Colorize(Color.blue);
+        //Colorize(Color.blue);
+        gameObject.transform.GetChild(0).gameObject.SetActive(false);
+
         HideTargetIndicators();
     }
 
@@ -417,7 +436,7 @@ public class Character : MonoBehaviour
         {
             StopCoroutine(_chaseRoutine);
         }
-        
+
         _chaseTarget = target;
         _chaseRoutine = StartCoroutine(FollowTarget(target));
     }
@@ -534,7 +553,7 @@ public class Character : MonoBehaviour
         {
             StopAllCoroutines();
             DestroyTargetIndicators();
-            
+
             newPatrolNode = Instantiate(IndicatorPrefab, originHit.point + Vector3.up * 0.01f, Quaternion.identity).GetComponent<Indicator>();
             newPatrolNode.transform.up = originHit.normal;
             newPatrolNode.transform.Rotate(new Vector3(90f, 0f, 0f));
@@ -545,7 +564,7 @@ public class Character : MonoBehaviour
 
             _patrolStep = 1;
         }
-        
+
         // Create an indicator for ground clicks
         newPatrolNode = Instantiate(IndicatorPrefab, targetHit.point - centerOffset + Vector3.up * 0.01f, Quaternion.identity).GetComponent<Indicator>();
         newPatrolNode.transform.up = targetHit.normal;
