@@ -30,9 +30,11 @@ ExportedObj/
 sysinfo.txt
 
 # Builds
-*.apk
-*.unitypackage
-Comp476Project/Library/
-Comp476Project/Build/
-Comp476Project/Temp/
-Comp476Project/.vs/
+*/*.apk
+*/*.unitypackage
+/Comp476Project/Library/
+*/Comp476Project/Build/
+*/Comp476Project/Temp/
+*/Comp476Project/.vs/
+*/test_Data/
+*/Temp/
