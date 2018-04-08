@@ -39,7 +39,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4887358719605628}
   - component: {fileID: 108781426544963550}
-  - component: {fileID: 135075275618423214}
+  - component: {fileID: 135280142920979806}
   - component: {fileID: 114037004028502196}
   m_Layer: 0
   m_Name: Point Light
@@ -391,8 +391,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d36d39af824e77469c132a6b6f8b712, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  point_light: {fileID: 0}
-  range: 0
 --- !u!114 &114924909278029186
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -437,7 +435,7 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!135 &135075275618423214
+--- !u!135 &135280142920979806
 SphereCollider:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -447,8 +445,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 2.8372102
-  m_Center: {x: -0.09626627, y: -1.0706034, z: -0.122956276}
+  m_Radius: 3
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!136 &136566457749004092
 CapsuleCollider:
   m_ObjectHideFlags: 1

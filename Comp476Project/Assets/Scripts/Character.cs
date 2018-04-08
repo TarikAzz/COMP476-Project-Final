@@ -678,6 +678,15 @@ public class Character : MonoBehaviour
     /// <param name="enabled">Determines if enabled or not</param>
     public void ToggleVisibility(bool enabled)
     {
+        //if (enabled == true)
+        //{
+        //    IsSpotted = true;
+        //}
+        //else
+        //{
+        //    IsSpotted = false;
+        //}
+
         Renderer[] rs = GetComponentsInChildren<Renderer>();
 
         foreach (Renderer r in rs)
