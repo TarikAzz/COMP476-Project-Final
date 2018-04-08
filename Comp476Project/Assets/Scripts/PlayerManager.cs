@@ -58,7 +58,10 @@ public class PlayerManager : NetworkBehaviour
 
     public GameObject lightning;
 
-    public GameObject defenderModel;
+    /// <summary>
+    /// TEMPORARY! Used to sync animations the opponent's animations.
+    /// </summary>
+    List<Vector3> otherPlayersPositions = new List<Vector3> { new Vector3(), new Vector3(), new Vector3(), new Vector3(), new Vector3() };
 
     #endregion
 
@@ -298,6 +301,7 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     void Update()
     {
+        // Changed this to work properly.
         if (!isLocalPlayer)
         {
             return;
@@ -338,6 +342,7 @@ public class PlayerManager : NetworkBehaviour
 
         #region Visibility
 
+        // Tags all players once we know they are present.
         if (doTaggingOnce)
         {
             // Manages the visibility.
@@ -379,7 +384,7 @@ public class PlayerManager : NetworkBehaviour
 
             foreach (var infiltrator in infiltrators)
             {
-                // bool isSpotted = (infiltrator.GetComponent<Character>().IsSpotted);
+                bool isSpotted = (infiltrator.GetComponent<Character>().IsSpotted);
 
                 // Show visibility on lightning flash
                 if (lightning.GetComponent<Lightning>().showInfiltrators)
@@ -388,58 +393,80 @@ public class PlayerManager : NetworkBehaviour
                 }
                 else
                 {
-
                     infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(false);
                 }
             }
         }
-
         #endregion
 
+        // Changes the models.
         if (doModelsOnce)
         {
             ChangeChars();
             doModelsOnce = false;
         }
-    }
-    
 
+        // Temporary
+        ApplyOpponentAnimations();
+    }
+
+    /// <summary>
+    /// TEMPORARY Runs the animaitons for the other player.
+    /// </summary>
+    void ApplyOpponentAnimations()
+    {
+        GameObject[] otherCharacters;
+
+        if (Kind == PlayerKind.Defender)
+        {
+            otherCharacters = GameObject.FindGameObjectsWithTag("Bad");
+        }
+        else
+        {
+            otherCharacters = GameObject.FindGameObjectsWithTag("Good");
+        }
+        
+        for (int i = 0; i < otherCharacters.Length; i++)
+        {
+            if (otherPlayersPositions[i] != otherCharacters[i].transform.position)
+            {
+                otherCharacters[i].GetComponent<Character>().IsMoving = true;
+                otherPlayersPositions[i] = otherCharacters[i].transform.position;
+            }
+            else
+            {
+                otherCharacters[i].GetComponent<Character>().IsMoving = false;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Chnages the models depending on the player type.
+    /// </summary>
     void ChangeChars()
     {
-        if (Kind == PlayerKind.Infiltrator)
+        GameObject[] otherCharacters;
+
+        if (Kind == PlayerKind.Defender)
         {
-            var defenders = GameObject.FindGameObjectsWithTag("Good");
-
-            for (var i = 0; i < defenders.Length; i++)
-            {
-                defenders[i].gameObject.GetComponent<MeshRenderer>().enabled = false;
-                defenders[i].gameObject.transform.GetChild(4).gameObject.SetActive(true);
-            }
-
-            // Infiltrator or has 5 children since the FOV is absent.
-            for (int i = 0; i < Characters.Count; i++)
-            {
-                Characters[i].gameObject.GetComponent<MeshRenderer>().enabled = false;
-                Characters[i].gameObject.transform.GetChild(4).gameObject.SetActive(true);
-            }
-
+            otherCharacters = GameObject.FindGameObjectsWithTag("Bad");
         }
-        else // If Defender
+        else
         {
-            var infiltrators = GameObject.FindGameObjectsWithTag("Bad");
+            otherCharacters = GameObject.FindGameObjectsWithTag("Good");
+        }
 
-            // Infiltrator or has 5 children since the FOV is absent.
-            for (var i = 0; i < infiltrators.Length; i++)
-            {
-                infiltrators[i].gameObject.GetComponent<MeshRenderer>().enabled = false;
-                infiltrators[i].gameObject.transform.GetChild(4).gameObject.SetActive(true);
-            }
+        for (var i = 0; i < otherCharacters.Length; i++)
+        {
+            otherCharacters[i].gameObject.GetComponent<MeshRenderer>().enabled = false;
+            otherCharacters[i].gameObject.transform.GetChild(4).gameObject.SetActive(true);
+        }
 
-            for (var i = 0; i < Characters.Count; i++)
-            {
-                Characters[i].gameObject.GetComponent<MeshRenderer>().enabled = false;
-                Characters[i].gameObject.transform.GetChild(4).gameObject.SetActive(true);
-            }
+        // Infiltrator or has 5 children since the FOV is absent.
+        for (int i = 0; i < Characters.Count; i++)
+        {
+            Characters[i].gameObject.GetComponent<MeshRenderer>().enabled = false;
+            Characters[i].gameObject.transform.GetChild(4).gameObject.SetActive(true);
         }
     }
 
@@ -738,6 +765,22 @@ public class PlayerManager : NetworkBehaviour
     {
         MainManager.EndGame(winningPlayer);
     }
+
+    //[Command]
+    //void CmdAnimate()
+    //{
+
+    //    // Plays the character animations.
+    //    if ((_navMeshAgent.velocity.magnitude > 0f))
+    //    {
+    //        //print("Moving");
+    //        transform.GetChild(4).gameObject.GetComponent<NetworkAnimator>().animator.SetBool("Move", true);
+    //    }
+    //    else
+    //    {
+    //        transform.GetChild(4).gameObject.GetComponent<Animator>().SetBool("Move", false);
+    //    }
+    //}
 
     /// <summary>
     /// 

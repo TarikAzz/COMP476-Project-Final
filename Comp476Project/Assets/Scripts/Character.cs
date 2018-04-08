@@ -148,7 +148,11 @@ public class Character : MonoBehaviour
     /// The NavMeshAgent component
     /// </summary>
     public NavMeshAgent _navMeshAgent;
-
+    
+    /// <summary>
+    /// TEMPORARY Checks if the player is moving.
+    /// </summary>
+    public bool IsMoving;
     #endregion
 
     /// <summary>
@@ -314,20 +318,16 @@ public class Character : MonoBehaviour
         {
             StopChase();
         }
+        
 
-        if ((_navMeshAgent.velocity.magnitude > 0f) )
+        if ((_navMeshAgent.velocity.magnitude > 0f))
         {
-            print("Moving");
-            transform.GetChild(4).gameObject.GetComponent<Animator>().SetBool("Move", true);
+            IsMoving = true;
         }
         else
         {
-            transform.GetChild(4).gameObject.GetComponent<Animator>().SetBool("Move", false);
+            IsMoving = false;
         }
-
-
-
-
     }
 
     /// <summary>
@@ -399,7 +399,7 @@ public class Character : MonoBehaviour
         //Colorize(Color.cyan);
 
         gameObject.transform.GetChild(0).gameObject.SetActive(true);
-        gameObject.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.green;
+        gameObject.transform.GetChild(0).gameObject.GetComponent<MeshRenderer>().material.color = Color.cyan;
 
         ShowTargetIndicators();
     }
