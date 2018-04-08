@@ -14,7 +14,6 @@ public class MyNetworkManager : NetworkManager
     void Start()
     {
         ToggleNetworkHUD(false);
-        
     }
 
 

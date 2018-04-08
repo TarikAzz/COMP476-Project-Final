@@ -53,8 +53,13 @@ public class AudioManager : MonoBehaviour
     // Play the Main Theme music
     public void playMainTheme()
     {
-        source_MainTheme.clip = main_theme;
-        source_MainTheme.Play();
+        // Play main theme once loaded
+        if(source_MainTheme != null)
+        {
+            source_MainTheme.clip = main_theme;
+            source_MainTheme.Play();
+        }
+        
     }
     
     // Play the Setup sound effect

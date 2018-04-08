@@ -805,7 +805,6 @@ MonoBehaviour:
   matchMaker: {fileID: 0}
   TitleScreen: {fileID: 223857234913464436}
   IP_Address: {fileID: 114953508714123036}
-  ConnectionHUD: 0
 --- !u!114 &114965867323126138
 MonoBehaviour:
   m_ObjectHideFlags: 1
