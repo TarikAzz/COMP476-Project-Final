@@ -169,7 +169,6 @@ public class FieldOfView : MonoBehaviour
                 
             }
         }
-
     }
 
     /// <summary>
