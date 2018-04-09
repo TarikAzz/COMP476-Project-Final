@@ -56,7 +56,21 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     public AudioManager audioManager;
 
+    /// <summary>
+    /// The lighting.
+    /// </summary>
     public GameObject lightning;
+
+    /// <summary>
+    /// Disable controls once game is over
+    /// </summary>
+    public bool DisableControls;
+
+    /// <summary>
+    /// Sprites for Win and Lose screens (defined in the Inspector)
+    /// </summary>
+    public Sprite winImage;
+    public Sprite loseImage;
 
     /// <summary>
     /// TEMPORARY! Used to sync animations the opponent's animations.
@@ -793,17 +807,21 @@ public class PlayerManager : NetworkBehaviour
             return;
         }
 
-        _inGamePanel.EndGameGroup.SetActive(true);
-        _inGamePanel.EndGameMessage.text = winningPlayer == Kind ? "You won!" : "You lost...";
+        DisableControls = true;
 
-        // Play Win/Lose sound effect (depending if you win or lose)
+        // Determine Win or Lose sound effects and icons
         if (Kind == winningPlayer)
         {
             audioManager.playWin();
+            _inGamePanel.EndGameImage.sprite = winImage;
         }
         else
         {
             audioManager.playLose();
+            _inGamePanel.EndGameImage.sprite = loseImage;
         }
+
+        // Enable view
+        _inGamePanel.EndGameGroup.SetActive(true);
     }
 }
