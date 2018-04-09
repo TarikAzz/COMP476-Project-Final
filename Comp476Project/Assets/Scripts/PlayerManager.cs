@@ -405,16 +405,18 @@ public class PlayerManager : NetworkBehaviour
 
             foreach (var infiltrator in infiltrators)
             {
-                bool isSpotted = (infiltrator.GetComponent<Character>().IsSpotted);
+                //bool isSpotted = (infiltrator.GetComponent<Character>().IsSpotted);
 
                 // Show visibility on lightning flash
                 if (lightning.GetComponent<Lightning>().showInfiltrators)
                 {
                     infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(true);
+                    infiltrator.GetComponent<Character>().IsSpotted = true;
                 }
                 else
                 {
                     infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(false);
+                    infiltrator.GetComponent<Character>().IsSpotted = false;
                 }
             }
         }
