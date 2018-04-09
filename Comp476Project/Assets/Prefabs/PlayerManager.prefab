@@ -20573,7 +20573,10 @@ MonoBehaviour:
   SetupGroup: {fileID: 1920577118118002}
   SetupTimerImage: {fileID: 114574427655324462}
   ReadyButton: {fileID: 114711509258749790}
+  UnitCommands: {fileID: 1306891414269164}
+  ToggleCommand: {fileID: 1963760292009878}
   EndGameGroup: {fileID: 1043836143678518}
+  EndGameImage: {fileID: 114148683028925490}
   EndGameMessage: {fileID: 114437498492791036}
   controlContainer: {fileID: 0}
   toggleContainer: {fileID: 0}
@@ -93361,6 +93364,9 @@ MonoBehaviour:
   Selected_Characters: 0
   audioManager: {fileID: 0}
   lightning: {fileID: 0}
+  DisableControls: 0
+  winImage: {fileID: 21300000, guid: 9a690f60d01f2ab4fa1f553c0caf980b, type: 3}
+  loseImage: {fileID: 21300000, guid: f6a3f17a9df66f844a364e16b7e120e5, type: 3}
 --- !u!114 &114895716427452330
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -114828,7 +114834,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 150, y: 85}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224516127612553512
 RectTransform:
@@ -115294,8 +115300,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 75, y: -25}
-  m_SizeDelta: {x: 150, y: 50}
+  m_AnchoredPosition: {x: 75, y: -75}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &224975079239204020
 RectTransform:
