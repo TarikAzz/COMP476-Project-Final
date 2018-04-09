@@ -116,6 +116,9 @@ public class PlayerManager : NetworkBehaviour
                 _inGamePanel.SetupGroup.gameObject.SetActive(true);
                 _setupTimer = MainManager.SetupTime;
 
+                // Play setup ticking noise
+                audioManager.playSetup();
+
                 var selectedCharacterPositions =
                     (from character in Characters select character.transform.position).ToArray();
                 var center = Vector3.zero;
@@ -335,6 +338,10 @@ public class PlayerManager : NetworkBehaviour
             if (_setupTimer <= 0)
             {
                 _inGamePanel.SetupTimerImage.fillAmount = 0;
+
+                // Stop the setup sound and play game start sound effect
+                audioManager.stopSetup();
+                audioManager.playGameStart();
                 StartGame();
             }
         }
