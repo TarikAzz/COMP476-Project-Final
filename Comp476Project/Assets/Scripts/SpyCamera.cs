@@ -7,11 +7,16 @@ public class SpyCamera : NetworkBehaviour
 {
 	void Update ()
 	{
-	    CmdRotate();
+	    if (!isServer)
+	    {
+	        return;
+	    }
+
+	    RpcRotate();
 	}
 
-    [Command]
-    public void CmdRotate()
+    [ClientRpc]
+    public void RpcRotate()
     {
         transform.Rotate(0f, 0.25f, 0f);
     }
