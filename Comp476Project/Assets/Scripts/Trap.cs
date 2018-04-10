@@ -16,6 +16,9 @@ public class Trap : NetworkBehaviour
     // Reference to the Audio Manager (CANNOT GET IT THROUGH INSPECTOR)
     public AudioManager audioManager;
 
+    // So that the sound for the stun effect only plays once (can trigger multiple times on collision)
+    public bool lockStunSound;
+
     // Use this for initialization
     void Start()
     {
@@ -23,6 +26,7 @@ public class Trap : NetworkBehaviour
 
         // Get audio functionalities (CANNOT GET IT THROUGH INSPECTOR)
         audioManager = GameObject.Find("AudioManager").GetComponent<AudioManager>();
+        lockStunSound = false;
     }
 
     // Update is called once per frame
@@ -41,8 +45,12 @@ public class Trap : NetworkBehaviour
     {
         if(col.gameObject.tag == "Bad")
         {
-            // Play trap stun sound effect
-            audioManager.playTrapStun();
+            if(lockStunSound == false)
+            {
+                // Play trap stun sound effect
+                audioManager.playTrapStun();
+                lockStunSound = true;
+            }
 
             // Reveal the trap
             TrapBase.GetComponent<MeshRenderer>().enabled = true;
@@ -53,11 +61,18 @@ public class Trap : NetworkBehaviour
             col.gameObject.GetComponent<Character>().IsSpotted = true;
             col.gameObject.GetComponent<Character>()._navMeshAgent.SetDestination(transform.position);
 
-            // Show stun effect
-            NetworkServer.Spawn(Instantiate(StunParticles, col.gameObject.transform.position, Quaternion.identity));
+            // Show stun effect (via a command to resolve NetworkServer spawn error)
+            CmdCallParticles(col.gameObject);
 
             // Trap gets destroyed after 2 seconds
             Destroy(gameObject, 2f);
         }
+    }
+
+    // Spawn stun particles to the server
+    [Command]
+    void CmdCallParticles(GameObject obj)
+    {
+        NetworkServer.Spawn(Instantiate(StunParticles, obj.gameObject.transform.position, Quaternion.identity));
     }
 }
