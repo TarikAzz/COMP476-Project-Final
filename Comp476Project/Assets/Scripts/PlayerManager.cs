@@ -581,9 +581,13 @@ public class PlayerManager : NetworkBehaviour
         {
             return;
         }
-
-        CharactersHealth[Characters.IndexOf(character)] -= DamagePerSecond * Time.deltaTime;
-        RpcUpdateCharacterHealth(Characters.IndexOf(character));
+        
+        if (isServer)
+        {
+            CharactersHealth[Characters.IndexOf(character)] -= DamagePerSecond * Time.deltaTime;
+            RpcUpdateCharacterHealth(Characters.IndexOf(character));
+        }
+        
     }
 
     /// <summary>
