@@ -691,7 +691,7 @@ public class Character : MonoBehaviour
             r.enabled = enabled;
         }
 
-        GetComponentInChildren<Canvas>().enabled = PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator && PlayerManager.isLocalPlayer && enabled;
+        GetComponentInChildren<Canvas>().enabled = PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator && enabled;
     }
 
 }

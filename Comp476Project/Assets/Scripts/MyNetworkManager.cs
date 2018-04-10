@@ -102,6 +102,13 @@ public class MyNetworkManager : NetworkManager
             mainManager.DefenderReady = false;
             mainManager.InfiltratorReady = false;
         }
+        
+        foreach (var unitSpawner in FindObjectsOfType<UnitSpawner>())
+        {
+            unitSpawner.lamps_spawned = 0;
+            unitSpawner.traps_spawned = 0;
+            unitSpawner.cameras_spawned = 0;
+        }
     }
 
     // Toggle the default HUD appearence
