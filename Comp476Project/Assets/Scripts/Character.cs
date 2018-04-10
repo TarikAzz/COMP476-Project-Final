@@ -169,8 +169,14 @@ public class Character : MonoBehaviour
     /// </summary>
     void Update()
     {
-        if (PlayerManager == null || !PlayerManager.GameReady)
+        if (PlayerManager == null)
         {
+            return;
+        }
+        
+        if (!PlayerManager.GameReady)
+        {
+            ToggleVisibility(false);
             return;
         }
 
@@ -678,15 +684,6 @@ public class Character : MonoBehaviour
     /// <param name="enabled">Determines if enabled or not</param>
     public void ToggleVisibility(bool enabled)
     {
-        //if (enabled == true)
-        //{
-        //    IsSpotted = true;
-        //}
-        //else
-        //{
-        //    IsSpotted = false;
-        //}
-
         Renderer[] rs = GetComponentsInChildren<Renderer>();
 
         foreach (Renderer r in rs)
@@ -694,7 +691,7 @@ public class Character : MonoBehaviour
             r.enabled = enabled;
         }
 
-        gameObject.transform.GetChild(2).gameObject.SetActive(enabled);
+        GetComponentInChildren<Canvas>().enabled = PlayerManager.Kind == PlayerManager.PlayerKind.Infiltrator && PlayerManager.isLocalPlayer && enabled;
     }
 
 }

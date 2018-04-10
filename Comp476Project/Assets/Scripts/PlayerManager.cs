@@ -386,6 +386,7 @@ public class PlayerManager : NetworkBehaviour
                 if (Characters.Count > 0)
                 {
                     Characters.ForEach(c => c.tag = "Good");
+                    Characters.ForEach(c => c.GetComponentInChildren<Canvas>().enabled = false);
                 }
 
                 GameObject otherPlayer = GameObject.FindGameObjectWithTag("OtherPlayer");
@@ -481,6 +482,7 @@ public class PlayerManager : NetworkBehaviour
 
         for (var i = 0; i < otherCharacters.Length; i++)
         {
+            otherCharacters[i].GetComponent<Character>().ToggleVisibility(true);
             otherCharacters[i].gameObject.GetComponent<MeshRenderer>().enabled = false;
             otherCharacters[i].gameObject.transform.GetChild(4).gameObject.SetActive(true);
         }
@@ -488,6 +490,7 @@ public class PlayerManager : NetworkBehaviour
         // Infiltrator or has 5 children since the FOV is absent.
         for (int i = 0; i < Characters.Count; i++)
         {
+            Characters[i].GetComponent<Character>().ToggleVisibility(true);
             Characters[i].gameObject.GetComponent<MeshRenderer>().enabled = false;
             Characters[i].gameObject.transform.GetChild(4).gameObject.SetActive(true);
         }
@@ -581,7 +584,7 @@ public class PlayerManager : NetworkBehaviour
         {
             return;
         }
-        
+
         if (isServer)
         {
             CharactersHealth[Characters.IndexOf(character)] -= DamagePerSecond * Time.deltaTime;
