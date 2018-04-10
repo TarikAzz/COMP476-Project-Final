@@ -518,6 +518,8 @@ public class Character : MonoBehaviour
     /// <param name="hit">The raycast information</param>
     private void CreateTargetIndicator(RaycastHit hit)
     {
+        PlayerManager.GetComponent<PlayerManager>().PlayInfiltratorOk();
+
         StopAllCoroutines();
         DestroyTargetIndicators();
 

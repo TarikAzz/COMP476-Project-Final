@@ -77,6 +77,12 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     List<Vector3> otherPlayersPositions = new List<Vector3> { new Vector3(), new Vector3(), new Vector3(), new Vector3(), new Vector3() };
 
+    public AudioClip defenderSelect;
+    public AudioClip defenderOk;
+
+    public AudioClip infiltratorSelect;
+    public AudioClip infiltratorOk;
+
     #endregion
 
     #region Public properties
@@ -653,6 +659,8 @@ public class PlayerManager : NetworkBehaviour
     /// <author>Tarik</author>
     private void CharacterSelection(bool isShift)
     {
+        PlayInfiltratorSelect();
+
         // Had to add this to fix the shift select not working. 
         // In Update another condition was added for this check, so it didn't work anymore.
         if (!isLocalPlayer)
@@ -752,6 +760,8 @@ public class PlayerManager : NetworkBehaviour
     /// <author>Tarik</author>
     private void RectangleSelect()
     {
+        bool haveAnyBeenSelected = false;
+
         // Iterate through all characters to select them in the rectangle selection.
         foreach (var character in Characters)
         {
@@ -759,8 +769,14 @@ public class PlayerManager : NetworkBehaviour
 
             if (isRectanlgeSelcted)
             {
+                haveAnyBeenSelected = true;
                 character.Select();
             }
+        }
+
+        if (haveAnyBeenSelected)
+        {
+            PlayInfiltratorSelect();
         }
     }
 
@@ -794,6 +810,26 @@ public class PlayerManager : NetworkBehaviour
     public void CmdEndGame(PlayerKind winningPlayer)
     {
         MainManager.EndGame(winningPlayer);
+    }
+
+    public void PlayDefenderSelect()
+    {
+        gameObject.GetComponent<AudioSource>().PlayOneShot(defenderSelect);
+    }
+
+    public void PlayDefenderOk()
+    {
+        gameObject.GetComponent<AudioSource>().PlayOneShot(defenderOk);
+    }
+
+    public void PlayInfiltratorSelect()
+    {
+        gameObject.GetComponent<AudioSource>().PlayOneShot(infiltratorSelect);
+    }
+
+    public void PlayInfiltratorOk()
+    {
+        gameObject.GetComponent<AudioSource>().PlayOneShot(infiltratorOk);
     }
 
     //[Command]

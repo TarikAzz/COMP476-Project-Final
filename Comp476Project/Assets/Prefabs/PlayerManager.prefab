@@ -5774,6 +5774,7 @@ GameObject:
   - component: {fileID: 114479226057251112}
   - component: {fileID: 114520979597619756}
   - component: {fileID: 114361122517640956}
+  - component: {fileID: 82348596762175960}
   m_Layer: 0
   m_Name: PlayerManager
   m_TagString: OtherPlayer
@@ -19837,6 +19838,86 @@ MeshCollider:
   m_InflateMesh: 0
   m_SkinWidth: 0.01
   m_Mesh: {fileID: 0}
+--- !u!82 &82348596762175960
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1543148581185804}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!95 &95038858351962878
 Animator:
   serializedVersion: 3
@@ -93367,6 +93448,10 @@ MonoBehaviour:
   DisableControls: 0
   winImage: {fileID: 21300000, guid: 9a690f60d01f2ab4fa1f553c0caf980b, type: 3}
   loseImage: {fileID: 21300000, guid: f6a3f17a9df66f844a364e16b7e120e5, type: 3}
+  defenderSelect: {fileID: 0}
+  defenderOk: {fileID: 0}
+  infiltratorSelect: {fileID: 8300000, guid: cbe8cc36a2cfb044194e67d4337f3187, type: 3}
+  infiltratorOk: {fileID: 8300000, guid: 9199160bc2cd08a458af2600d2e7a35e, type: 3}
 --- !u!114 &114895716427452330
 MonoBehaviour:
   m_ObjectHideFlags: 1
