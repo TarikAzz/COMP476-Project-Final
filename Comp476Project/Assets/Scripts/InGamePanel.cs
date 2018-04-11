@@ -127,13 +127,13 @@ public class InGamePanel : MonoBehaviour
         // The quantity limit of each unit
         lampCapacity = 2;
         cameraCapacity = 2;
-        trapCapacity = 2;
+        trapCapacity = 3;
 
         // Get amount of units
         unitTracker = GameObject.Find("Unit Spawner").GetComponent<UnitSpawner>();
 
         // Handle sniper cooldown mechanic
-        sniperCooldown = 20;
+        sniperCooldown = 15;
         isSniperReady = true;
 
         // Get audio functionalities (CANNOT GET IT THROUGH INSPECTOR)
