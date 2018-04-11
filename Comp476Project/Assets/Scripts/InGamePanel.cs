@@ -125,9 +125,9 @@ public class InGamePanel : MonoBehaviour
         startFlash = false;
 
         // The quantity limit of each unit
-        lampCapacity = 3;
-        cameraCapacity = 3;
-        trapCapacity = 3;
+        lampCapacity = 2;
+        cameraCapacity = 2;
+        trapCapacity = 2;
 
         // Get amount of units
         unitTracker = GameObject.Find("Unit Spawner").GetComponent<UnitSpawner>();
