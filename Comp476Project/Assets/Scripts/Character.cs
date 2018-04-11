@@ -65,6 +65,12 @@ public class Character : MonoBehaviour
     /// The time a character wait after reaching a patrol node
     /// </summary>
     public float PatrolCooldown;
+    
+    public float InfiltratorSpeed;
+
+    public float InfiltratorAngularSpeed;
+
+    public float InfiltratorAcceleration;
 
     /// <summary>
     /// Whether the character loops back on the patrol's path after reaching its last node or executes it in reverse

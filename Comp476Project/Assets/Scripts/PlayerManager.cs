@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
@@ -378,6 +379,9 @@ public class PlayerManager : NetworkBehaviour
                 if (Characters.Count > 0)
                 {
                     Characters.ForEach(c => c.tag = "Bad");
+                    Characters.ForEach(c => c.GetComponent<NavMeshAgent>().speed = c.InfiltratorSpeed);
+                    Characters.ForEach(c => c.GetComponent<NavMeshAgent>().angularSpeed = c.InfiltratorAngularSpeed);
+                    Characters.ForEach(c => c.GetComponent<NavMeshAgent>().acceleration = c.InfiltratorAcceleration);
                 }
 
                 GameObject otherPlayer = GameObject.FindGameObjectWithTag("OtherPlayer");
