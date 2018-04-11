@@ -320,6 +320,8 @@ public class PlayerManager : NetworkBehaviour
     bool doTaggingOnce = true;
     bool doModelsOnce = true;
 
+    bool shouldPlaySound = true;
+
     /// <summary>
     /// Updates character selection and camera movement
     /// </summary>
@@ -442,6 +444,24 @@ public class PlayerManager : NetworkBehaviour
 
         // Temporary
         ApplyOpponentAnimations();
+
+        //shouldPlaySound = true;
+
+        //if (Selected_Characters <= 0)
+        //{
+        //    shouldPlaySound = false;
+        //}
+
+        //if (shouldPlaySound)
+        //{
+        //    if (Selected_Characters > 0)
+        //    {
+        //        PlayInfiltratorSelect();
+        //    }
+
+        //    //shouldPlaySound = false;
+        //}
+
     }
 
     /// <summary>
@@ -459,7 +479,7 @@ public class PlayerManager : NetworkBehaviour
         {
             otherCharacters = GameObject.FindGameObjectsWithTag("Good");
         }
-        
+
         for (int i = 0; i < otherCharacters.Length; i++)
         {
             if (otherPlayersPositions[i] != otherCharacters[i].transform.position)
@@ -600,7 +620,7 @@ public class PlayerManager : NetworkBehaviour
             CharactersHealth[Characters.IndexOf(character)] -= DamagePerSecond * Time.deltaTime;
             RpcUpdateCharacterHealth(Characters.IndexOf(character));
         }
-        
+
     }
 
     /// <summary>
@@ -663,7 +683,6 @@ public class PlayerManager : NetworkBehaviour
     /// <author>Tarik</author>
     private void CharacterSelection(bool isShift)
     {
-        PlayInfiltratorSelect();
 
         // Had to add this to fix the shift select not working. 
         // In Update another condition was added for this check, so it didn't work anymore.
@@ -705,6 +724,11 @@ public class PlayerManager : NetworkBehaviour
             }
             else
             {
+                if (Selected_Characters == 1)
+                {
+
+                    PlayInfiltratorSelect();
+                }
                 hitCharacter.Select();
             }
         }
@@ -780,7 +804,7 @@ public class PlayerManager : NetworkBehaviour
 
         if (haveAnyBeenSelected)
         {
-            PlayInfiltratorSelect();
+            // PlayInfiltratorSelect();
         }
     }
 
