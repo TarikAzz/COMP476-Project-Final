@@ -20161,7 +20161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466e5b38ea100d64abdb721d93e25a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ViewRadius: 14
+  ViewRadius: 10
   ViewAngle: 73
   targetMask:
     serializedVersion: 2
@@ -20377,7 +20377,7 @@ MonoBehaviour:
   BulletLifeTime: 5
   BulletDamage: 1
   HealthBar: {fileID: 114843072795360788}
-  MaxHealth: 5
+  MaxHealth: 3
   IndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
@@ -21225,7 +21225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466e5b38ea100d64abdb721d93e25a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ViewRadius: 14
+  ViewRadius: 10
   ViewAngle: 73
   targetMask:
     serializedVersion: 2
@@ -21250,7 +21250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466e5b38ea100d64abdb721d93e25a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ViewRadius: 14
+  ViewRadius: 10
   ViewAngle: 73
   targetMask:
     serializedVersion: 2
@@ -21438,7 +21438,7 @@ MonoBehaviour:
   BulletLifeTime: 5
   BulletDamage: 1
   HealthBar: {fileID: 114724183506333882}
-  MaxHealth: 5
+  MaxHealth: 3
   IndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
@@ -57369,7 +57369,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466e5b38ea100d64abdb721d93e25a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ViewRadius: 14
+  ViewRadius: 10
   ViewAngle: 73
   targetMask:
     serializedVersion: 2
@@ -57740,7 +57740,7 @@ MonoBehaviour:
   BulletLifeTime: 5
   BulletDamage: 1
   HealthBar: {fileID: 114438554886646670}
-  MaxHealth: 5
+  MaxHealth: 3
   IndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
@@ -75641,7 +75641,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466e5b38ea100d64abdb721d93e25a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ViewRadius: 14
+  ViewRadius: 10
   ViewAngle: 73
   targetMask:
     serializedVersion: 2
@@ -111149,7 +111149,7 @@ MonoBehaviour:
   BulletLifeTime: 5
   BulletDamage: 1
   HealthBar: {fileID: 114637510984038818}
-  MaxHealth: 5
+  MaxHealth: 3
   IndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
@@ -111202,7 +111202,7 @@ MonoBehaviour:
   BulletLifeTime: 5
   BulletDamage: 1
   HealthBar: {fileID: 114582622249982814}
-  MaxHealth: 5
+  MaxHealth: 3
   IndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
