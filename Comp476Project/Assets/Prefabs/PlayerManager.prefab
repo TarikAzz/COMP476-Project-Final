@@ -20161,7 +20161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466e5b38ea100d64abdb721d93e25a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ViewRadius: 17.49
+  ViewRadius: 14
   ViewAngle: 73
   targetMask:
     serializedVersion: 2
@@ -20381,6 +20381,9 @@ MonoBehaviour:
   IndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
+  InfiltratorSpeed: 10
+  InfiltratorAngularSpeed: 140
+  InfiltratorAcceleration: 14
   LoopPatrol: 0
   StunDuration: 5
   NotStunnedTillNow: 0
@@ -21222,7 +21225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466e5b38ea100d64abdb721d93e25a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ViewRadius: 17.49
+  ViewRadius: 14
   ViewAngle: 73
   targetMask:
     serializedVersion: 2
@@ -21247,7 +21250,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466e5b38ea100d64abdb721d93e25a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ViewRadius: 17.49
+  ViewRadius: 14
   ViewAngle: 73
   targetMask:
     serializedVersion: 2
@@ -21439,6 +21442,9 @@ MonoBehaviour:
   IndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
+  InfiltratorSpeed: 10
+  InfiltratorAngularSpeed: 140
+  InfiltratorAcceleration: 14
   LoopPatrol: 0
   StunDuration: 5
   NotStunnedTillNow: 0
@@ -57363,7 +57369,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466e5b38ea100d64abdb721d93e25a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ViewRadius: 17.49
+  ViewRadius: 14
   ViewAngle: 73
   targetMask:
     serializedVersion: 2
@@ -57738,6 +57744,9 @@ MonoBehaviour:
   IndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
+  InfiltratorSpeed: 10
+  InfiltratorAngularSpeed: 140
+  InfiltratorAcceleration: 14
   LoopPatrol: 0
   StunDuration: 5
   NotStunnedTillNow: 0
@@ -75632,7 +75641,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 466e5b38ea100d64abdb721d93e25a3d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ViewRadius: 17.49
+  ViewRadius: 14
   ViewAngle: 73
   targetMask:
     serializedVersion: 2
@@ -111144,6 +111153,9 @@ MonoBehaviour:
   IndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
+  InfiltratorSpeed: 10
+  InfiltratorAngularSpeed: 140
+  InfiltratorAcceleration: 14
   LoopPatrol: 0
   StunDuration: 5
   NotStunnedTillNow: 0
@@ -111194,6 +111206,9 @@ MonoBehaviour:
   IndicatorPrefab: {fileID: 1695486531192834, guid: 4edab599243c17840b8bf86832d3a036,
     type: 2}
   PatrolCooldown: 1
+  InfiltratorSpeed: 10
+  InfiltratorAngularSpeed: 140
+  InfiltratorAcceleration: 14
   LoopPatrol: 0
   StunDuration: 5
   NotStunnedTillNow: 0
@@ -114116,10 +114131,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 8
-  m_Acceleration: 15
+  m_Speed: 5
+  m_Acceleration: 9
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 80
   m_StoppingDistance: 1.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -114137,10 +114152,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 8
-  m_Acceleration: 15
+  m_Speed: 5
+  m_Acceleration: 9
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 80
   m_StoppingDistance: 1.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -114158,10 +114173,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 8
-  m_Acceleration: 15
+  m_Speed: 5
+  m_Acceleration: 9
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 80
   m_StoppingDistance: 1.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -114179,10 +114194,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 8
-  m_Acceleration: 15
+  m_Speed: 5
+  m_Acceleration: 9
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 80
   m_StoppingDistance: 1.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
@@ -114200,10 +114215,10 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 8
-  m_Acceleration: 15
+  m_Speed: 5
+  m_Acceleration: 9
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 80
   m_StoppingDistance: 1.5
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
