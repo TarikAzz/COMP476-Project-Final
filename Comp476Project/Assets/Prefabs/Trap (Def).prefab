@@ -73,7 +73,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1752186976257290}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -40.087875, y: 8.08, z: -3.389699}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_Children:
   - {fileID: 4556095152795026}
@@ -101,8 +101,8 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1255011860729670}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.08, y: 0.24, z: 0.004}
-  m_LocalScale: {x: 0.5, y: 0.18, z: 0.5}
+  m_LocalPosition: {x: 0.08, y: 0.221, z: 0.004}
+  m_LocalScale: {x: 0.5, y: 0.12, z: 0.5}
   m_Children: []
   m_Father: {fileID: 4240123081803352}
   m_RootOrder: 1
@@ -120,7 +120,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: e5161b583bd323c4e870dad8d31c9bd0, type: 2}
+  - {fileID: 2100000, guid: ec552f97ab5d466449f686f31836d114, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -152,7 +152,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: b8c6927c2f82f014488cffce382f533e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -223,6 +223,7 @@ MonoBehaviour:
   TrapHead: {fileID: 1255011860729670}
   panel: {fileID: 0}
   audioManager: {fileID: 0}
+  lockStunSound: 0
 --- !u!114 &114751772180150532
 MonoBehaviour:
   m_ObjectHideFlags: 1
