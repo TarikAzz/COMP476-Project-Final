@@ -15,6 +15,8 @@ public class AudioManager : MonoBehaviour
     public AudioSource source_Lightning;
     public AudioSource source_Win;
     public AudioSource source_Lose;
+    public AudioSource source_CharacterSelection;
+    public AudioSource source_CharacterOk;
 
     // Defined in the Inspector
     public AudioClip main_theme;
@@ -27,6 +29,43 @@ public class AudioManager : MonoBehaviour
     public AudioClip win;
     public AudioClip lose;
 
+    /// <summary>
+    /// The infiltrator select sounds
+    /// </summary>
+    public AudioClip infiltratorSelect1;
+    public AudioClip infiltratorSelect2;
+    public AudioClip infiltratorSelect3;
+    public AudioClip infiltratorSelect4;
+
+    /// <summary>
+    /// The defender select sounds
+    /// </summary>
+    public AudioClip defenderSelect1;
+    public AudioClip defenderSelect2;
+    public AudioClip defenderSelect3;
+    public AudioClip defenderSelect4;
+
+    /// <summary>
+    /// The infiltrator ok sounds
+    /// </summary>
+    public AudioClip infiltratorOk1;
+    public AudioClip infiltratorOk2;
+    public AudioClip infiltratorOk3;
+    public AudioClip infiltratorOk4;
+
+    /// <summary>
+    /// The defender ok sounds
+    /// </summary>
+    public AudioClip defenderOk1;
+    public AudioClip defenderOk2;
+    public AudioClip defenderOk3;
+    public AudioClip defenderOk4;
+
+    List<AudioClip> infiltratorSelectList;
+    List<AudioClip> defenderSelectList = new List<AudioClip>();
+    List<AudioClip> infiltratorOkList = new List<AudioClip>();
+    List<AudioClip> defenderOkList = new List<AudioClip>();
+
     // Use this for initialization
     void Start()
     {
@@ -37,7 +76,7 @@ public class AudioManager : MonoBehaviour
 
         source_Setup = gameObject.AddComponent<AudioSource>();
         source_Setup.loop = true;
-        
+
         source_GameStart = gameObject.AddComponent<AudioSource>();
         source_Sniper = gameObject.AddComponent<AudioSource>();
         source_Unit = gameObject.AddComponent<AudioSource>();
@@ -46,22 +85,38 @@ public class AudioManager : MonoBehaviour
         source_Win = gameObject.AddComponent<AudioSource>();
         source_Lose = gameObject.AddComponent<AudioSource>();
 
+        source_CharacterSelection = gameObject.AddComponent<AudioSource>();
+        source_CharacterOk = gameObject.AddComponent<AudioSource>();
+
         // Start playing the main theme
         playMainTheme();
+
+        infiltratorSelectList = new List<AudioClip> { infiltratorSelect1, infiltratorSelect2, infiltratorSelect3, infiltratorSelect4 };
+        defenderSelectList = new List<AudioClip> { defenderSelect1, defenderSelect2, defenderSelect3, defenderSelect4 };
+
+        infiltratorOkList = new List<AudioClip> { infiltratorOk1, infiltratorOk2, infiltratorOk3, infiltratorOk4 };
+        defenderOkList = new List<AudioClip> { defenderOk1, defenderOk2, defenderOk3, defenderOk4 };
+
+        source_CharacterOk.playOnAwake = false;
+        source_CharacterOk.loop = false;
+
+        source_CharacterSelection.playOnAwake = false;
+        source_CharacterSelection.loop = false;
+
     }
 
     // Play the Main Theme music
     public void playMainTheme()
     {
         // Play main theme once loaded
-        if(source_MainTheme != null)
+        if (source_MainTheme != null)
         {
             source_MainTheme.clip = main_theme;
             source_MainTheme.Play();
         }
-        
+
     }
-    
+
     // Play the Setup sound effect
     public void playSetup()
     {
@@ -129,7 +184,40 @@ public class AudioManager : MonoBehaviour
         source_Lose.clip = lose;
         source_Lose.Play();
     }
-    
+
+    public void playCharacterSelection(bool isInfiltrator)
+    {
+        int randomIndex = Random.Range(0, infiltratorSelectList.Count);
+
+        if (isInfiltrator)
+        {
+            source_CharacterSelection.PlayOneShot(infiltratorSelectList[randomIndex]);
+        }
+        else
+        {
+            //source_CharacterSelection.clip = defenderSelectList[randomIndex];
+            source_CharacterSelection.PlayOneShot(defenderSelectList[randomIndex]);
+        }
+
+        //source_CharacterSelection.Play();
+    }
+
+    public void playCharacterOk(bool isInfiltrator)
+    {
+        //int randomIndex = Random.Range(0, infiltratorOkList.Count);
+
+        if (isInfiltrator)
+        {
+            source_CharacterSelection.PlayOneShot(infiltratorOkList[0]);
+        }
+        else
+        {
+            source_CharacterSelection.PlayOneShot(defenderOkList[0]);
+        }
+
+       // source_CharacterOk.Play();
+    }
+
     // Stop all audio (used for when game is over)
     public void StopEverything()
     {

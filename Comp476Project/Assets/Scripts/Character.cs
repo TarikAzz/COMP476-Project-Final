@@ -65,7 +65,7 @@ public class Character : MonoBehaviour
     /// The time a character wait after reaching a patrol node
     /// </summary>
     public float PatrolCooldown;
-    
+
     public float InfiltratorSpeed;
 
     public float InfiltratorAngularSpeed;
@@ -86,6 +86,11 @@ public class Character : MonoBehaviour
     /// Keep track of network's time as you are NOT stunned
     /// </summary>
     public double NotStunnedTillNow;
+
+    /// <summary>
+    /// The audio manager.
+    /// </summary>
+    public GameObject audioManager;
 
     #endregion
 
@@ -154,7 +159,7 @@ public class Character : MonoBehaviour
     /// The NavMeshAgent component
     /// </summary>
     public NavMeshAgent _navMeshAgent;
-    
+
     /// <summary>
     /// TEMPORARY Checks if the player is moving.
     /// </summary>
@@ -168,6 +173,8 @@ public class Character : MonoBehaviour
     {
         _navMeshAgent = GetComponent<NavMeshAgent>();
         _patrolIndicators = new List<Indicator>();
+
+        audioManager = GameObject.Find("AudioManager");
     }
 
     /// <summary>
@@ -179,7 +186,7 @@ public class Character : MonoBehaviour
         {
             return;
         }
-        
+
         if (!PlayerManager.GameReady)
         {
             ToggleVisibility(false);
@@ -330,7 +337,7 @@ public class Character : MonoBehaviour
         {
             StopChase();
         }
-        
+
 
         if ((_navMeshAgent.velocity.magnitude > 0f))
         {
@@ -524,6 +531,16 @@ public class Character : MonoBehaviour
     /// <param name="hit">The raycast information</param>
     private void CreateTargetIndicator(RaycastHit hit)
     {
+        // Plays the OK (right click) sounds.
+        if (PlayerManager.GetComponent<PlayerManager>().Kind == PlayerManager.PlayerKind.Infiltrator)
+        {
+            audioManager.GetComponent<AudioManager>().playCharacterOk(true);
+        }
+        else
+        {
+            audioManager.GetComponent<AudioManager>().playCharacterOk(false);
+        }
+
         StopAllCoroutines();
         DestroyTargetIndicators();
 

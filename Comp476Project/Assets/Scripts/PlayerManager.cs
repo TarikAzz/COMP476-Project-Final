@@ -227,6 +227,25 @@ public class PlayerManager : NetworkBehaviour
     /// </summary>
     private Vector3 _cameraOffset = Vector3.zero;
 
+    /// <summary>
+    /// Determines if a character was selelected when in the rectangle selection.
+    /// </summary>
+    private bool rectangleHasPlayerBeenSelected = false;
+
+    /// <summary>
+    /// Locks sounds from playing in RectangleSelect().
+    /// </summary>
+    private bool rectangleSoundLocker = true;
+
+    /// <summary>
+    /// Used to tag the players once, during Update.
+    /// </summary>
+    bool doTaggingOnce = true;
+
+    /// <summary>
+    /// Used to apply character models once, during Update.
+    /// </summary>
+    bool doModelsOnce = true;
     #endregion
 
     #region Private properties
@@ -310,10 +329,7 @@ public class PlayerManager : NetworkBehaviour
 
         _setupBarriers = FindObjectsOfType<Barrier>();
     }
-
-    bool doTaggingOnce = true;
-    bool doModelsOnce = true;
-
+    
     /// <summary>
     /// Updates character selection and camera movement
     /// </summary>
@@ -357,6 +373,8 @@ public class PlayerManager : NetworkBehaviour
         else if (Input.GetMouseButtonDown(0))
         {
             CharacterSelection(false);
+            rectangleSoundLocker = true;
+            rectangleHasPlayerBeenSelected = false;
         }
 
         RectangleSelect();
@@ -453,7 +471,7 @@ public class PlayerManager : NetworkBehaviour
         {
             otherCharacters = GameObject.FindGameObjectsWithTag("Good");
         }
-        
+
         for (int i = 0; i < otherCharacters.Length; i++)
         {
             if (otherPlayersPositions[i] != otherCharacters[i].transform.position)
@@ -594,7 +612,7 @@ public class PlayerManager : NetworkBehaviour
             CharactersHealth[Characters.IndexOf(character)] -= DamagePerSecond * Time.deltaTime;
             RpcUpdateCharacterHealth(Characters.IndexOf(character));
         }
-        
+
     }
 
     /// <summary>
@@ -687,6 +705,17 @@ public class PlayerManager : NetworkBehaviour
         if (!isShift)
         {
             Characters.ForEach(c => c.Deselect());
+
+            // Plays the selection sounds.
+            if (Kind == PlayerKind.Infiltrator)
+            {
+                audioManager.GetComponent<AudioManager>().playCharacterSelection(true);
+            }
+            else
+            {
+                audioManager.GetComponent<AudioManager>().playCharacterSelection(false);
+            }
+
             hitCharacter.Select();
         }
         else
@@ -697,6 +726,19 @@ public class PlayerManager : NetworkBehaviour
             }
             else
             {
+                // Plays the selection sounds.
+                if (Selected_Characters < 1)
+                {
+                    if (Kind == PlayerKind.Infiltrator)
+                    {
+                        audioManager.GetComponent<AudioManager>().playCharacterSelection(true);
+                    }
+                    else
+                    {
+                        audioManager.GetComponent<AudioManager>().playCharacterSelection(false);
+                    }
+                }
+
                 hitCharacter.Select();
             }
         }
@@ -760,12 +802,31 @@ public class PlayerManager : NetworkBehaviour
         foreach (var character in Characters)
         {
             bool isRectanlgeSelcted = GetComponent<MouseSelection>().IsWithinSelectionBounds(character.gameObject);
-
+            
             if (isRectanlgeSelcted)
             {
+                rectangleHasPlayerBeenSelected = true;
                 character.Select();
             }
         }
+
+        // Plays selection sound.
+        if (rectangleHasPlayerBeenSelected && rectangleSoundLocker)
+        {
+            switch (Kind)
+            {
+                case PlayerKind.Infiltrator:
+                    audioManager.GetComponent<AudioManager>().playCharacterSelection(true);
+                    break;
+                case PlayerKind.Defender:
+                    audioManager.GetComponent<AudioManager>().playCharacterSelection(false);
+                    break;
+            }
+
+            rectangleSoundLocker = false;
+            rectangleHasPlayerBeenSelected = false;
+        }
+
     }
 
     /// <summary>

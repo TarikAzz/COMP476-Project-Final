@@ -60,6 +60,8 @@ MonoBehaviour:
   source_Lightning: {fileID: 0}
   source_Win: {fileID: 0}
   source_Lose: {fileID: 0}
+  source_CharacterSelection: {fileID: 0}
+  source_CharacterOk: {fileID: 0}
   main_theme: {fileID: 8300000, guid: 5c741811ca0722e408bf020a36ca33ee, type: 3}
   setup: {fileID: 8300000, guid: c4fab33e71529b248a680ba64e6cfbb5, type: 3}
   game_start: {fileID: 8300000, guid: e21c2481f81cd0543bee8f124865c78c, type: 3}
@@ -69,3 +71,19 @@ MonoBehaviour:
   lightning: {fileID: 8300000, guid: 6111beb4c750bcc4aa3b9ce286ae566a, type: 3}
   win: {fileID: 8300000, guid: fa37002116d689c489465ad682270c48, type: 3}
   lose: {fileID: 8300000, guid: df55825ce36e66e44958387a12c3bcda, type: 3}
+  infiltratorSelect1: {fileID: 8300000, guid: b7ed01d54a14c854b953f8d8b3b6082a, type: 3}
+  infiltratorSelect2: {fileID: 8300000, guid: 2f47ce94863f1584fbc4704446de82ec, type: 3}
+  infiltratorSelect3: {fileID: 8300000, guid: 5681044d644df754091426742534aaa2, type: 3}
+  infiltratorSelect4: {fileID: 8300000, guid: dc5caa0615df7d84fbd1e8b41a48cbac, type: 3}
+  defenderSelect1: {fileID: 8300000, guid: 1ebaf2f9a90e14048ac49f36d45b0729, type: 3}
+  defenderSelect2: {fileID: 8300000, guid: 52d6f3f243a1231458603852cd84a6a9, type: 3}
+  defenderSelect3: {fileID: 8300000, guid: 06f4a8a5cc9e49444ae138c5f1a72248, type: 3}
+  defenderSelect4: {fileID: 8300000, guid: 38baccd1c00703a4e923afc44a4d8481, type: 3}
+  infiltratorOk1: {fileID: 8300000, guid: 7786ad0fe0052394081f508a14a0fb26, type: 3}
+  infiltratorOk2: {fileID: 8300000, guid: 1859bf73153ce3d408577140baf9cee9, type: 3}
+  infiltratorOk3: {fileID: 8300000, guid: ab98886e83c81534cadb85b5c4340eeb, type: 3}
+  infiltratorOk4: {fileID: 8300000, guid: ca638278d64cc7f4fb7a4fc9bc3e3bed, type: 3}
+  defenderOk1: {fileID: 8300000, guid: 180fd9830df79da40b0992864afa8cc4, type: 3}
+  defenderOk2: {fileID: 8300000, guid: e3a6884621c58a846b72444d2d030f2b, type: 3}
+  defenderOk3: {fileID: 8300000, guid: 6b87c8b87280f184cb901c2e1a476aba, type: 3}
+  defenderOk4: {fileID: 8300000, guid: 20233ad8c3d126247b8f25704213c171, type: 3}
