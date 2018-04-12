@@ -438,7 +438,7 @@ public class PlayerManager : NetworkBehaviour
                 }
                 else
                 {
-                    infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(false);
+                    infiltrator.gameObject.GetComponent<Character>().ToggleVisibility(false); 
                     infiltrator.GetComponent<Character>().IsSpotted = false;
                 }
             }

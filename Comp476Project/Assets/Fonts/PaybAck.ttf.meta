@@ -1,0 +1,21 @@
+fileFormatVersion: 2
+guid: 02437aec24fbcef4d8ee55c5e085374c
+timeCreated: 1523502440
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: PaybAck
+  fontNames:
+  - PaybAck
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
