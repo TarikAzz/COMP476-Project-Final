@@ -66,6 +66,9 @@ public class AudioManager : MonoBehaviour
     List<AudioClip> infiltratorOkList = new List<AudioClip>();
     List<AudioClip> defenderOkList = new List<AudioClip>();
 
+    private float barkCooldown = 4f;
+    private bool canBark;
+
     // Use this for initialization
     void Start()
     {
@@ -102,6 +105,8 @@ public class AudioManager : MonoBehaviour
 
         source_CharacterSelection.playOnAwake = false;
         source_CharacterSelection.loop = false;
+
+        canBark = true;
 
     }
 
@@ -198,6 +203,7 @@ public class AudioManager : MonoBehaviour
             //source_CharacterSelection.clip = defenderSelectList[randomIndex];
             source_CharacterSelection.PlayOneShot(defenderSelectList[randomIndex]);
         }
+        canBark = true;
 
         //source_CharacterSelection.Play();
     }
@@ -205,15 +211,20 @@ public class AudioManager : MonoBehaviour
     public void playCharacterOk(bool isInfiltrator)
     {
         //int randomIndex = Random.Range(0, infiltratorOkList.Count);
-
-        if (isInfiltrator)
+        if (canBark)
         {
-            source_CharacterSelection.PlayOneShot(infiltratorOkList[0]);
+            if (isInfiltrator)
+            {
+                source_CharacterSelection.PlayOneShot(infiltratorOkList[0]);
+            }
+            else
+            {
+                source_CharacterSelection.PlayOneShot(defenderOkList[0]);
+            }
+            canBark = false;
+            Invoke("EnableBark",barkCooldown);
         }
-        else
-        {
-            source_CharacterSelection.PlayOneShot(defenderOkList[0]);
-        }
+       
 
        // source_CharacterOk.Play();
     }
@@ -226,5 +237,10 @@ public class AudioManager : MonoBehaviour
         source_Unit.Stop();
         source_Trap.Stop();
         source_Lightning.Stop();
+    }
+
+    private void EnableBark()
+    {
+        canBark = true;
     }
 }
